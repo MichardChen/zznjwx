@@ -3,20 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <title>登陆</title>
-<script src="http://192.168.1.7:8087/zznj/wx/js/jquery.min.js"></script>
+<script src="http://192.168.1.7:8088/zznjwx/wx/js/jquery.min.js"></script>
 <script type="text/javascript">
 	function login() {
 		$.ajax({
-			url : "http://192.168.1.7:8087/zznj/wxmrest/login",
+			url : "http://192.168.1.7:8088/zznjwx/wxmrest/login",
 			type : "POST",
-			contentType : "application/json;charset=utf-8",
-			data : "userName=18250752939&password=25d55ad283aa400af464c76d713c07ad",
-			dataType : "text",
+			data : "userName=18250752939&password=123456",
+			dataType: "json",
 			success : function(result) {
 				alert(result);
-				var retData =  eval('('+result+')');
-				alert(retData.msg);
-				if (retData.code == "5600") {
+				var code = result.code;
+				alert(result.message);
+				if (result.code == "5600") {
 					alert("success");
 				} else {
 					alert("1");

@@ -1,30 +1,12 @@
 package my.core.controller;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.ExcessiveAttemptsException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.servlet.Cookie;
-import org.huadalink.plugin.shiro.CaptchaUsernamePasswordToken;
-import org.huadalink.plugin.shiro.IncorrectCaptchaException;
-import org.huadalink.render.kaptcha.KaptchaRender;
 import org.huadalink.route.ControllerBind;
 
-import com.jfinal.aop.Enhancer;
 import com.jfinal.core.Controller;
-import com.jfinal.kit.HashKit;
-
-import my.core.constants.Constants;
-import my.core.model.Log;
-import my.core.model.User;
-import my.core.service.UserService;
 
 @ControllerBind(key = "/login", path = "/platform")
 public class LoginController extends Controller {
-
+/*
 	UserService service=Enhancer.enhance(UserService.class);
 	public void index() {
 		render("login.jsp");
@@ -32,12 +14,12 @@ public class LoginController extends Controller {
 
 	public void captcha() {
 		render(new KaptchaRender());
-	}
+	}*/
 
 	/**
 	 * 登录
 	 */
-	public void checkin() {
+	/*public void checkin() {
 		String userName = getPara("userName");
 		String pword = getPara("password");
 		String password=HashKit.md5(pword);
@@ -77,9 +59,9 @@ public class LoginController extends Controller {
 		renderJson("{\"code\":" + code + ",\"msg\":\" " + msg + " \"}");
 	}
 
-	/**
+	*//**
 	 * 返回登录界面
-	 */
+	 *//*
 	public void checkout() {
 		Log.dao.saveLogInfo((Integer)getSessionAttr("agentId"), Constants.USER_TYPE.PLATFORM_USER, "退出");
 		Subject subject = SecurityUtils.getSubject();
@@ -97,5 +79,5 @@ public class LoginController extends Controller {
 	        sb.append(";");
 	    }
 	    return sb.toString();
-	}
+	}*/
 }

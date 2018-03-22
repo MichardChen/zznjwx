@@ -7,6 +7,8 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.servlet.Cookie;
+import org.huadalink.plugin.shiro.CaptchaUsernamePasswordToken;
 import org.huadalink.plugin.shiro.IncorrectCaptchaException;
 import org.huadalink.route.ControllerBind;
 
@@ -14,8 +16,12 @@ import com.jfinal.aop.Enhancer;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.HashKit;
 
+import my.core.constants.Constants;
+import my.core.model.Log;
 import my.core.model.Member;
-import my.core.security.CaptchaUsernamePasswordTokenPlus;
+import my.core.model.ReturnData;
+import my.pvcloud.dto.LoginDTO;
+import my.pvcloud.util.VertifyUtil;
 import my.wx.service.WXService;
 
 @ControllerBind(key = "/wxmrest", path = "/wx")
@@ -23,17 +29,26 @@ public class WXController extends Controller{
 
 	WXService service=Enhancer.enhance(WXService.class);
 	
-	public void index() {
+	public void index(){
 		render("/wx/login.html");
 	}
+	
+	public void loginExpire(){
+		ReturnData data = new ReturnData();
+		data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
+		data.setMessage("您还未登陆，请先登陆");
+		renderJson(data);
+	}
+	
 	public void login() {
 		
-		String mobile = "";
-		String pword = "";
+		ReturnData data = new ReturnData();
+		String mobile = getPara("userName");
+		String pword = getPara("password");
 		String password=HashKit.md5(pword);
 		String captcha = getPara("captcha");
 		//登陆验证
-		CaptchaUsernamePasswordTokenPlus token = new CaptchaUsernamePasswordTokenPlus(mobile, password, captcha,"0");
+		CaptchaUsernamePasswordToken token = new CaptchaUsernamePasswordToken(mobile, password, captcha);
 		
 		Subject subject = SecurityUtils.getSubject();
 		String code = "5700";
@@ -63,6 +78,46 @@ public class WXController extends Controller{
 			e.printStackTrace();
 			msg = "请重新登录!";
 		}
-		renderJson("{\"code\":" + code + ",\"msg\":\" " + msg + " \"}");
+		data.setCode(code);
+		data.setMessage(msg);
+		renderJson(data);
+	}
+	
+	/**
+	 * 返回登录界面
+	 */
+	public void checkout() {
+		Log.dao.saveLogInfo((Integer)getSessionAttr("memberId"), Constants.USER_TYPE.USER_TYPE_CLIENT, "微信端退出");
+		Subject subject = SecurityUtils.getSubject();
+		if (subject != null) {
+			subject.logout();
+		}
+		redirect("/index");
+	}
+	
+	private String getCookies(Cookie[] cookies) {
+	    StringBuilder sb = new StringBuilder();
+	    for(Cookie cookie : cookies) {
+	        sb.append(cookie.getName());
+	        sb.append("=");
+	        sb.append(cookie.getValue());
+	        sb.append(";");
+	    }
+	    return sb.toString();
+	}
+	
+	//获取验证码
+	public void getCheckCode() throws Exception{
+		LoginDTO dto =  LoginDTO.getInstance(getRequest());
+		String code = VertifyUtil.getVertifyCode();
+		dto.setCode(code);
+		renderJson(service.getCheckCodePlus(dto));
+	}
+	
+	//获取个人数据
+	public void queryPersonData() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		dto.setUserId((Integer)getSessionAttr("memberId"));
+		renderJson(service.queryPersonData(dto));
 	}
 }

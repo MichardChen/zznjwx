@@ -199,7 +199,6 @@ public class WXService {
 		String userPwd = dto.getUserPwd();
 		String code = dto.getCode();
 		int sex = dto.getSex();
-		String token = TextUtil.generateUUID();
 		//获取验证码有效时间
 		VertifyCode vCode = VertifyCode.dao.queryVertifyCode(mobile,Constants.SHORT_MESSAGE_TYPE.REGISTER);
 		Timestamp expireTime = vCode == null ? null : (Timestamp)vCode.get("expire_time");
@@ -254,28 +253,15 @@ public class WXService {
 			Member m = Member.dao.queryMemberById(id);
 			Map<String, Object> map = new HashMap<>();
 			map.put("member", m);
-			map.put("accessToken", token);
-			VertifyCode.dao.updateVertifyCodeExpire(mobile, now,Constants.SHORT_MESSAGE_TYPE.REGISTER);
-			//保存token
-			AcceessToken at = AcceessToken.dao.queryToken(id, Constants.USER_TYPE.USER_TYPE_CLIENT,dto.getPlatForm());
-			boolean tokensave = false;
-			if(at == null){
-				tokensave = AcceessToken.dao.saveToken(id, Constants.USER_TYPE.USER_TYPE_CLIENT, token,StringUtil.checkCode(dto.getPlatForm()));
-				if(tokensave){
-					data.setCode(Constants.STATUS_CODE.SUCCESS);
-					data.setMessage("注册成功");
-					data.setData(map);
-					return data;
-				}else{
-					data.setCode(Constants.STATUS_CODE.FAIL);
-					data.setMessage("注册失败");
-					return data;
-				}
-			}else{
-				AcceessToken.dao.updateToken(id, token,dto.getPlatForm());
+			int ret = VertifyCode.dao.updateWXVertifyCodeExpire(mobile, now,Constants.SHORT_MESSAGE_TYPE.REGISTER);
+			if(ret != 0){
 				data.setCode(Constants.STATUS_CODE.SUCCESS);
 				data.setMessage("注册成功");
 				data.setData(map);
+				return data;
+			}else{
+				data.setCode(Constants.STATUS_CODE.FAIL);
+				data.setMessage("注册失败");
 				return data;
 			}
 		}else{
@@ -542,14 +528,6 @@ public class WXService {
 			map.put("bindCardFlg", 0);
 		}
 		
-		//是否苹果更新
-		CodeMst iosUpdate = CodeMst.dao.queryCodestByCode(Constants.COMMON_SETTING.IOS_UPDATE_SHOW);
-		if(iosUpdate != null){
-			map.put("updateShowFlg", iosUpdate.getInt("data1"));
-		}else{
-			map.put("updateShowFlg", 0);
-		}
-		
 		Document document = Document.dao.queryByTypeCd(Constants.DOCUMENT_TYPE.TRADE_CONTRACT);
 		if(document != null){
 			map.put("tradeContract", document.getStr("desc_url"));
@@ -590,27 +568,6 @@ public class WXService {
 			map.put("netUrl", null);
 		}
 		
-		
-		//版本号
-		if(StringUtil.equals(dto.getPlatForm(), Constants.PLATFORM.ANDROID)){
-			SystemVersionControl svc = SystemVersionControl.dao.querySystemVersionControl(Constants.VERSION_TYPE.ANDROID);
-			if(svc != null){
-				map.put("version", svc.getStr("version"));
-				map.put("url", svc.getStr("data1"));
-			}else{
-				map.put("version", null);
-				map.put("url", null);
-			}
-		}else{
-			SystemVersionControl svc = SystemVersionControl.dao.querySystemVersionControl(Constants.VERSION_TYPE.IOS);
-			if(svc != null){
-				map.put("version", svc.getStr("version"));
-				map.put("url", svc.getStr("data2"));
-			}else{
-				map.put("version", null);
-				map.put("url", null);
-			}
-		}
 		map.put("shareAppUrl", "http://app.tongjichaye.com/zznj/h5/share.jsp?businessId="+dto.getUserId());
 		//获取前四条资讯
 		Page<News> news = News.dao.queryByPage(1, 4);

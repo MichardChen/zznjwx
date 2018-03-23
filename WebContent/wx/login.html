@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>登陆</title>
-<script src="http://139.196.171.205/zznjwx/wx/js/jquery.min.js"></script>
+<script src="http://192.168.1.7:8088/zznjwx/wx/js/jquery.min.js"></script>
 <script type="text/javascript">
 	function login() {
 		$.ajax({
-			url : "http://139.196.171.205/zznjwx/wxmrest/login",
+			//url : "http://139.196.171.205/zznjwx/wxmrest/login",
+			url : "http://192.168.1.7:8088/zznjwx/wxmrest/login",
 			type : "POST",
-			data : "userName=18250752939&password=123456",
+			data : "mobile=18250752939&password=e10adc3949ba59abbe56e057f20f883e",
 			dataType: "json",
 			success : function(result) {
 				alert(result);

@@ -8,7 +8,6 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
 import my.pvcloud.util.DateUtil;
-import my.pvcloud.util.StringUtil;
 
 @TableBind(table = "t_vertify_code", pk = "id")
 public class VertifyCode extends Model<VertifyCode> {
@@ -29,6 +28,10 @@ public class VertifyCode extends Model<VertifyCode> {
 	
 	public void updateVertifyCodeExpire(String mobile,Timestamp expireTime,String codeTypeCd){
 		Db.update("update t_vertify_code set expire_time='"+expireTime+"' where mobile='"+mobile+"' and code_type_cd='"+codeTypeCd+"'");
+	}
+	
+	public int updateWXVertifyCodeExpire(String mobile,Timestamp expireTime,String codeTypeCd){
+		return Db.update("update t_vertify_code set expire_time='"+expireTime+"' where mobile='"+mobile+"' and code_type_cd='"+codeTypeCd+"'");
 	}
 	
 	public Long queryTodayCount(String date){

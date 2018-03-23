@@ -14,14 +14,12 @@ import org.huadalink.route.ControllerBind;
 
 import com.jfinal.aop.Enhancer;
 import com.jfinal.core.Controller;
-import com.jfinal.kit.HashKit;
 
 import my.core.constants.Constants;
 import my.core.model.Log;
 import my.core.model.Member;
 import my.core.model.ReturnData;
 import my.pvcloud.dto.LoginDTO;
-import my.pvcloud.util.VertifyUtil;
 import my.wx.service.WXService;
 
 @ControllerBind(key = "/wxmrest", path = "/wx")
@@ -40,28 +38,36 @@ public class WXController extends Controller{
 		renderJson(data);
 	}
 	
-	public void login() {
+	public void login(){
 		
 		ReturnData data = new ReturnData();
-		String mobile = getPara("userName");
-		String pword = getPara("password");
-		String password=HashKit.md5(pword);
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		String mobile = getPara("mobile");
+		String password = getPara("password");
 		String captcha = getPara("captcha");
+		
 		//登陆验证
 		CaptchaUsernamePasswordToken token = new CaptchaUsernamePasswordToken(mobile, password, captcha);
 		
 		Subject subject = SecurityUtils.getSubject();
 		String code = "5700";
 		String msg;
-		try {
-			if (!subject.isAuthenticated()) {
+		try{
+			if(!subject.isAuthenticated()){
 				subject.login(token);
 			}
-			setSessionAttr("userName", mobile);
+			setSessionAttr("mobile", mobile);
 			code = "5600";
 			msg = "登录成功";
 			Member member = Member.dao.queryMember(mobile, password);
 			setSessionAttr("memberId", member.get("id"));
+			/*if(StringUtil.equals(code, Constants.STATUS_CODE.SUCCESS)){
+				//登陆成功
+				dto.setUserId((Integer)getSessionAttr("memberId"));
+				dto.setMobile(mobile);
+				ReturnData retData = service.index(dto);
+				data.setData(retData.getData());
+			}*/
 		} catch (IncorrectCaptchaException e) {
 			msg = "验证码错误!";
 		} catch (UnknownAccountException e) {
@@ -106,18 +112,10 @@ public class WXController extends Controller{
 	    return sb.toString();
 	}
 	
-	//获取验证码
-	public void getCheckCode() throws Exception{
-		LoginDTO dto =  LoginDTO.getInstance(getRequest());
-		String code = VertifyUtil.getVertifyCode();
-		dto.setCode(code);
-		renderJson(service.getCheckCodePlus(dto));
-	}
-	
 	//获取个人数据
 	public void queryPersonData() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		dto.setUserId((Integer)getSessionAttr("memberId"));
+		dto.setUserId(getSessionAttr("memberId")==null?0:(Integer)getSessionAttr("memberId"));
 		renderJson(service.queryPersonData(dto));
 	}
 }

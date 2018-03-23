@@ -8,7 +8,7 @@ import java.util.Random;
 public class MobileUtil {
 
 	public static void main(String[] args) {  
-	    String val = "18250752999";
+	    String val = "18250758888";
 	    //加密
 	    String result=encryptPhone(val);  
 	    System.out.println(result);  
@@ -16,7 +16,6 @@ public class MobileUtil {
 	    String rawdata=decryptPhone(result);  
 	    System.out.println(rawdata);  
 	}  
-	
 	private static String[] data = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
 	  
 	/** 

@@ -15,6 +15,7 @@ import com.jfinal.aop.Enhancer;
 import com.jfinal.core.Controller;
 
 import my.core.constants.Constants;
+import my.core.model.Document;
 import my.core.model.Log;
 import my.core.model.Member;
 import my.core.model.ReturnData;
@@ -41,6 +42,51 @@ public class WXNoAuthController extends Controller{
 		String code = VertifyUtil.getVertifyCode();
 		dto.setCode(code);
 		renderJson(service.getCheckCodePlus(dto));
+	}
+	
+	public void login(){
+		
+		ReturnData data = new ReturnData();
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		String mobile = getPara("mobile");
+		String password = getPara("password");
+		String captcha = getPara("captcha");
+		
+		//登陆验证
+		CaptchaUsernamePasswordToken token = new CaptchaUsernamePasswordToken(mobile, password, captcha);
+		
+		Subject subject = SecurityUtils.getSubject();
+		String code = "5700";
+		String msg;
+		try{
+			if(!subject.isAuthenticated()){
+				subject.login(token);
+			}
+			setSessionAttr("mobile", mobile);
+			code = "5600";
+			msg = "登录成功";
+			Member member = Member.dao.queryMember(mobile, password);
+			setSessionAttr("memberId", member.get("id"));
+			setSessionAttr("userTypeCd", "010001");
+		} catch (IncorrectCaptchaException e) {
+			msg = "验证码错误!";
+		} catch (UnknownAccountException e) {
+			msg = "账号不存在!";
+		} catch (IncorrectCredentialsException e) {
+			msg = "用户名密码错误!";
+		} catch (LockedAccountException e) {
+			msg = "账号被锁定!";
+		} catch (ExcessiveAttemptsException e) {
+			msg = "尝试次数过多 请明天再试!";
+		} catch (AuthenticationException e) {
+			msg = "对不起 没有权限访问!";
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg = "请重新登录!";
+		}
+		data.setCode(code);
+		data.setMessage(msg);
+		renderJson(data);
 	}
 	
 	//注册
@@ -115,5 +161,26 @@ public class WXNoAuthController extends Controller{
 		dto.setMobile((String)getSessionAttr("mobile"));
 		//获取初始化数据
 		renderJson(service.index(dto));
+	}
+	
+	//获取文档列表
+	public void getDocumentList(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		renderJson(service.getDocumentList(dto));
+	}
+	
+	//跳转文档
+	public void queryDocument() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		Document document = Document.dao.queryByTypeCd(dto.getType());
+		if(document != null){
+			redirect(document.getStr("desc_url"));
+		}
+	}
+	
+	//联系我们
+	public void contactUs(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		renderJson(service.contactUs(dto));
 	}
 }

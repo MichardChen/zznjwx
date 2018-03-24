@@ -222,6 +222,10 @@ public class Member extends Model<Member> {
 		Db.update("update t_member set userpwd='"+userPwd+"',update_time='"+DateUtil.getNowTimestamp()+"' where mobile='"+mobile+"'");
 	}
 	
+	public int updatePwdWX(String mobile,String userPwd){
+		return Db.update("update t_member set userpwd='"+userPwd+"',update_time='"+DateUtil.getNowTimestamp()+"' where mobile='"+mobile+"'");
+	}
+	
 	public int updateIdCardInfo(int userId,String idCardNo,String idCardImg,String ownerName){
 		if(StringUtil.isNoneBlank(idCardImg)){
 			return Db.update("update t_member set id_card_no='"+idCardNo+"',id_card_img='"+idCardImg+"',update_time='"+DateUtil.getNowTimestamp()+"',name='"+ownerName+"' where id="+userId);

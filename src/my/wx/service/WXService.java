@@ -466,9 +466,14 @@ public class WXService {
 			return data;
 		}
 		//保存密码
-		Member.dao.updatePwd(dto.getMobile(), dto.getNewPwd());
-		data.setCode(Constants.STATUS_CODE.SUCCESS);
-		data.setMessage("密码修改成功");
+		int ret = Member.dao.updatePwdWX(dto.getMobile(), dto.getNewPwd());
+		if(ret != 0){
+			data.setCode(Constants.STATUS_CODE.SUCCESS);
+			data.setMessage("密码修改成功");
+		}else{
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("密码修改失败");
+		}
 		return data;
 	}
 	
@@ -985,7 +990,9 @@ public class WXService {
 		ReturnData data = new ReturnData();
 		int userId = dto.getUserId();
 		String typeCd = dto.getType();
-		List<Message> messages = Message.dao.queryMessages(userId, typeCd);
+		int pageSize = dto.getPageSize();
+		int pageNum = dto.getPageNum();
+		List<Message> messages = Message.dao.queryMessagesByPage(userId, typeCd,pageNum,pageSize);
 		List<MessageListVO> vos = new ArrayList<>();
 		MessageListVO vo = null;
 		for(Message message : messages){
@@ -4956,7 +4963,7 @@ public class WXService {
 		//默认评价
 		List<StoreEvaluate> list = StoreEvaluate.dao.queryStoreEvaluateList(5
 																		   ,1
-																		   ,dto.getId());
+																		   ,store.getInt("id"));
 		List<EvaluateListModel> models = new ArrayList<>();
 		EvaluateListModel model = null;
 		for(StoreEvaluate evaluate : list){
@@ -5275,5 +5282,36 @@ public class WXService {
 			model.setContent("账号退款："+StringUtil.toString(record.getBigDecimal("moneys")));
 		}
 		return model;
+	}
+	
+	public ReturnData contactUs(LoginDTO dto){
+		ReturnData data = new ReturnData();
+		CodeMst shareLogo1 = CodeMst.dao.queryCodestByCode(Constants.COMMON_SETTING.APP_LOGO);
+		Map<String, Object> map = new HashMap<>();
+		if(shareLogo1 != null){
+			map.put("appLogo", shareLogo1.getStr("data2"));
+		}else{
+			map.put("appLogo", null);
+		}
+		//客服电话
+		CodeMst phone = CodeMst.dao.queryCodestByCode(Constants.PHONE.CUSTOM);
+		if(phone != null){
+			map.put("phone", phone.getStr("data2"));
+		}else{
+			map.put("phone", null);
+		}
+		
+		//公司网址
+		CodeMst url = CodeMst.dao.queryCodestByCode(Constants.COMMON_SETTING.NET_URL);
+		if(url != null){
+			map.put("netUrl", url.getStr("data2"));
+		}else{
+			map.put("netUrl", null);
+		}
+		map.put("wx", "同记茶业");
+		data.setData(map);
+		data.setMessage("查询成功");
+		data.setCode(Constants.STATUS_CODE.SUCCESS);
+		return data;
 	}
 }

@@ -1,5 +1,9 @@
 package my.wx.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -12,14 +16,22 @@ import org.huadalink.plugin.shiro.CaptchaUsernamePasswordToken;
 import org.huadalink.plugin.shiro.IncorrectCaptchaException;
 import org.huadalink.route.ControllerBind;
 
+import com.jfinal.aop.Before;
 import com.jfinal.aop.Enhancer;
 import com.jfinal.core.Controller;
+import com.jfinal.upload.UploadFile;
 
+import my.app.service.FileService;
 import my.core.constants.Constants;
+import my.core.interceptor.ContainFileInterceptor;
+import my.core.interceptor.RequestInterceptor;
 import my.core.model.Log;
 import my.core.model.Member;
 import my.core.model.ReturnData;
 import my.pvcloud.dto.LoginDTO;
+import my.pvcloud.util.ImageTools;
+import my.pvcloud.util.ImageZipUtil;
+import my.pvcloud.util.StringUtil;
 import my.wx.service.WXService;
 
 @ControllerBind(key = "/wxmrest", path = "/wx")
@@ -38,62 +50,10 @@ public class WXController extends Controller{
 		renderJson(data);
 	}
 	
-	public void login(){
-		
-		ReturnData data = new ReturnData();
-		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		String mobile = getPara("mobile");
-		String password = getPara("password");
-		String captcha = getPara("captcha");
-		
-		//登陆验证
-		CaptchaUsernamePasswordToken token = new CaptchaUsernamePasswordToken(mobile, password, captcha);
-		
-		Subject subject = SecurityUtils.getSubject();
-		String code = "5700";
-		String msg;
-		try{
-			if(!subject.isAuthenticated()){
-				subject.login(token);
-			}
-			setSessionAttr("mobile", mobile);
-			code = "5600";
-			msg = "登录成功";
-			Member member = Member.dao.queryMember(mobile, password);
-			setSessionAttr("memberId", member.get("id"));
-			/*if(StringUtil.equals(code, Constants.STATUS_CODE.SUCCESS)){
-				//登陆成功
-				dto.setUserId((Integer)getSessionAttr("memberId"));
-				dto.setMobile(mobile);
-				ReturnData retData = service.index(dto);
-				data.setData(retData.getData());
-			}*/
-		} catch (IncorrectCaptchaException e) {
-			msg = "验证码错误!";
-		} catch (UnknownAccountException e) {
-			msg = "账号不存在!";
-		} catch (IncorrectCredentialsException e) {
-			msg = "用户名密码错误!";
-		} catch (LockedAccountException e) {
-			msg = "账号被锁定!";
-		} catch (ExcessiveAttemptsException e) {
-			msg = "尝试次数过多 请明天再试!";
-		} catch (AuthenticationException e) {
-			msg = "对不起 没有权限访问!";
-		} catch (Exception e) {
-			e.printStackTrace();
-			msg = "请重新登录!";
-		}
-		data.setCode(code);
-		data.setMessage(msg);
-		renderJson(data);
-	}
-	
 	/**
 	 * 返回登录界面
 	 */
 	public void checkout() {
-		Log.dao.saveLogInfo((Integer)getSessionAttr("memberId"), Constants.USER_TYPE.USER_TYPE_CLIENT, "微信端退出");
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null) {
 			subject.logout();
@@ -115,7 +75,201 @@ public class WXController extends Controller{
 	//获取个人数据
 	public void queryPersonData() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		dto.setUserId(getSessionAttr("memberId")==null?0:(Integer)getSessionAttr("memberId"));
+		setSesssionParams(dto);
 		renderJson(service.queryPersonData(dto));
+	}
+	
+	//上传头像
+	public void uploadIcon() throws Exception{
+		UploadFile uploadFile = getFile("icon");
+		
+		/*ContainFileInterceptor interceptor = new ContainFileInterceptor();
+		ReturnData data1 = interceptor.vertifyToken(getRequest());
+		if(!StringUtil.equals(data1.getCode(), Constants.STATUS_CODE.SUCCESS)){
+			renderJson(data1);
+			return;
+		}*/
+		
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		//表单中有提交图片，要先获取图片
+		FileService fs=new FileService();
+		String logo = "";
+		//上传文件
+		String uuid = UUID.randomUUID().toString();
+		if(uploadFile != null){
+			String fileName = uploadFile.getOriginalFileName();
+			String[] names = fileName.split("\\.");
+		    File file=uploadFile.getFile();
+		    File t=new File(Constants.FILE_HOST.ICON+uuid+"."+names[1]);
+		    logo = Constants.HOST.ICON+uuid+"."+names[1];
+		    try{
+		        t.createNewFile();
+		    }catch(IOException e){
+		        e.printStackTrace();
+		    }
+		    
+		    fs.fileChannelCopy(file, t);
+		    ImageZipUtil.zipWidthHeightImageFile(file, t, ImageTools.getImgWidth(file), ImageTools.getImgHeight(file), 0.5f);
+		    file.delete();
+		}
+		renderJson(service.updateIcon(dto.getUserId(), logo));
+	}
+	
+	//修改qq
+	public void updateQQ() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.updateQQ(dto.getUserId(), dto.getQq()));
+	}
+		
+	//修改微信
+	public void updateWX() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.updateWX(dto.getUserId(), dto.getWx()));
+	}
+		
+	//修改昵称
+	public void updateNickName() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.updateNickName(dto.getUserId(), dto.getNickName()));
+	}
+	
+	//收货地址列表
+	public void queryMemberAddressList(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.queryMemberAddressList(dto));
+	}
+		
+	//添加收货地址
+	public void saveAddress(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.saveAddress(dto));
+	}
+		
+	//修改收货地址
+	public void updateAddress(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.updateAddress(dto));
+	}
+		
+	//查找收货地址
+	public void queryAddressById(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.queryAddressById(dto));
+	}
+		
+	//删除收货地址
+	public void deleteAddress(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.deleteAddressById(dto));
+	}
+		
+	//提交反馈
+	public void saveFeedBack(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.saveFeedback(dto));
+	}
+	
+	//消息列表
+	public void queryMessageList(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.queryMessageList(dto));
+	}
+	
+	//消息
+	public void queryMessageListDetail(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.queryMessageListDetail(dto));
+	}
+	
+	private void setSesssionParams(LoginDTO dto){
+		dto.setUserId(getSessionAttr("memberId")==null?0:(Integer)getSessionAttr("memberId"));
+		dto.setUserTypeCd((String)getSessionAttr("userTypeCd"));
+		dto.setMobile((String)getSessionAttr("mobile"));
+	}
+	
+	//账单
+	public void queryRecord(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		String queryType = dto.getType();
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.BUY_TEA)){
+			//买茶记录
+			renderJson(service.queryBuyNewTeaRecord(dto));
+			return;
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.SALE_TEA)){
+			//卖茶记录
+			renderJson(service.querySaleTeaRecord(dto));
+			return;
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.WAREHOUSE_FEE)){
+			//仓储费记录
+			renderJson(service.queryWareHouseRecords(dto));
+			return;
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.GET_TEA)){
+			//取茶记录
+			renderJson(service.queryGetTeaRecords(dto));
+			return;
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.RECHARGE)){
+			//充值记录
+			renderJson(service.queryRechargeRecords(dto));
+			return;
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.WITHDRAW)){
+			//提现记录
+			renderJson(service.queryWithDrawRecords(dto));
+			return;
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.REFUND)){
+			//退款记录
+			renderJson(service.queryRefundRecords(dto));
+			return;
+		}
+		
+		ReturnData data = new ReturnData();
+		data.setCode(Constants.STATUS_CODE.FAIL);
+		data.setMessage("查询失败");
+		renderJson(data);
+	}
+	
+	//修改性别
+	public void modifySex(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.updateSex(dto.getUserId(), dto.getSex()));
+	}
+	
+	//查看关联门店
+	public void queryMemberStoreDetail(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.queryMemberStoreDetail(dto));
+	}
+	
+	//修改密码
+	public void modifyPwd() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		renderJson(service.modifyUserPwd(dto));
 	}
 }

@@ -27,4 +27,12 @@ public class Message extends Model<Message> {
 			}
 			return Message.dao.find("select * from t_message where user_id=? and message_type_cd=? order by update_time desc",userId,typeCd);
 		}
+		
+		public List<Message> queryMessagesByPage(int userId,String typeCd,int pageSize,int pageNum){
+			int fromRow = (pageNum-1)*pageSize;
+			if(StringUtil.isBlank(typeCd)){
+				return Message.dao.find("select * from t_message where user_id=? order by update_time desc limit ?,?",userId,fromRow,pageSize);
+			}
+			return Message.dao.find("select * from t_message where user_id=? and message_type_cd=? order by update_time desc limit ?,?",userId,typeCd,fromRow,pageSize);
+		}
 }

@@ -47,6 +47,7 @@ public class WXController extends Controller{
 		ReturnData data = new ReturnData();
 		data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
 		data.setMessage("您还未登陆，请先登陆");
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(data);
 	}
 	
@@ -76,6 +77,7 @@ public class WXController extends Controller{
 	public void queryPersonData() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryPersonData(dto));
 	}
 	
@@ -113,6 +115,7 @@ public class WXController extends Controller{
 		    ImageZipUtil.zipWidthHeightImageFile(file, t, ImageTools.getImgWidth(file), ImageTools.getImgHeight(file), 0.5f);
 		    file.delete();
 		}
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.updateIcon(dto.getUserId(), logo));
 	}
 	
@@ -120,6 +123,7 @@ public class WXController extends Controller{
 	public void updateQQ() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.updateQQ(dto.getUserId(), dto.getQq()));
 	}
 		
@@ -127,6 +131,7 @@ public class WXController extends Controller{
 	public void updateWX() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.updateWX(dto.getUserId(), dto.getWx()));
 	}
 		
@@ -134,6 +139,7 @@ public class WXController extends Controller{
 	public void updateNickName() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.updateNickName(dto.getUserId(), dto.getNickName()));
 	}
 	
@@ -141,6 +147,7 @@ public class WXController extends Controller{
 	public void queryMemberAddressList(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryMemberAddressList(dto));
 	}
 		
@@ -148,6 +155,7 @@ public class WXController extends Controller{
 	public void saveAddress(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.saveAddress(dto));
 	}
 		
@@ -155,6 +163,7 @@ public class WXController extends Controller{
 	public void updateAddress(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.updateAddress(dto));
 	}
 		
@@ -162,6 +171,7 @@ public class WXController extends Controller{
 	public void queryAddressById(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryAddressById(dto));
 	}
 		
@@ -169,6 +179,7 @@ public class WXController extends Controller{
 	public void deleteAddress(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.deleteAddressById(dto));
 	}
 		
@@ -176,6 +187,7 @@ public class WXController extends Controller{
 	public void saveFeedBack(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.saveFeedback(dto));
 	}
 	
@@ -183,6 +195,7 @@ public class WXController extends Controller{
 	public void queryMessageList(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryMessageList(dto));
 	}
 	
@@ -190,6 +203,7 @@ public class WXController extends Controller{
 	public void queryMessageListDetail(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryMessageListDetail(dto));
 	}
 	
@@ -203,6 +217,7 @@ public class WXController extends Controller{
 	public void queryRecord(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		String queryType = dto.getType();
 		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.BUY_TEA)){
 			//买茶记录
@@ -256,6 +271,7 @@ public class WXController extends Controller{
 	public void modifySex(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.updateSex(dto.getUserId(), dto.getSex()));
 	}
 	
@@ -263,6 +279,7 @@ public class WXController extends Controller{
 	public void queryMemberStoreDetail(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryMemberStoreDetail(dto));
 	}
 	
@@ -270,6 +287,7 @@ public class WXController extends Controller{
 	public void modifyPwd() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.modifyUserPwd(dto));
 	}
 }

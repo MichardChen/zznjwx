@@ -33,6 +33,7 @@ public class WXNoAuthController extends Controller{
 		ReturnData data = new ReturnData();
 		data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
 		data.setMessage("您还未登陆，请先登陆");
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(data);
 	}
 	
@@ -41,6 +42,8 @@ public class WXNoAuthController extends Controller{
 		LoginDTO dto =  LoginDTO.getInstance(getRequest());
 		String code = VertifyUtil.getVertifyCode();
 		dto.setCode(code);
+		dto.setUserTypeCd("010001");
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.getCheckCodePlus(dto));
 	}
 	
@@ -86,6 +89,7 @@ public class WXNoAuthController extends Controller{
 		}
 		data.setCode(code);
 		data.setMessage(msg);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(data);
 	}
 	
@@ -124,8 +128,10 @@ public class WXNoAuthController extends Controller{
 				e.printStackTrace();
 				msg = "请重新登录!";
 			}
+			getResponse().setHeader("Access-Control-Allow-Origin", "*");
 			renderJson(rt);
 		}else{
+			getResponse().setHeader("Access-Control-Allow-Origin", "*");
 			renderJson(rt);
 		}
 	}
@@ -133,6 +139,7 @@ public class WXNoAuthController extends Controller{
 	//获取忘记密码验证码
 	public void getForgetCheckCode() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.getForgetCheckCode(dto));
 	}
 	
@@ -145,12 +152,14 @@ public class WXNoAuthController extends Controller{
 		}
 		data.setCode(Constants.STATUS_CODE.SUCCESS);
 		data.setMessage("退出成功");
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(data);
 	}
 	
 	//资讯列表
 	public void queryNewsList() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryNewsList(dto));
 	}
 	
@@ -159,6 +168,7 @@ public class WXNoAuthController extends Controller{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		dto.setUserId(getSessionAttr("memberId")==null?0:(Integer)getSessionAttr("memberId"));
 		dto.setMobile((String)getSessionAttr("mobile"));
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		//获取初始化数据
 		renderJson(service.index(dto));
 	}
@@ -166,6 +176,7 @@ public class WXNoAuthController extends Controller{
 	//获取文档列表
 	public void getDocumentList(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.getDocumentList(dto));
 	}
 	
@@ -181,6 +192,7 @@ public class WXNoAuthController extends Controller{
 	//联系我们
 	public void contactUs(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.contactUs(dto));
 	}
 }

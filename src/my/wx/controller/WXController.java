@@ -5,15 +5,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.ExcessiveAttemptsException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.servlet.Cookie;
-import org.huadalink.plugin.shiro.CaptchaUsernamePasswordToken;
-import org.huadalink.plugin.shiro.IncorrectCaptchaException;
 import org.huadalink.route.ControllerBind;
 
 import com.jfinal.aop.Before;
@@ -23,10 +16,7 @@ import com.jfinal.upload.UploadFile;
 
 import my.app.service.FileService;
 import my.core.constants.Constants;
-import my.core.interceptor.ContainFileInterceptor;
 import my.core.interceptor.RequestInterceptor;
-import my.core.model.Log;
-import my.core.model.Member;
 import my.core.model.ReturnData;
 import my.pvcloud.dto.LoginDTO;
 import my.pvcloud.util.ImageTools;
@@ -289,5 +279,117 @@ public class WXController extends Controller{
 		setSesssionParams(dto);
 		getResponse().setHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.modifyUserPwd(dto));
+	}
+	
+	//新茶发售列表
+	public void queryNewTeaSaleList(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryNewTeaSaleList(dto));
+	}
+		
+	//查询新茶发售详情
+	public void queryNewTeaById(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryNewTeaById(dto));
+	}
+	
+	//添加到购物车
+	public void addBuyCart(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.addBuyCart(dto));
+	}
+		
+	//删除购物车
+	public void deleteBuyCart(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.deleteBuyCart(dto));
+	}
+		
+	//购物车列表
+	public void queryBuyCartList(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryBuyCartLists(dto));
+	}
+		
+	//我要买茶列表
+	public void queryBuyTeaList(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryTeaLists(dto));
+	}
+		
+	//我要买茶按片按件列表
+	public void queryTeaList(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryTeaByIdList(dto));
+	}
+		
+	//我要买茶分析
+	public void queryTeaAnalysis(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryTeaAnalysis(dto));
+	}
+		
+	//新茶发行->新茶发行详情->选择规格(具体茶叶的规格)
+	public void queryTeaSize(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryTeaSize(dto));
+	}
+		
+	//茶资产
+	public void queryTeaProperty(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryTeaProperty(dto));
+	}
+		
+	//仓储详情
+	public void queryWareHouseDetail(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryWareHouseDetail(dto));
+	}
+	
+	//我要喝茶列表
+	public void queryTeaStoreList(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryTeaStoreList(dto));
+	}
+		
+	//门店详情
+	public void queryTeaStoreDetail(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryTeaStoreDetail(dto));
+	}
+		
+	//获取账号余额
+	public void queryMemberMoney() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		setSesssionParams(dto);
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryMemberMoney(dto));
 	}
 }

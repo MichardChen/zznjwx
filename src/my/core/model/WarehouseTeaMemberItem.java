@@ -70,6 +70,56 @@ public class WarehouseTeaMemberItem extends Model<WarehouseTeaMemberItem> {
 		return WarehouseTeaMemberItem.dao.find("select a.* from t_warehouse_tea_member_item a inner join t_warehouse_tea_member b on a.warehouse_tea_member_id=b.id where 1=1 and b.member_id != "+memberId+" "+sql+orderby+" limit "+fromRow+","+pageSize);
 	}
 	
+	public List<WarehouseTeaMemberItem> queryTeaByIdListForWX(int teaId
+															,String size
+															,String priceFlg
+															,int wareHouseId
+															,int quality
+															,int pageSize
+															,int pageNum
+															,int memberId){
+		
+		int fromRow = pageSize*(pageNum-1);
+		//String orderby = " order by a.create_time asc";
+		String orderby = " order by ";
+		String sql = " and a.size_type_cd ='"+size+"'";
+		if(StringUtil.equals(priceFlg, "0")){
+			//从低到高
+			//sql = sql +" and a.size_type_cd ='150001'";
+			orderby = orderby +" a.price asc";
+			sql = sql+" and a.status='"+Constants.TEA_STATUS.ON_SALE+"'";
+		}else if(StringUtil.equals(priceFlg, "2")){
+			//默认
+			orderby = orderby +" a.price asc";
+			sql = sql+" and a.status='"+Constants.TEA_STATUS.ON_SALE+"'";
+		}else{
+			//从高到低
+			//sql = sql +" and a.size_type_cd ='150002'";
+			orderby = orderby +" a.price desc";
+			sql = sql+" and a.status='"+Constants.TEA_STATUS.ON_SALE+"'";
+		}
+		
+		if(quality == 0){
+			//从低到高
+			orderby = orderby +",a.quality asc";
+		}else if(quality == 2){
+			//默认
+			orderby = orderby +",a.quality asc";
+		}else{
+			//从高到低
+			orderby = orderby +",a.quality desc";
+		}
+		
+		if(wareHouseId != 0){
+			sql = sql + " and b.warehouse_id="+wareHouseId;
+		}
+		
+		
+		sql = sql + " and b.tea_id="+teaId+" and a.quality is not null and a.quality!=0";
+		
+		return WarehouseTeaMemberItem.dao.find("select a.* from t_warehouse_tea_member_item a inner join t_warehouse_tea_member b on a.warehouse_tea_member_id=b.id where 1=1 and b.member_id != "+memberId+" "+sql+orderby+" limit "+fromRow+","+pageSize);
+	}
+	
 	public BigDecimal queryOnSaleTeaCount(int memberId,int houserId,int teaId,String typeCd){
 		return Db.queryBigDecimal("select sum(b.quality) from t_warehouse_tea_member a inner join t_warehouse_tea_member_item b on b.warehouse_tea_member_id=a.id where a.member_id="+memberId+" and a.warehouse_id="+houserId+" and a.tea_id="+teaId+" and member_type_cd='010001' and b.status='160001' and size_type_cd='"+typeCd+"'");
 	}

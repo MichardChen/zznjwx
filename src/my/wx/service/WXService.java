@@ -1134,7 +1134,6 @@ public class WXService {
 			data.setMessage("查询失败，茶叶数据不存在");
 			return data;
 		}
-		//WarehouseTeaMember wtm = WarehouseTeaMember.dao.queryWarehouseTeaMember(dto.getId(), Constants.USER_TYPE.PLATFORM_USER);
 		WarehouseTeaMember wtm = WarehouseTeaMember.dao.queryById(wtmItem.getInt("warehouse_tea_member_id"));
 		if(wtm == null){
 			data.setCode(Constants.STATUS_CODE.FAIL);
@@ -1772,7 +1771,7 @@ public class WXService {
 			return data;
 		}
 		
-		List<WarehouseTeaMemberItem> list = WarehouseTeaMemberItem.dao.queryTeaByIdList(dto.getTeaId()
+		List<WarehouseTeaMemberItem> list = WarehouseTeaMemberItem.dao.queryTeaByIdListForWX(dto.getTeaId()
 																					   ,size
 																					   ,priceFlg
 																					   ,wareHouseId

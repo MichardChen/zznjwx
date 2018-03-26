@@ -143,6 +143,12 @@ public class WXNoAuthController extends Controller{
 		renderJson(service.getForgetCheckCode(dto));
 	}
 	
+	public void saveForgetPwd() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.saveForgetPwd(dto));
+	}
+	
 	//退出
 	public void logout() {
 		ReturnData data = new ReturnData();

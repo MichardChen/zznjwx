@@ -1,0 +1,143 @@
+body {
+  background: #fff;
+}
+.mui-bar {
+  background: none;
+  box-shadow: none;
+}
+.mui-bar .mui-cancel {
+  line-height: 44px;
+  padding-left: 20px;
+  margin-top: 20px;
+  color: #333;
+}
+.page-container .mui-segmented-control {
+  width: 50%;
+  margin: 86px auto 0 auto;
+  border: none;
+}
+.page-container .mui-segmented-control .mui-control-item {
+  border: 0;
+  color: #777;
+}
+.page-container .mui-segmented-control .mui-control-item.mui-active {
+  background: none;
+  color: #fe5400;
+  border-bottom: 2px solid #fe5400;
+}
+#login-form .mui-input-row,
+#register-form .mui-input-row {
+  border: 0;
+  margin: 15px;
+  height: 45px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+}
+#login-form .mui-input-row input,
+#register-form .mui-input-row input {
+  font-size: 12px;
+  height: 45px;
+}
+#login-form .mui-input-row .mui-icon,
+#register-form .mui-input-row .mui-icon {
+  top: 12px;
+}
+#login-form .mui-input-row:after,
+#register-form .mui-input-row:after {
+  display: none;
+}
+#login-form .mui-button-row,
+#register-form .mui-button-row {
+  height: atuo;
+  margin: 15px;
+  padding: 15px 0;
+}
+#login-form .mui-button-row button,
+#register-form .mui-button-row button {
+  margin-bottom: 0;
+  padding: 8px 0;
+  background: #fe5400;
+  border: 0;
+  color: #fff;
+}
+#login-form .mui-input-row:nth-child(2) {
+  display: flex;
+}
+#login-form .mui-input-row:nth-child(2) input {
+  flex: 1;
+}
+#login-form .mui-input-row:nth-child(2) .forget-password {
+  flex: 0 0 80px;
+  margin: 3px;
+  width: 80px;
+  border-color: #ff5400;
+  color: #ff5400;
+  border-radius: 30px;
+  padding: 10px;
+  background: none;
+}
+#login-form .mui-input-row:nth-child(2) .mui-icon {
+  right: 85px;
+}
+#register-form {
+  background: none;
+}
+#register-form .mui-input-row .get-msg,
+#register-form .mui-input-row .countdown {
+  margin: 3px;
+  padding: 10px;
+  color: #ff5400;
+  z-index: 100;
+}
+#register-form .mui-input-row:nth-child(2) {
+  display: flex;
+}
+#register-form .mui-input-row:nth-child(2) input {
+  flex: 1;
+}
+#register-form .mui-input-row:nth-child(2) .get-msg {
+  flex: 0 0 120px;
+  width: 120px;
+  border-color: #ffe4d7;
+  background: #ffe4d7;
+  border-radius: 30px;
+}
+#register-form .mui-input-row:nth-child(2) .countdown {
+  display: none;
+}
+#register-form .mui-input-row:nth-child(2) .mui-icon {
+  right: 125px;
+}
+#register-form .mui-input-row:nth-child(3) {
+  display: flex;
+}
+#register-form .mui-input-row:nth-child(3) input {
+  flex: 1;
+}
+#register-form .mui-input-row:nth-child(3) .triggle-show {
+  flex: 0 0 50px;
+  width: 50px;
+  border: 0;
+  font-size: 24px;
+  padding: 0;
+  background: transparent ;
+}
+#register-form .mui-input-row:nth-child(3) .mui-icon {
+  right: 40px;
+}
+#register-form .mui-text-row {
+  font-size: 12px;
+  line-height: 18px;
+  margin: 15px;
+}
+#register-form .mui-text-row .service-agreement,
+#register-form .mui-text-row .save-agreement {
+  color: #ff5400;
+}
+#register-form:before,
+#register-form:after,
+#login-form:before,
+#login-form:after {
+  display: none;
+  clear: both;
+}

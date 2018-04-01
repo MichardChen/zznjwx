@@ -1,0 +1,39 @@
+#fresh-news{
+    .mui-table-view{
+        .mui-table-view-cell{
+            padding:10px;
+            display: flex;
+            .title-box{
+                flex:1;
+                padding: 5px 10px;
+                .title{
+                    display: block;
+                    font-size: 13px;
+                    line-height: 16px;
+                    color:#444;
+                    height: 40px;
+                }
+                .desc{
+                    font-size: 11px;
+                    color: #666;
+                    .desc-type{
+                        float: left;
+                    }
+                    .time{
+                        float: right;
+                    }
+                }
+                .desc:after{
+                    content: '';
+                    display: table;
+                    height: 0;
+                    visibility: hidden;
+                    clear: both;
+                }
+            }
+            .img-box{
+                flex:0 0 100px
+            }
+        }
+    }
+}

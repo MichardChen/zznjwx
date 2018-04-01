@@ -1,0 +1,145 @@
+body{
+    background: #fff;
+}
+.mui-bar{
+    background: none;
+    box-shadow: none;
+    .mui-cancel{
+        line-height: 44px;
+        padding-left:20px; 
+        margin-top: 20px;
+        color:#333;
+    }
+}
+.page-container{
+    .mui-segmented-control{
+        width: 50%;
+        margin: 86px auto 0 auto;
+        border: none;
+        .mui-control-item{
+            border:0;
+            color: #777;
+        }
+        .mui-control-item.mui-active{
+            background: none;
+            color: #fe5400;
+            border-bottom: 2px solid #fe5400;
+        }
+    }
+}
+#login-form,#register-form{
+    .mui-input-row{
+        border:0;
+        margin: 15px;
+        height: 45px;
+        border:1px solid #ccc;
+        border-radius: 30px;
+        input{
+            font-size: 12px;           
+            height: 45px;
+        }
+        .mui-icon{
+            top:12px;
+        }
+    }
+    .mui-input-row:after{
+        display: none;
+    }
+    .mui-button-row{
+        height: atuo;
+        margin: 15px;
+        padding: 15px 0;
+        button{
+            margin-bottom: 0;
+            padding:8px 0;
+            background:#fe5400;
+            border: 0;
+            color: #fff;
+        }
+    } 
+}
+#login-form{
+    .mui-input-row:nth-child(2){
+        display: flex;
+        input{
+            flex: 1;
+        }
+        .forget-password{
+            flex: 0 0 80px;
+            margin: 3px;
+            width: 80px;
+            border-color: #ff5400;
+            color:#ff5400;
+            border-radius: 30px;
+            padding:10px;
+            background: none;
+        }
+        .mui-icon{
+            right: 85px;
+        }
+    }
+}
+#register-form{    
+    background: none;
+    .mui-input-row{
+        .get-msg,.countdown{
+            margin: 3px;
+            padding:10px;
+            color: #ff5400;
+            z-index: 100;
+        }
+        
+    }
+
+    .mui-input-row:nth-child(2){
+        display: flex;
+        input{
+            flex: 1;
+        }
+        .get-msg{
+            flex: 0 0 120px;
+            width: 120px;
+            border-color: #ffe4d7;
+            background: #ffe4d7;
+            border-radius: 30px;
+        }
+        .countdown{
+            display: none;
+        }
+        .mui-icon{
+            right: 125px;
+        }
+    }
+    .mui-input-row:nth-child(3){
+        display: flex;
+        input{
+            flex: 1;
+        }
+        .triggle-show{
+            flex: 0 0 50px;
+            width: 50px;
+            border: 0;
+            font-size: 24px;
+            padding: 0;
+            background: transparent ;
+        }
+        .mui-icon{
+            right: 40px;
+        }
+    }
+   
+    .mui-text-row{
+        font-size: 12px;
+        line-height: 18px;
+        margin: 15px;
+        .service-agreement,.save-agreement{
+            color: #ff5400;
+        }
+    }
+}
+#register-form:before,#register-form:after,#login-form:before,#login-form:after{
+    display: none;
+    clear: both;
+}
+
+

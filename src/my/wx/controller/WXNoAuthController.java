@@ -1,5 +1,8 @@
 package my.wx.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -11,16 +14,20 @@ import org.huadalink.plugin.shiro.CaptchaUsernamePasswordToken;
 import org.huadalink.plugin.shiro.IncorrectCaptchaException;
 import org.huadalink.route.ControllerBind;
 
+import com.alibaba.druid.util.StringUtils;
 import com.jfinal.aop.Enhancer;
 import com.jfinal.core.Controller;
 
 import my.core.constants.Constants;
+import my.core.model.AcceessToken;
 import my.core.model.Document;
 import my.core.model.Log;
 import my.core.model.Member;
 import my.core.model.ReturnData;
+import my.core.vo.UserData;
 import my.pvcloud.dto.LoginDTO;
 import my.pvcloud.util.StringUtil;
+import my.pvcloud.util.TextUtil;
 import my.pvcloud.util.VertifyUtil;
 import my.wx.service.WXService;
 
@@ -29,12 +36,16 @@ public class WXNoAuthController extends Controller{
 
 	WXService service=Enhancer.enhance(WXService.class);
 	
-	public void loginExpire(){
+	/*public void loginExpire(){
 		ReturnData data = new ReturnData();
 		data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
 		data.setMessage("您还未登陆，请先登陆");
-		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(data);
+	}*/
+	
+	public void loginInit() throws Exception{
+		render("/wx/pages/login.html");
 	}
 	
 	//获取注册验证码
@@ -43,7 +54,7 @@ public class WXNoAuthController extends Controller{
 		String code = VertifyUtil.getVertifyCode();
 		dto.setCode(code);
 		dto.setUserTypeCd("010001");
-		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.getCheckCodePlus(dto));
 	}
 	
@@ -65,12 +76,26 @@ public class WXNoAuthController extends Controller{
 			if(!subject.isAuthenticated()){
 				subject.login(token);
 			}
-			setSessionAttr("mobile", mobile);
 			code = "5600";
 			msg = "登录成功";
 			Member member = Member.dao.queryMember(mobile, password);
-			setSessionAttr("memberId", member.get("id"));
-			setSessionAttr("userTypeCd", "010001");
+			//String accessToken = TextUtil.generateUUID();
+			String accessToken = "6aa1c3b464074590ad1f37af0fd2aa67";
+			UserData userData = new UserData();
+			userData.setUserId(member.getInt("id"));
+			userData.setToken(accessToken);
+			userData.setMobile(mobile);
+			userData.setUserTypeCd("010001");
+			//判断access_token表是否存储
+			AcceessToken aToken = AcceessToken.dao.queryToken(member.getInt("id"), "010001", "020005");
+			if(aToken != null){
+				//更新
+				AcceessToken.dao.updateToken(member.getInt("id"), accessToken, "020005");
+			}else{
+				//新增
+				AcceessToken.dao.saveToken(member.getInt("id"), "010001", accessToken, "020005");
+			}
+			data.setData(userData);
 		} catch (IncorrectCaptchaException e) {
 			msg = "验证码错误!";
 		} catch (UnknownAccountException e) {
@@ -89,7 +114,8 @@ public class WXNoAuthController extends Controller{
 		}
 		data.setCode(code);
 		data.setMessage(msg);
-		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(data);
 	}
 	
@@ -107,11 +133,26 @@ public class WXNoAuthController extends Controller{
 				if(!subject.isAuthenticated()){
 					subject.login(token);
 				}
-				setSessionAttr("mobile", dto.getMobile());
 				code = "5600";
 				msg = "登录成功";
 				Member member = Member.dao.queryMember(dto.getMobile(), dto.getUserPwd());
-				setSessionAttr("memberId", member.get("id"));
+				String accessToken = TextUtil.generateUUID();
+				//String accessToken = "6aa1c3b464074590ad1f37af0fd2aa67";
+				UserData userData = new UserData();
+				userData.setUserId(member.getInt("id"));
+				userData.setToken(accessToken);
+				userData.setMobile(dto.getMobile());
+				userData.setUserTypeCd("010001");
+				//判断access_token表是否存储
+				AcceessToken aToken = AcceessToken.dao.queryToken(member.getInt("id"), "010001", "020005");
+				if(aToken != null){
+					//更新
+					AcceessToken.dao.updateToken(member.getInt("id"), accessToken, "020005");
+				}else{
+					//新增
+					AcceessToken.dao.saveToken(member.getInt("id"), "010001", accessToken, "020005");
+				}
+				rt.setData(userData);
 			} catch (IncorrectCaptchaException e) {
 				msg = "验证码错误!";
 			} catch (UnknownAccountException e) {
@@ -128,10 +169,10 @@ public class WXNoAuthController extends Controller{
 				e.printStackTrace();
 				msg = "请重新登录!";
 			}
-			getResponse().setHeader("Access-Control-Allow-Origin", "*");
+			getResponse().addHeader("Access-Control-Allow-Origin", "*");
 			renderJson(rt);
 		}else{
-			getResponse().setHeader("Access-Control-Allow-Origin", "*");
+			getResponse().addHeader("Access-Control-Allow-Origin", "*");
 			renderJson(rt);
 		}
 	}
@@ -139,13 +180,13 @@ public class WXNoAuthController extends Controller{
 	//获取忘记密码验证码
 	public void getForgetCheckCode() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.getForgetCheckCode(dto));
 	}
 	
 	public void saveForgetPwd() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.saveForgetPwd(dto));
 	}
 	
@@ -158,14 +199,14 @@ public class WXNoAuthController extends Controller{
 		}
 		data.setCode(Constants.STATUS_CODE.SUCCESS);
 		data.setMessage("退出成功");
-		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(data);
 	}
 	
 	//资讯列表
 	public void queryNewsList() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryNewsList(dto));
 	}
 	
@@ -174,7 +215,7 @@ public class WXNoAuthController extends Controller{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		dto.setUserId(getSessionAttr("memberId")==null?0:(Integer)getSessionAttr("memberId"));
 		dto.setMobile((String)getSessionAttr("mobile"));
-		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		//获取初始化数据
 		renderJson(service.index(dto));
 	}
@@ -182,7 +223,7 @@ public class WXNoAuthController extends Controller{
 	//获取文档列表
 	public void getDocumentList(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.getDocumentList(dto));
 	}
 	
@@ -198,7 +239,7 @@ public class WXNoAuthController extends Controller{
 	//联系我们
 	public void contactUs(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.contactUs(dto));
 	}
 }

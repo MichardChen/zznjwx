@@ -1,0 +1,99 @@
+.mui-bar{
+    background:transparent;
+    box-shadow: none;
+    padding-top: 15px;
+    .icon-box{
+        background: rgba(0,0,0,0.3);
+        border-radius: 30px;
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        font-size: 18px;
+        .icon-message{
+            color: #fff;
+        }
+    }
+}
+.page-container{
+    .mui-slider{
+        .mui-slider-indicator{
+            background: rgba(0,0,0,0.3);
+            bottom: 0;
+            padding-bottom: 8px;
+        }
+    }
+    .nav-bar{
+        margin-top:5px;
+        background: #fff;
+        font-size: 12px;
+        padding:13px 0;
+        display: flex;
+        .nav-bar-item{
+            flex:1;
+            text-align: center;
+            img{
+                margin-bottom: 12px;
+            }
+        }
+    }
+    .information-list{
+        margin-top: 10px;        
+        .mui-table-view{
+            .mui-table-view-cell{
+                padding:10px;
+                display: flex;
+                .read-title{
+                    flex: 1;
+                    font-size: 16px;
+                    line-height: 28px;
+                    padding: 0 10px;
+                    color: #222;
+                }
+                .more{
+                    flex:0 0 100px;
+                    margin-right: -10px;
+                    font-size: 13px;
+                    line-height: 30px;
+                    color: #666;
+                    text-align: right;
+                }
+                .title-box{
+                    flex:1;
+                    padding: 5px 10px;
+                    .title{
+                        display: block;
+                        font-size: 13px;
+                        line-height: 16px;
+                        color:#444;
+                        height: 40px;
+                    }
+                    .desc{
+                        font-size: 11px;
+                        color: #666;
+                        .desc-type{
+                            float: left;
+                        }
+                        .time{
+                            float: right;
+                        }
+                    }
+                    .desc:after{
+                        content: '';
+                        display: table;
+                        height: 0;
+                        visibility: hidden;
+                        clear: both;
+                    }
+                }
+                .img-box{
+                    flex:0 0 100px
+                }
+            }
+        }
+        .mui-table-view:before,.mui-table-view:after{
+            visibility: hidden;
+        }
+    }
+}

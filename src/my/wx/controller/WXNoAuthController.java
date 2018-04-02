@@ -79,8 +79,8 @@ public class WXNoAuthController extends Controller{
 			code = "5600";
 			msg = "登录成功";
 			Member member = Member.dao.queryMember(mobile, password);
-			//String accessToken = TextUtil.generateUUID();
-			String accessToken = "6aa1c3b464074590ad1f37af0fd2aa67";
+			String accessToken = TextUtil.generateUUID();
+			//String accessToken = "6aa1c3b464074590ad1f37af0fd2aa67";
 			UserData userData = new UserData();
 			userData.setUserId(member.getInt("id"));
 			userData.setToken(accessToken);
@@ -137,7 +137,6 @@ public class WXNoAuthController extends Controller{
 				msg = "登录成功";
 				Member member = Member.dao.queryMember(dto.getMobile(), dto.getUserPwd());
 				String accessToken = TextUtil.generateUUID();
-				//String accessToken = "6aa1c3b464074590ad1f37af0fd2aa67";
 				UserData userData = new UserData();
 				userData.setUserId(member.getInt("id"));
 				userData.setToken(accessToken);

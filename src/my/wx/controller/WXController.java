@@ -932,6 +932,8 @@ public class WXController extends Controller{
 	
 	private int onLogin(int userId,String userTypeCd,String token,String platForm){
 		
+		userTypeCd="010001";
+		platForm="020005";
 		AcceessToken acceessToken = AcceessToken.dao.queryToken(userId, userTypeCd, platForm);
 		if(acceessToken == null){
 			//没有登录

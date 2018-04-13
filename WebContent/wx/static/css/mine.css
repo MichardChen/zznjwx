@@ -1,0 +1,93 @@
+.mui-bar {
+  position: relative;
+  background: #777777;
+  height: 120px;
+}
+.mui-bar .header-card {
+  position: absolute;
+  width: 95%;
+  height: 110px;
+  background: #fff;
+  border-radius: 6px;
+  padding: 9px 10px;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  bottom: -55px;
+  left: 2.5%;
+}
+.mui-bar .header-card .top-part {
+  display: flex;
+  border-bottom: 1px solid #eee;
+}
+.mui-bar .header-card .top-part .Head-portrait {
+  flex: 0 0 86px;
+  width: 86px;
+}
+.mui-bar .header-card .top-part .user-name {
+  flex: 1;
+}
+.mui-bar .header-card .top-part .user-name .name {
+  font-size: 18px;
+  line-height: 36px;
+}
+.mui-bar .header-card .top-part .user-name .name p {
+  display: inline-block;
+  color: #333;
+}
+.mui-bar .header-card .top-part .user-name .icon-setter {
+  font-size: 22px;
+  float: right;
+  padding: 0 10px;
+}
+.mui-bar .header-card .top-part .modify p {
+  font-size: 12px;
+  line-height: 18px;
+  padding-bottom: 5px;
+}
+.mui-bar .header-card .top-part .modify p i {
+  padding-left: 5px;
+  vertical-align: text-bottom;
+}
+.mui-bar .header-card .bottom-part {
+  display: flex;
+  text-align: center;
+  font-size: 14px;
+  line-height: 30px;
+  margin-top: 4px;
+}
+.mui-bar .header-card .bottom-part .buytea-record,
+.mui-bar .header-card .bottom-part .gettea-record {
+  flex: 1;
+}
+.mui-bar .header-card .bottom-part .buytea-record a,
+.mui-bar .header-card .bottom-part .gettea-record a {
+  color: #555;
+}
+.mui-bar .header-card .bottom-part .buytea-record i,
+.mui-bar .header-card .bottom-part .gettea-record i {
+  vertical-align: text-bottom;
+  padding-right: 2px;
+  font-size: 18px;
+}
+.mui-content.mine-list {
+  padding-top: 55px;
+}
+.mui-content.mine-list .mui-table-view {
+  margin-top: 15px;
+}
+.mui-content.mine-list .mui-table-view .mui-navigate-right {
+  font-size: 14px;
+  line-height: 24px;
+  color: #333;
+}
+.mui-content.mine-list .mui-table-view .mui-navigate-right i {
+  padding-right: 7px;
+  font-size: 20px;
+  vertical-align: middle;
+}
+.mui-content.mine-list .mui-table-view .mui-navigate-right span {
+  color: #999;
+}
+.mui-content.mine-list .mui-table-view:before,
+.mui-content.mine-list .mui-table-view:after {
+  display: none;
+}

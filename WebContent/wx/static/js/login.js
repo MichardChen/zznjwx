@@ -18,6 +18,7 @@
 			dataType:'json',
 			success:function(data){
 				if(data == QEQUEST_OK){
+					console.log(data);
 					mui.toast("注册成功！")
 				}else{
 					mui.toast("注册失败，请核对信息重新注册！")
@@ -146,6 +147,7 @@
 			dataType:'json',
 			success:function(data){
 				if(data.code == REQUEST_OK){
+					setCookie(data.data,0.1);
 					mui.toast("登录成功！")
 				}else{
 					mui.toast("账号密码错误，请重新输入！")

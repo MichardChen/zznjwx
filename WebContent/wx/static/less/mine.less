@@ -1,0 +1,92 @@
+.mui-bar{
+    position: relative;
+    background: #777777;
+    height: 120px;
+    .header-card{
+        position: absolute;
+        width: 95%;
+        height: 110px;
+        background: #fff;
+        border-radius: 6px;
+        padding:9px 10px;
+        box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
+        bottom: -55px;
+        left:2.5%;
+        .top-part{
+            display: flex;
+            border-bottom: 1px solid #eee;
+            .Head-portrait{
+                flex:0 0 86px;
+                width: 86px;
+            }
+            .user-name{
+                flex: 1;
+                .name{
+                    font-size: 18px;
+                    line-height: 36px;
+                    p{
+                       display: inline-block;
+                       color: #333;
+                    }                    
+                }
+                .icon-setter{
+                    font-size: 22px;
+                    float: right;
+                    padding:0 10px;
+                }
+            }
+            .modify{
+                p{
+                    font-size: 12px;
+                    line-height: 18px;                   
+                    padding-bottom: 5px;
+                    i{
+                        padding-left: 5px;
+                        vertical-align: text-bottom;
+                    }
+                }
+            }
+        }
+        .bottom-part{
+            display: flex;
+            text-align: center;
+            font-size: 14px;
+            line-height: 30px;
+            margin-top: 4px;
+            .buytea-record,.gettea-record{
+                flex:1;               
+                a{
+                    color: #555;
+                }
+                i{
+                    vertical-align: text-bottom;
+                    padding-right: 2px;
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+}
+
+.mui-content.mine-list{
+    padding-top:55px;
+    .mui-table-view{
+        margin-top:15px;
+        .mui-navigate-right{
+            font-size:14px;
+            line-height:24px;
+            color:#333;
+            i{
+                padding-right:7px;
+                font-size:20px;
+                vertical-align: middle;
+            }
+            span{
+                color:#999;
+            }
+        }
+    }
+    .mui-table-view:before,.mui-table-view:after{
+        display:none;
+    }
+}

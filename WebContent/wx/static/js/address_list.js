@@ -1,14 +1,12 @@
 +(function(){
-	//获取cookie
+	//获取cookie值
 	var cookieParam = getCookie();
-	//请求数据
-	var getMessageData = function(pageSize,pageNum){
-		var messageData;
+	//请求收货地址列表数据
+	var getAddressData = function(pageSize,pageNum){
+		var ListData;
 		$.ajax({
-			url:REQUEST_URL+"wxmrest/queryMessageList",
 			type:"get",
-			dataType:"json",
-			async:false,
+			url:REQUEST_URL+"wxmrest/queryMemberAddressList",
 			data:{
 				"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
@@ -16,24 +14,21 @@
 				"pageSize":pageSize,
 				"pageNum":pageNum
 			},
+			async:false,
+			dataType:"json",
 			success:function(data){
 				if(data.code == REQUEST_OK){
-					messageData = data.data;
+					ListData =  data.data;
 				}else{
-					mui.toast(data.message)
+					return ;
 				}
-			},
-			error:function(msg){
-				console.log(msg);
 			}
-		})
-		console.log(messageData);
-		return messageData;		
+		});
+		return ListData;
 	}
-	
 	mui.init({
 		pullRefresh: {
-			container: '#messages-list',
+			container: '#address-list',
 			down: {
 				contentdown : "下拉可以刷新",
       			contentover : "释放立即刷新",
@@ -112,6 +107,5 @@
 	mui('.mui-table-view').on('tap','.mui-table-view-cell',function(){
 		var url = $(this).find('a').attr('href');
 		document.location.href=url;
-	});
+	});	
 })()
-

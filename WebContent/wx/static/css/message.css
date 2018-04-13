@@ -1,0 +1,45 @@
+.mui-bar {
+  background: #322b27;
+}
+.mui-bar .mui-icon,
+.mui-bar .mui-title {
+  color: #fff;
+}
+.mui-bar .mui-btn {
+  background: none;
+  color: #fff;
+  border: 0;
+}
+.mui-bar .mui-btn:active {
+  background: none;
+  color: ff5400;
+}
+.mui-content {
+  padding-top: 44px;
+}
+.mui-content .mui-table-view:before {
+  display: none;
+}
+#messages-list .mui-table-view .mui-table-view-cell {
+  padding: 7.5px 15px;
+  margin-bottom: 5px;
+}
+#messages-list .mui-table-view .mui-table-view-cell .title-box .title {
+  font-size: 16px;
+  line-height: 32px;
+  color: #333;
+}
+#messages-list .mui-table-view .mui-table-view-cell .title-box .desc {
+  font-size: 14px;
+  line-height: 28px;
+  color: #666;
+}
+#messages-list .mui-table-view .mui-table-view-cell .title-box .time {
+  font-size: 12px;
+  line-height: 24px;
+  color: #999;
+}
+#messages-list .mui-table-view:before,
+#messages-list .mui-table-view:after {
+  display: none;
+}

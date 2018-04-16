@@ -1,0 +1,85 @@
+.mui-bar-nav {
+  background: #322b27;
+}
+.mui-bar-nav .mui-icon,
+.mui-bar-nav .mui-title {
+  color: #fff;
+}
+.mui-bar-nav .mui-btn {
+  background: none;
+  color: #fff;
+  border: 0;
+}
+.mui-bar-nav .mui-btn:active {
+  background: none;
+  color: ff5400;
+}
+.mui-content {
+  padding-top: 44px;
+}
+.mui-content .mui-table-view:before {
+  display: none;
+}
+.mui-content > .mui-table-view:first-child {
+  margin-top: 0;
+}
+.tea-publish-bar {
+  padding: 15px;
+  margin-bottom: 10px;
+  background: #fff;
+}
+.tea-publish-bar .desc-text {
+  font-size: 14px;
+  line-height: 24px;
+  padding: 0 15px;
+  text-align: justify;
+}
+.mui-table-view {
+  background: transparent;
+}
+.mui-table-view .mui-table-view-cell {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+.mui-table-view .mui-table-view-cell .tea-img {
+  width: 100%;
+  height: auto;
+}
+.mui-table-view .mui-table-view-cell .tea-text {
+  display: flex;
+  margin: 0 -15px -15px -15px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+}
+.mui-table-view .mui-table-view-cell .tea-text .tea-name {
+  flex: 1;
+  color: #fff;
+  padding: 10px 15px;
+}
+.mui-table-view .mui-table-view-cell .tea-text .tea-status {
+  flex: 0 0 100px;
+  width: 100px;
+  text-align: center;
+  padding: 10px 15px;
+}
+.mui-table-view .mui-table-view-cell .tea-text .tea-publishing {
+  background: #ff5400;
+  color: #fff;
+}
+.mui-table-view .mui-table-view-cell .tea-text .tea-wait-publish {
+  background: #A0a0a0;
+  color: #fff;
+}
+.mui-bar-tab {
+  background: none;
+  box-shadow: none;
+}
+.mui-bar-tab button.mui-btn-block {
+  background: #ff5400;
+  color: #fff;
+  height: 50px;
+  border-radius: 0;
+  border: 1px solid #ff5400;
+  margin-bottom: 5px;
+}

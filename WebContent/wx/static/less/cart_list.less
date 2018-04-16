@@ -1,0 +1,155 @@
+@import './common.less';
+#cart-list{
+    .mui-table-view{
+        background: none;
+        .mui-table-view-cell{
+            padding:5px 15px;
+            margin-bottom: 10px;
+            background: #fff;
+            .top-part{
+                display: flex;
+                border-bottom: 1px solid #ccc;
+                padding:10px 0;
+                .product-img{
+                    flex:0 0 100px;
+                    width:100px;
+                }
+                .product-content{
+                    flex: 1;
+                    .product-name{
+                        padding: 6px 5px;
+                    }
+                    .prodcut-name:after{
+                        content: '';
+                        visibility: hidden;
+                        display: table;
+                        height: 0;
+                        clear: both;
+                    }
+                    
+                    p{
+                        display: inline-block;
+                    }
+                    .name{
+                        font-size: 16px;
+                        color: #333;
+                    }
+                    .product-label{
+                        span{
+                            font-size: 12px;
+                            color:#666;
+                            padding:1px 3px;
+                            border:1px solid #666;
+                            margin:0 5px;
+                            border-radius: 3px;
+                        }
+                    }
+                    .product-price{
+                        padding:6px 5px;
+                        .price{
+                            color:#ff5400;
+                            font-size: 14px;
+                        }
+                    }
+                    .product-num{
+                        padding-right: 30px;
+                    }
+                    
+                }
+            }
+            .bottom-part{
+               line-height: 30px; 
+               height: 30px;
+               input{
+                   vertical-align: middle;
+                   left:0;
+               }
+            }
+        }
+        .mui-table-view-cell.mui-active{
+            background: #fff;
+        }
+    }
+    .mui-table-view:first-child{
+        margin-top: 0;;
+    }
+    .mui-table-view:after{
+        display: none;
+    }
+    
+}
+.cart-bar{   
+    background: #fff;
+    box-shadow: none;
+    .order,.delete{
+        display: flex;
+        height: 50px;
+        line-height: 50px;
+        font-size: 16px;
+        .all-sellect,.all-sellect-delete{
+            flex:1;
+            text-align: left;
+            padding: 0 15px;
+            label{
+                padding-left: 30px;
+            }
+            .mui-checkbox{
+                input[type='checkbox']{
+                    left: 0;
+                    top:11px;
+                }
+            }
+        }
+        .all-price{
+            flex:0 0 100px;
+            width: 80px;
+            padding:0 10px; 
+            .money{
+                color: #ff5400;
+            }          
+        }
+        .order-btn,.delete-btn{
+            flex: 0 0 100px;
+            text-align: center;
+            button{
+                width: 100%;
+                height: 50px;
+                top: 0;
+                background: #ff5400; 
+                border-radius: 0;
+                border: 0;
+                color:#fff;
+            }
+            button.mui-disabled{
+                background:#ccc;
+            }          
+        }
+        
+    }
+    .delete{
+            display: none;
+        }
+}
+.mui-checkbox input[type=checkbox]:checked:before, .mui-radio input[type=radio]:checked:before{
+    color: #ff5400;
+}
+
+/*购物车default页面*/
+
+.default-page{
+    .default-text{
+        padding-top:60%;
+        text-align: center;
+        color: #ccc;
+    }
+    .mui-input-row{
+        button{
+            width: 80%;
+            text-align: center;
+            margin: 10%;
+            background: #ff5400;
+            color: #fff;
+            border:0;
+        }
+    }
+}

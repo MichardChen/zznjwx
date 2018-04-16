@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?27z2gr');
-  src:  url('fonts/icomoon.eot?27z2gr#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?27z2gr') format('truetype'),
-    url('fonts/icomoon.woff?27z2gr') format('woff'),
-    url('fonts/icomoon.svg?27z2gr#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?ol95vv');
+  src:  url('fonts/icomoon.eot?ol95vv#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?ol95vv') format('truetype'),
+    url('fonts/icomoon.woff?ol95vv') format('woff'),
+    url('fonts/icomoon.svg?ol95vv#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,6 +24,29 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-filter:before {
+  content: "\e929";
+  color: #666;
+}
+.icon-scall:before {
+  content: "\e92a";
+  color: #ef7f49;
+}
+.icon-bg:before {
+  content: "\e925";
+  color: #ddddde;
+}
+.icon-notice:before {
+  content: "\e926";
+  color: #ea5619;
+}
+.icon-service:before {
+  content: "\e927";
+}
+.icon-share2:before {
+  content: "\e928";
+  color: #dcdbdb;
+}
 .icon-buytea:before {
   content: "\e90e";
   color: #626262;

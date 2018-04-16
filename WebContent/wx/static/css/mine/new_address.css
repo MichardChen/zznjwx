@@ -1,0 +1,39 @@
+.mui-bar-nav {
+  background: #322b27;
+}
+.mui-bar-nav .mui-icon,
+.mui-bar-nav .mui-title {
+  color: #fff;
+}
+.mui-bar-nav .mui-btn {
+  background: none;
+  color: #fff;
+  border: 0;
+}
+.mui-bar-nav .mui-btn:active {
+  background: none;
+  color: ff5400;
+}
+.mui-content {
+  padding-top: 44px;
+}
+.mui-content .mui-table-view:before {
+  display: none;
+}
+.mui-content p.desc {
+  font-size: 14px;
+  padding: 10px 0;
+  color: #333;
+}
+.mui-content > .mui-table-view:first-child {
+  margin-top: 0;
+}
+.mui-content .mui-checkbox {
+  line-height: 40px;
+}
+.mui-table-view-cell input {
+  margin: 0;
+  font-size: 14px;
+  border-color: transparent;
+  padding: 0;
+}

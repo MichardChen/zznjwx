@@ -1,0 +1,18 @@
+.mui-bar .mui-tab-item {
+  color: #333;
+}
+.mui-bar .mui-tab-item.mui-active {
+  color: #ff5400;
+}
+.mui-bar .mui-tab-item.mui-active .icon-index::before {
+  content: "\e904";
+}
+.mui-bar .mui-tab-item.mui-active .icon-resourse::before {
+  content: "\e90c";
+}
+.mui-bar .mui-tab-item.mui-active .icon-cart::before {
+  content: "\e901";
+}
+.mui-bar .mui-tab-item.mui-active .icon-mine::before {
+  content: "\e907";
+}

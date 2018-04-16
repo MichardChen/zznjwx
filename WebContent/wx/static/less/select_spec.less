@@ -1,0 +1,86 @@
+@import 'common.less';
+
+.mui-table-view{
+    .mui-table-view-cell.mui-active{
+        background: #fff;
+    }
+    .mui-table-view-cell{
+        padding: 15px;
+        .top-div{
+            padding-bottom: 7.5px;
+            display: flex;
+            border-bottom: 1px solid #efefef;
+            .tea-img{
+                flex:0 0 100px;
+                width: 100px;
+            }
+            .tea-text{
+                flex:1;
+                .tea-name{
+                    margin-bottom: 6px;
+                    color: #333;
+                }
+                p{
+                    display: inline-block;
+                    line-height: 24px;
+                }
+                .tea-price{
+                    color: #ff5400;
+                }
+                span{
+                    font-size: 12px;
+                    color: #999;
+                }
+                span.tag{
+                    font-size: 12px;
+                    padding: 3px;
+                    border-radius: 3px;
+                    border:1px solid #ccc;
+                    margin-right: 10px;
+                };
+            }
+        }
+        .bottom-div{
+            padding-top: 7.5px;
+            line-height: 35px;
+            font-size: 14px;
+            span{
+                padding:0 15px;
+            }
+        }
+    }    
+}
+.desc-btn{
+        background: none;
+        padding: 15px;
+        a{
+            font-size: 14px;
+            color: #ff5400;
+        }
+    }
+
+
+.buy-bar{
+    display: flex;
+    .service{
+        flex:0 0 80px;
+        text-align: center;
+        .icon-cart{
+            font-size: 28px;
+        }
+        p{
+            font-size: 14px;
+        }
+    }
+    .buy-btn{
+        flex: 1;
+        text-align: center;
+        line-height: 50px;
+        background: #ff5400;
+        a{
+           color: #fff;
+          } 
+        }
+        
+}
+

@@ -1,0 +1,22 @@
+.mui-bar {
+  background: #322b27;
+}
+.mui-bar .mui-icon,
+.mui-bar .mui-title {
+  color: #fff;
+}
+.mui-bar .mui-btn {
+  background: none;
+  color: #fff;
+  border: 0;
+}
+.mui-bar .mui-btn:active {
+  background: none;
+  color: ff5400;
+}
+.mui-content {
+  padding-top: 44px;
+}
+.mui-content .mui-table-view:before {
+  display: none;
+}

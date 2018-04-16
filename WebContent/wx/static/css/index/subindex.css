@@ -1,0 +1,99 @@
+.mui-bar {
+  background: transparent;
+  box-shadow: none;
+  padding-top: 15px;
+}
+.mui-bar .icon-box {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 30px;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 18px;
+}
+.mui-bar .icon-box .icon-message {
+  color: #fff;
+}
+.page-container .mui-slider .mui-slider-indicator {
+  background: rgba(0, 0, 0, 0.3);
+  bottom: 0;
+  padding-bottom: 8px;
+}
+.page-container .nav-bar {
+  margin-top: 5px;
+  background: #fff;
+  font-size: 12px;
+  padding: 13px 0;
+  display: flex;
+}
+.page-container .nav-bar .nav-bar-item {
+  flex: 1;
+  text-align: center;
+}
+.page-container .nav-bar .nav-bar-item img {
+  margin-bottom: 12px;
+}
+.page-container .information-list {
+  margin-top: 10px;
+}
+.page-container .information-list .mui-table-view .mui-table-view-cell {
+  padding: 10px;
+  display: flex;
+}
+.page-container .information-list .mui-table-view .mui-table-view-cell .read-title {
+  flex: 1;
+  font-size: 16px;
+  line-height: 28px;
+  padding: 0 10px;
+  color: #222;
+}
+.page-container .information-list .mui-table-view .mui-table-view-cell .more {
+  flex: 0 0 100px;
+  margin-right: -10px;
+  font-size: 13px;
+  line-height: 30px;
+  color: #666;
+  text-align: right;
+}
+.page-container .information-list .mui-table-view .mui-table-view-cell .title-box {
+  flex: 1;
+  padding: 5px 10px;
+}
+.page-container .information-list .mui-table-view .mui-table-view-cell .title-box .title {
+  display: block;
+  font-size: 13px;
+  line-height: 16px;
+  color: #444;
+  height: 40px;
+}
+.page-container .information-list .mui-table-view .mui-table-view-cell .title-box .desc {
+  font-size: 11px;
+  color: #666;
+}
+.page-container .information-list .mui-table-view .mui-table-view-cell .title-box .desc .desc-type {
+  float: left;
+}
+.page-container .information-list .mui-table-view .mui-table-view-cell .title-box .desc .time {
+  float: right;
+}
+.page-container .information-list .mui-table-view .mui-table-view-cell .title-box .desc:after {
+  content: '';
+  display: table;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+.page-container .information-list .mui-table-view .mui-table-view-cell .img-box {
+  flex: 0 0 100px;
+}
+.page-container .information-list .mui-table-view:before,
+.page-container .information-list .mui-table-view:after {
+  visibility: hidden;
+}
+.jq-alert .alert .fd-btn a {
+  height: 35px;
+  padding: 5px;
+  font-size: 16px;
+}

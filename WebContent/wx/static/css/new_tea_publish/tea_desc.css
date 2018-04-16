@@ -1,0 +1,85 @@
+.mui-bar-nav.mui-bar {
+  background: transparent;
+  box-shadow: none;
+  padding-top: 15px;
+}
+.mui-bar-nav.mui-bar .mui-icon {
+  padding: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border-radius: 30px;
+  margin: 0;
+}
+.desc-content .mui-card {
+  margin: 0;
+  box-shadow: none;
+}
+.desc-content .mui-card .tea-name-box,
+.desc-content .mui-card .tea-price-box {
+  padding: 10px 15px;
+  font-size: 14px;
+}
+.desc-content .mui-card .tea-price-box .tea-price {
+  font-size: 16px;
+  color: #ff5400;
+}
+.desc-content .mui-card .tea-price-box .tea-Num-desc {
+  font-size: 12px;
+  line-height: 16px;
+  color: #ccc;
+}
+.desc-content .mui-card .mui-card-footer {
+  display: block;
+}
+.desc-content .mui-card .mui-card-footer h3 {
+  line-height: 20px;
+  margin-bottom: 10px;
+}
+.desc-content .mui-card .mui-card-footer p {
+  line-height: 16px;
+}
+.mui-segmented-control {
+  background: #fff;
+  border: 0;
+  border-radius: 0;
+  margin: 10px 0;
+}
+.mui-segmented-control .mui-control-item {
+  color: #444;
+  border: 0;
+}
+.mui-segmented-control .mui-control-item.mui-active {
+  background: none;
+  color: #ff5400;
+}
+.mui-table {
+  background: #fff;
+  padding: 15px;
+}
+.mui-table tr td {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #efeff4;
+}
+.buy-bar {
+  display: flex;
+}
+.buy-bar .service {
+  flex: 0 0 80px;
+  text-align: center;
+}
+.buy-bar .service .icon-service {
+  font-size: 28px;
+}
+.buy-bar .service p {
+  font-size: 14px;
+}
+.buy-bar .buy-btn {
+  flex: 1;
+  text-align: center;
+  line-height: 50px;
+  background: #ff5400;
+}
+.buy-bar .buy-btn a {
+  color: #fff;
+}

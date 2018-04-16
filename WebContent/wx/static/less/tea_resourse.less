@@ -1,0 +1,71 @@
+.header-nav{
+    height:90px;
+    background: #322b27;
+    display: flex;
+    .mui-nav-item{
+        flex:1;
+        color: #fff;
+        text-align: center;
+        .mui-icon{          
+            display: block;
+            padding-top: 20px;            
+        }
+        .mui-icon:before{
+            font-size: 30px;
+            color: #fff;
+        }
+    }
+}
+.page-container{
+    padding-top:90px;
+    .mui-pull-top-pocket{
+        top:90px;
+    }
+    .mui-table-view{
+        background: none;
+        .no-product{
+            padding:15px;
+            padding-top: 70%;
+            background: none;
+            background-image: url('../../images/buy.png');
+            background-position: center center;
+            background-repeat: no-repeat;
+            text-align: center;
+        }
+        .mui-table-view-cell{
+            background: #fff;
+            padding: 15px;
+            .top-part{
+                padding: 0 0 20px 0;
+                border-bottom: 1px solid #eee;
+                p{
+                    display: inline-block;
+                }
+                .tea-title{
+                    color: #333;
+                    font-size: 16px;
+                }
+                .tea-num{
+                    color: #ccc;
+                    font-size: 14px;
+                }
+            }
+            .bottom-part{
+                padding-top: 15px;
+                span{
+                    padding: 0 3px;
+                    border:1px solid #666;
+                    font-size: 14px;
+                    border-radius: 3px;
+                }
+                a{
+                    color: #ccc;
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+     .mui-table-view:before, .mui-table-view:after{
+         display: none;
+     }
+}

@@ -1,0 +1,46 @@
+.mui-bar-nav {
+  background: #322b27;
+}
+.mui-bar-nav .mui-icon,
+.mui-bar-nav .mui-title {
+  color: #fff;
+}
+.mui-bar-nav .mui-btn {
+  background: none;
+  color: #fff;
+  border: 0;
+}
+.mui-bar-nav .mui-btn:active {
+  background: none;
+  color: ff5400;
+}
+.mui-content {
+  padding-top: 44px;
+}
+.mui-content .mui-table-view:before {
+  display: none;
+}
+.mui-toast-container {
+  bottom: 50%;
+}
+.mui-bar.mui-bar-nav {
+  display: flex;
+}
+.mui-bar.mui-bar-nav .mui-action-back {
+  flex: 0 0 50px;
+}
+.mui-bar.mui-bar-nav .mui-slider-indicator {
+  flex: 1;
+  padding-right: 45px;
+  top: 4px;
+}
+.mui-bar.mui-bar-nav .mui-slider-indicator a {
+  color: #fff;
+}
+.mui-bar.mui-bar-nav .mui-slider-indicator a.mui-active {
+  color: #fff;
+  border-color: #fff;
+}
+.mui-scroll-wrapper {
+  top: 44px;
+}

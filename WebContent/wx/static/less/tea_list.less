@@ -1,0 +1,60 @@
+@import 'common.less';
+
+.mui-bar{
+    .mui-search{
+        width: 90%;       
+        input{
+            background: #fff;
+            border-radius: 3px;
+            text-align: left;
+            margin: 7px 0;
+        }
+    }
+    .mui-icon.mui-icon-search{
+        color:#666;  
+        top: 0;
+        position: absolute;
+        left: 0;      
+    }
+}
+
+.mui-table-view{
+    .mui-table-view-cell{
+        margin-bottom: 10px;
+        .top-div{
+            display: flex;
+            border-bottom: 1px solid #eee;
+            .tea-img{
+                flex: 0 0 100px;
+                width: 100px;
+            }
+            .tea-text{
+                flex: 1;
+                .tea-name{
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: #333;
+                    margin-bottom: 8px;
+                }
+                .tea-tag{
+                    padding: 2px;
+                    border: 1px solid #322B27;
+                    border-radius: 3px;
+                    font-size: 12px;
+                    color: #322B27;
+                }
+            }
+        }
+        .bottom-div{
+            padding-top: 10px;
+            p{
+               font-size: 14px;
+               line-height: 25px;
+               span{
+                   padding-left: 10px;
+                   color: #ff5400;
+               }
+            }
+        }
+    }
+}

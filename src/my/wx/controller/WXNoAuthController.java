@@ -20,6 +20,7 @@ import com.jfinal.core.Controller;
 
 import my.core.constants.Constants;
 import my.core.model.AcceessToken;
+import my.core.model.CodeMst;
 import my.core.model.Document;
 import my.core.model.Log;
 import my.core.model.Member;
@@ -230,9 +231,20 @@ public class WXNoAuthController extends Controller{
 	public void queryDocument() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		Document document = Document.dao.queryByTypeCd(dto.getType());
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
+		ReturnData data = new ReturnData();
+		Map<String, Object> map = new HashMap<>();
 		if(document != null){
-			redirect(document.getStr("desc_url"));
+			data.setCode(Constants.STATUS_CODE.SUCCESS);
+			data.setMessage("查询成功");
+			map.put("url", document.getStr("desc_url"));
+		}else{
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("查询失败");
+			map.put("url", "");
 		}
+		data.setData(map);
+		renderJson(data);
 	}
 	
 	//联系我们

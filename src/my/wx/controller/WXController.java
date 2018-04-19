@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import my.app.service.FileService;
 import my.core.constants.Constants;
+import my.core.interceptor.RequestInterceptor;
 import my.core.model.AcceessToken;
 import my.core.model.ReturnData;
 import my.core.vo.UserData;
@@ -30,6 +31,7 @@ import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.session.mgt.WebSessionKey;
 import org.huadalink.route.ControllerBind;
 
+import com.jfinal.aop.Before;
 import com.jfinal.aop.Enhancer;
 import com.jfinal.core.Controller;
 import com.jfinal.upload.UploadFile;
@@ -972,4 +974,54 @@ public class WXController extends Controller{
 
         return status;
     }
+	
+	//付款(选择规格=下单)
+	public void pay() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		if(loginFlg != 3){
+			ReturnData data = new ReturnData();
+			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
+			if(loginFlg == 0){
+				data.setMessage("您还未登陆，请先登陆");
+			}
+			if(loginFlg == 1){
+				data.setMessage("您的账号登录过期");
+			}
+			if(loginFlg == 2){
+				data.setMessage("您的账号已在其他终端登录");
+			}
+			
+			getResponse().addHeader("Access-Control-Allow-Origin", "*");
+			renderJson(data);
+			return;
+		}
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.pay(dto));
+	}
+		
+	//购物车下单
+	public void addOrder() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		if(loginFlg != 3){
+			ReturnData data = new ReturnData();
+			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
+			if(loginFlg == 0){
+				data.setMessage("您还未登陆，请先登陆");
+			}
+			if(loginFlg == 1){
+				data.setMessage("您的账号登录过期");
+			}
+			if(loginFlg == 2){
+				data.setMessage("您的账号已在其他终端登录");
+			}
+			
+			getResponse().addHeader("Access-Control-Allow-Origin", "*");
+			renderJson(data);
+			return;
+		}
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.addOrder(dto));
+	}
 }

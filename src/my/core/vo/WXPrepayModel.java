@@ -11,6 +11,14 @@ public class WXPrepayModel implements Serializable{
 	private String nonceStr;
 	private String timeStamp;
 	private String sign;
+	private String mwebUrl;
+	
+	public String getMwebUrl() {
+		return mwebUrl;
+	}
+	public void setMwebUrl(String mwebUrl) {
+		this.mwebUrl = mwebUrl;
+	}
 	public String getAppId() {
 		return appId;
 	}

@@ -253,4 +253,11 @@ public class WXNoAuthController extends Controller{
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.contactUs(dto));
 	}
+	
+	//授权重定向接口
+	public void redirectAuth(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		System.out.println("授权登陆重定向接口。。。。。。。。。。。。。。");
+		renderJson(service.contactUs(dto));
+	}
 }

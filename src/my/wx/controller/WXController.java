@@ -428,7 +428,8 @@ public class WXController extends Controller{
 	//消息
 	public void queryMessageListDetail(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		//int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		int loginFlg =3;
 		if(loginFlg != 3){
 			ReturnData data = new ReturnData();
 			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);

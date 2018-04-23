@@ -1,0 +1,71 @@
+.mui-bar-nav {
+  background: #322b27;
+}
+.mui-bar-nav .mui-icon,
+.mui-bar-nav .mui-title {
+  color: #fff;
+}
+.mui-bar-nav .mui-btn {
+  background: none;
+  color: #fff;
+  border: 0;
+}
+.mui-bar-nav .mui-btn:active {
+  background: none;
+  color: ff5400;
+}
+.mui-content {
+  padding-top: 44px;
+}
+.mui-content .mui-table-view:before {
+  display: none;
+}
+.mui-toast-container {
+  bottom: 50%;
+}
+.mui-content > .mui-table-view:first-child {
+  margin-top: 0;
+}
+.mui-content .mui-table-view {
+  background: none;
+}
+.mui-content .mui-table-view .mui-table-view-cell:first-child .tea-title {
+  color: #333;
+  font-size: 16px;
+  line-height: 30px;
+}
+.mui-content .mui-table-view .mui-table-view-cell:first-child .bottom-part {
+  margin-top: 15px;
+}
+.mui-content .mui-table-view .mui-table-view-cell:first-child .tea-tag {
+  padding: 1px 6px;
+  border: 1px solid #76675F;
+  line-height: 28px;
+  font-size: 14px;
+  border-radius: 3px;
+  color: #76675F;
+}
+.mui-content .mui-table-view .mui-table-view-cell {
+  background: #fff;
+  margin-bottom: 10px;
+}
+.mui-content .mui-table-view .mui-table-view-cell .storage-name {
+  font-size: 16px;
+  padding: 10px 0;
+}
+.mui-content .mui-table-view .mui-table-view-cell .sale-box,
+.mui-content .mui-table-view .mui-table-view-cell .get-box {
+  padding: 8px 0;
+}
+.mui-content .mui-table-view .mui-table-view-cell .sale-box span,
+.mui-content .mui-table-view .mui-table-view-cell .get-box span {
+  font-size: 14px;
+  line-height: 28px;
+  color: #666;
+}
+.mui-content .mui-table-view .mui-table-view-cell .sale-box .mui-btn-danger {
+  background: #ff5400;
+}
+.mui-content .mui-table-view .mui-table-view-cell .get-box .mui-btn-success {
+  background: #23b84a;
+}

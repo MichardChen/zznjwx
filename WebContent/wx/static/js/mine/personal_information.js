@@ -24,7 +24,7 @@
 	}
 	var fillData = function(data){
 		$("#personal-img").attr('src',data.icon);
-		$(".phone-num").html(data.mobile);
+		$(".phone-num").html(String(data.mobile));
 		$('.gender').html(data.sex == 0 ? "女":"男");
 		$('.wxNo').html(data.wxNo == null ? "" : data.wxNo);
 		$('.QQNo').html(data.qqNo == null ? "" : data.qqNo);
@@ -33,8 +33,46 @@
 
 	mui.ready(function(){
 		getData();
-		mui(".mui-content").on('tap','.modify-Head-portrait',function(){
-			mui.alert("调用摄像头接口")
+		mui(".modify-Head-portrait").on('change','.head-input',function(){
+			var file = $(this).get(0).files[0];
+			var cookieParam = getCookie();
+			console.log(file);
+			var formData = new FormData();
+			formData.append("icon",file);
+			formData.append("token",cookieParam.token);
+			formData.append("mobile",cookieParam.mobile);
+			formData.append("userId",cookieParam.userId);
+			console.log(formData);
+			var cookieParam = getCookie();
+			$.ajax({
+				type:"post",
+				url:REQUEST_URL+"wxmrest/uploadIcon",
+				data:formData,
+				contentType: false, // 注意这里应设为false
+      			processData: false,    //false
+      			cache: false,    //缓存
+				success:function(data){
+					if(data.code == REQUEST_OK){
+						mui.toast(data.message);
+						if (window.FileReader) {
+						        var reader = new FileReader();
+						    } else {
+						        alert("您的设备不支持图片预览功能，如需该功能请升级您的设备！");
+						    }
+						    //获取图片
+						    if (file.files && file.files[0]){
+						        var reader = new FileReader(); 
+						        reader.onload = function(e){  
+						            var img = document.getElementById("personal-img");
+						            img.setAttribute("src",e.target.result);
+						        }
+						        reader.readAsDataURL(file.files[0]);
+						    }
+					}else{
+						mui.toast(data.message);
+					}
+				}
+			});
 		})
 		mui(".mui-content").on('tap','.modify-genter',function(){
 			var html='<div class="mui-input-row mui-radio mui-left"><label>男</label><input name="radio1" value=1 type="radio"></div>'
@@ -85,14 +123,15 @@
 			})
 		})
 		mui(".mui-content").on('tap','.modify-nickname',function(){
+			var nickname = $('.nickname').html();
 			mui.openWindow({
-				url:'./subpages/modify_nickname.html',
+				url:'./subpages/modify_nickname.html?'+nickname,
 				id:'modify_nickname.html'
 			})
 		})
-		mui(".mui-content").on('tap','.modify-certification',function(){
+		/*mui(".mui-content").on('tap','.modify-certification',function(){
 			mui.alert("调用摄像头接口")
-		})
+		})*/
 		mui(".mui-content").on('tap','.modify-address',function(){
 			mui.openWindow({
 				url:'./subpages/address_list.html',

@@ -12,8 +12,12 @@
 
     mui.ready(function(){
     	mui('.mui-bar-tab').on('tap', 'a', function(e) {	
-    		toggleTap(this);
-			checkCookie(login);               		
+    		if($(this).hasClass('default-index')){
+    			toggleTap(this);
+    		}else{
+    			toggleTap(this);
+				checkCookie(login); 
+    		}    		              		
         })
     });
     //自定义事件，模拟点击“首页选项卡”
@@ -41,5 +45,6 @@
 	}
 	var toggleTap = function(targetUrl){
 		$('.mui-iframe-wrapper').find('iframe').attr('src',targetUrl);
+		
 	}
 })()

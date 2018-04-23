@@ -70,3 +70,6 @@
 .page-container .mui-table-view:after {
   display: none;
 }
+.mui-toast-container {
+  bottom: 50%;
+}

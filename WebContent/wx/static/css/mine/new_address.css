@@ -37,3 +37,6 @@
   border-color: transparent;
   padding: 0;
 }
+.mui-checkbox input[type=checkbox]:checked:before, .mui-radio input[type=radio]:checked:before{
+	color: #ff5400;
+}

@@ -34,9 +34,9 @@
 		console.log(data);
 		var table = $('.mui-table-view');
 		for (var i = 0; i < data.messages.length; i++) {
-			var li = $('<li class="mui-table-view-cell"/>')
+			var li = $('<li class="mui-table-view-cell" data-messageid='+data.messages[i].id+'/>')
 			var titleBox = $('<div class="title-box"/>');
-			var title = '<a class="title" href='+data.messages[i].shareUrl+'>'+data.messages[i].type+'</a>';
+			var title = '<a class="title" >'+data.messages[i].type+'</a>';
 			var desc = '<div class="desc"><span class="message-type">'+data.messages[i].title+'</span></div>';				
 			var time = '<div class="time"><span class="time">'+data.messages[i].date+'</span><span class="mui-pull-right">查看详情<i class="icon-next"></i></span></div>'
 			titleBox.html(title+desc+time);
@@ -54,10 +54,9 @@
 	loadList(paramObj);
 	
 	mui('.mui-table-view').on('tap','.mui-table-view-cell',function(){
-		var url = $(this).find('a').attr('href');
-		console.log(url);
+		var msgid = $(this).data("messageid");
 		mui.openWindow({
-    		url:"../message_desc.html?"+url,
+    		url:"./message_desc.html?"+msgid,
     		id:"message.html",
     		show:{
 		      autoShow:true,//页面loaded事件发生后自动显示，默认为true

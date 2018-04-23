@@ -1,16 +1,4 @@
 +(function(){
-	
-	var login = function(){
-		mui.openWindow({
-    		url:"../login/login.html",
-    		id:"login.html",
-    		show:{
-		      autoShow:true,//页面loaded事件发生后自动显示，默认为true
-		      aniShow:"slide-in-down",//页面显示动画，默认为”slide-in-right“；
-		      duration:100//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-		    }
-        })
-	}
 	//请求列表数据
 	var getListData = function(obj){
 		var cookieParam = checkCookie();
@@ -32,7 +20,6 @@
 					createListDom(data.data.tea);
 				}else{
 					mui.toast(data.message);
-					login();
 				}
 			}
 		});
@@ -49,9 +36,9 @@
 			listWapper.html(li);
 		}else{
 			data.forEach(function(n){
-				li = $('<li class="mui-table-view-cell"/>')
+				li = $('<li class="mui-table-view-cell" data-teaId='+n.teaId+'/>')
 				var topPart = $('<div class="top-part"/>')
-				var topPartContent = '<p class="tea-title">'+n.name+'</p><p class="mui-pull-right tea-num">库存：'+n.warehouse+n.size+'</p>';
+				var topPartContent = '<p class="tea-title">'+n.name+'</p><p class="mui-pull-right tea-num">库存：'+n.stock+n.size+'</p>';
 				topPart.html(topPartContent);
 				var bottomPart = $('<div class="bottom-part"/>');
 				var bottomPartContent = '<span class="tea-tag">'+n.type+'</span><a class="mui-pull-right">查看详情<i class="icon-next"></i></a>'
@@ -67,4 +54,61 @@
 		fn:getListData
 	}
 	loadList(paramObj);
+	
+	mui(".header-nav").on("tap",".buy-tea",function(){
+		var cookieParam = getCookie();  
+		debugger;
+    	$.ajax({
+    		url:REQUEST_URL+'wxnonAuthRest/queryDocument',
+    		type:"get",
+    		dataType:"json",
+    		async:true,
+    		data:{
+    			"token":cookieParam.token,
+				"mobile":cookieParam.mobile,
+				"userId":cookieParam.userId,
+    			"typeCd":'060011'
+    		},
+    		success:function(data){
+    			debugger;
+    			console.log(data);
+    			var html = "<iframe src='"+data+"'></iframe>";
+	        	 jqalert({
+			        content: html,
+			        yestext: '同意并继续',
+			        notext: '取消',
+			        yesfn:function(){
+			        	mui.openWindow({
+			        		url:"../buytea/tea_list.html",
+			        		id:'tea_list.html'
+			        	})
+			        }
+			    })
+    		}
+    	})
+	})
+	
+	mui(".header-nav").on("tap",".sale-tea",function(){
+			appAlert()
+	})
+	
+	mui(".header-nav").on("tap",".cancellations",function(){
+			appAlert()
+	})
+	
+	mui(".header-nav").on("tap",".records",function(){
+			mui.openWindow({
+				url:"../bill/bill_list.html",
+				id:"bill_list.html"
+			})
+	})
+	
+	mui(".mui-content").on("tap",".mui-table-view-cell",function(){
+			var teaId = $(this).data("teaid");
+			mui.openWindow({
+				url:"./tea_storage.html?"+teaId,
+				id:"tea_storage.html"
+			})
+	})
+	
 })()

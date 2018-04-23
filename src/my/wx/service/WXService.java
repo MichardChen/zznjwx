@@ -5313,4 +5313,25 @@ public class WXService {
 		data.setCode(Constants.STATUS_CODE.SUCCESS);
 		return data;
 	}
+	
+	public ReturnData logoutWX(LoginDTO dto) throws Exception{
+		ReturnData data = new ReturnData();
+		Member member = Member.dao.queryMember(dto.getMobile());
+		if(member == null){
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("对不起，用户不存在");
+			return data;
+		}
+		AcceessToken token = AcceessToken.dao.queryById(member.getInt("id"),"020005");
+		if((token == null)  ||(!StringUtil.equals(token.getStr("token"), dto.getToken()))){
+			data.setCode("5701");
+			data.setMessage("对不起，您的账号在另一处登录");
+			return data;
+		}
+		
+		AcceessToken.dao.updateToken(member.getInt("id"), "","020005");
+		data.setCode(Constants.STATUS_CODE.SUCCESS);
+		data.setMessage("退出成功");
+		return data;
+	}
 }

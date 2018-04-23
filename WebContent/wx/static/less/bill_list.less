@@ -1,0 +1,123 @@
+@import 'common.less';
+.mui-bar{
+    box-shadow: none;
+}
+.nav-bar{
+    display: flex;
+    background: #322b27;
+    position: relative;
+    .nav-item{
+        flex: 1;
+        text-align: center;
+        line-height: 40px;
+        span.icon-calendar{
+            font-size: 24px;
+            color: #fff;
+            vertical-align: sub;
+        }
+        span.icon-calendar:before{
+            color: #fff;
+        }
+        a{
+            color: #fff;
+            span{
+                padding: 0 2px;
+            }
+        }
+    }
+    .nav-item:nth-child(2){
+        flex: 0 0 200px;
+        width: 200px;       
+        .inner-box{
+            padding:0 6px;
+            background: #76675f;
+            border-radius: 4px;
+            line-height: 28px;
+            margin: 6px 0;
+            a,span{
+                line-height: 28px;
+                vertical-align: top;
+            }
+            .icon-arrow:before{
+                color: #fff;
+                font-size: 20px;
+            }
+        }
+    }
+    .year-select,.month-select,.options{
+        position: absolute;
+        top:44px;
+        left:0;
+        width: 100%;
+        background: #fff;
+        display: none;
+        z-index: 10;
+    }
+    .year-select{
+        a{
+            display: block;
+            padding:15px;
+            color: #333;
+        }
+        a.mui-active{
+            color: #ff5400;
+        }
+    }
+    .month-select{       
+        .month-option{
+            display: flex;
+            a{
+                flex: 1;
+                color: #333;
+                padding: 15px;
+            }
+            a.mui-active{
+                span{
+                    padding: 5px;
+                    border-radius: 20px;
+                    background: #ff5400;
+                    color: #fff;
+                }
+            }
+        }
+    }
+    .options{
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        .options-item{
+            a{
+                display: block;
+                padding:15px;
+                color: #333;
+            }
+        }
+        .options-item.mui-active{
+            background: #f0f0f0;
+        }
+    }
+}
+.mui-content{
+    .mui-scroll-wrapper{
+        top:88px;
+    }
+}
+
+.mui-table-view{
+    .mui-table-view-cell{
+        table{
+            tr{
+                td{
+                    padding:7.5px;
+                    
+                }
+                .bill-content{
+                    color: #ff5400;
+                }
+                .bill-time,.bill-desc-content{
+                    color: #999;
+                }
+            }
+        }
+    }
+}

@@ -67,4 +67,28 @@
 		})
 	})
 	
+	mui('.mui-bar-nav').on('tap',".mui-btn",function(){
+		var cookieParam = getCookie();  
+		$.ajax({
+    		url:REQUEST_URL+'wxnonAuthRest/queryDocument',
+    		type:"get",
+    		dataType:"json",
+    		data:{
+    			"token":cookieParam.token,
+				"mobile":cookieParam.mobile,
+				"userId":cookieParam.userId,
+    			"typeCd":'060001'
+    		},
+    		success:function(data){
+    			console.log(data);
+	            mui.openWindow({
+					url:"./publish_desc.html?"+data.data.url,
+					id:"publish_desc.html"
+				})
+    		}
+    	})
+		
+	})
+	
+	
 })()

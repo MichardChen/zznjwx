@@ -129,8 +129,7 @@
 }
 .cart-bar .order .all-price,
 .cart-bar .delete .all-price {
-  flex: 0 0 100px;
-  width: 80px;
+  flex: 1;
   padding: 0 10px;
 }
 .cart-bar .order .all-price .money,

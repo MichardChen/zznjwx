@@ -98,8 +98,28 @@
     }
 }
 
-.jq-alert .alert .fd-btn a{
-    height: 35px;
-    padding: 5px;
-    font-size: 16px;
+.jq-alert {
+    .alert {
+        .content{
+            padding: 15px;
+        }
+        .fd-btn{
+            a{
+                height: 35px;
+                padding: 24px;
+                font-size: 16px; 
+            }
+            a:first-child{
+                flex:0 0 80px
+            }
+            a:last-child{
+                flex: 1;
+                background: #ff5400;
+                color: #fff;
+            }
+            a.confirm:active{
+                background: #ff5400;
+            }
+        }
+    }
 }

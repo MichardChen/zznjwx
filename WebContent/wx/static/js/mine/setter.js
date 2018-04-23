@@ -11,5 +11,26 @@ $(function(){
 			id:'feedback.html'
 		})
 	})
-	
+	mui('.mui-content').on('tap','.excit-btn',function(){
+		$.ajax({
+            url:REQUEST_URL+"wxnonAuthRest/checkout",
+            type:"get",
+            dataType:"json",
+            async:true,
+            success:function(data){
+                if(data.code == REQUEST_OK){
+                    mui.toast(data.message); 
+                    delAllCookie();
+                    setTimeout(function(){
+                    	 mui.openWindow({
+							url:'../../../index.html',
+							id:'index.html'
+						})
+                    },500)                 
+                }else{
+                    mui.toast(data.message);
+                }               
+            }
+        })
+	})
 })

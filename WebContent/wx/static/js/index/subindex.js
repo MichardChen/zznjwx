@@ -112,8 +112,9 @@
         	})
         })
         
-        mui('.mui-table-view').on('tap','.information',function(){
+/*        mui('.mui-table-view').on('tap','.information',function(){
         	var url = $(this).find('a').attr('href');
+        	document.location.href = url;
         	mui.openWindow({
         		url:"./information_desc.html?"+url,
 	    		id:"information.html",
@@ -124,23 +125,42 @@
 			    }
         	})
         	
-        })
+        })*/
         
         mui('.nav-bar').on('tap','.tea-publish',function(){
-        	var cookieParam = checkCookie(login);
-        	var html = "<iframe src='./message.html'></iframe>";
-		        	 jqalert({
+        	var cookieParam = checkCookie(login);        		        	 
+        	$.ajax({
+        		url:REQUEST_URL+'wxnonAuthRest/queryDocument',
+        		type:"get",
+        		dataType:"json",
+        		data:{
+        			"token":cookieParam.token,
+					"mobile":cookieParam.mobile,
+					"userId":cookieParam.userId,
+        			"typeCd":'060011'
+        		},
+        		success:function(data){
+        			console.log(data);
+        			var html ="<iframe src="+data.data.url+" scrolling=no width=100% height=300px></iframe>";	
+        			jqalert({
 				        content: html,
 				        yestext: '同意并继续',
 				        notext: '取消',
-				        yesfn:function(){
+				        yesfn: function(){
+				        	alert("dsjkfjsd")
 				        	mui.openWindow({
 				        		url:"../new_tea_publish/new_tea_publish.html",
 				        		id:'new_tea_publish.html'
 				        	})
 				        }
 				    })
-        	/*$.ajax({
+        		}
+        	})
+        	
+        })
+         mui('.nav-bar').on('tap','.buy-tea',function(){
+        	var cookieParam = checkCookie(login);        	
+        	$.ajax({
         		url:REQUEST_URL+'wxnonAuthRest/queryDocument',
         		type:"get",
         		dataType:"json",
@@ -148,44 +168,31 @@
         			"token":cookieParam.token,
 					"mobile":cookieParam.mobile,
 					"userId":cookieParam.userId,
-        			"typeCd":'060011'
+        			"typeCd":'060008'
         		},
         		success:function(data){
         			console.log(data);
-        			
-        		}
-        	})*/
-        	
-        })
-         mui('.nav-bar').on('tap','.buy-tea',function(){
-        	var cookieParam = checkCookie(login);
-        	var html = "<iframe src='./message.html'></iframe>";
-		        	 jqalert({
+        			var html = "<iframe src="+data.data.url+" scrolling=no width=100% height=300px></iframe>";
+		        	jqalert({
 				        content: html,
 				        yestext: '同意并继续',
 				        notext: '取消',
-				        yesfn:function(){
+				        yesfn: function(){
 				        	mui.openWindow({
 				        		url:"../buytea/tea_list.html",
 				        		id:'tea_list.html'
 				        	})
 				        }
 				    })
-        	/*$.ajax({
-        		url:REQUEST_URL+'wxnonAuthRest/queryDocument',
-        		type:"get",
-        		dataType:"json",
-        		data:{
-        			"token":cookieParam.token,
-					"mobile":cookieParam.mobile,
-					"userId":cookieParam.userId,
-        			"typeCd":'060011'
-        		},
-        		success:function(data){
-        			console.log(data);
-        			
         		}
-        	})*/
+        	})
+        	
+        })
+        mui('.nav-bar').on('tap','.sale-tea',function(){
+        	appAlert()      	
+        })
+        mui('.nav-bar').on('tap','.free-tea',function(){
+        	appAlert()
         	
         })
     })

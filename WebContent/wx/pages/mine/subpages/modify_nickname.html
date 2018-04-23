@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../../../static/font/style.css">
     <link rel="stylesheet" href="../../../static/css/common/reset.css">
     <link rel="stylesheet" href="../../../static/css/mine/modify.css">
-    <title>Document</title>
 </head>
 
 <body>
@@ -30,6 +29,49 @@
 	<script src="../../../lib/mui/js/mui.min.js"></script>
     <script src="../../../lib/jquery/jquery-3.3.1.min.js"></script>
     <script src="../../../static/js/common/common.js"></script>
-    <script src="../../../static/js/mine/personal_information.js"></script>
+    <script type="text/javascript">
+    	$(function(){
+    		var nickname= document.location.href.indexOf('?')== -1 ? "": document.location.href.substring(document.location.href.indexOf('?')+1);
+    		nickname = decodeURIComponent(nickname);
+    		if(nickname == ""){
+    			$(".mui-title").html("添加昵称");
+    		}else{
+    			$(".mui-title").html("修改昵称");
+    			$('.QQ-input').val(nickname);
+    		} 
+    	
+    		mui(".mui-bar-nav").on('tap','.mui-btn',function(){
+    			var name = $('.QQ-input').val();
+    			if(name == nickname){
+    				return;
+    			}else{
+    				var cookieParam = getCookie();
+				$.ajax({
+					type:"post",
+					url:REQUEST_URL+"wxmrest/updateNickName",
+					data:{
+						"token":cookieParam.token,
+						"mobile":cookieParam.mobile,
+						"userId":cookieParam.userId,
+						"nickName":name
+						},
+						dataType:"json",
+						async:true,
+						success:function(data){
+							if(data.code == REQUEST_OK){
+								mui.back();
+								mui.toast("保存成功");
+							}else{
+								mui.toast(data.message);
+							}
+						}
+					});
+    			}
+    		})
+    		
+    	})
+    	
+    	
+    </script>
 </body>
 </html>

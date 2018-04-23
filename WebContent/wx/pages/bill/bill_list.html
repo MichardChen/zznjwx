@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../../lib/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../static/font/style.css">
+    <link rel="stylesheet" href="../../static/css/bill/bill_list.css" />
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+		<a class="mui-action-back mui-pull-left mui-icon mui-icon-arrowleft"></a>
+		<h3 class="mui-title">我的账单<span class="product-num"></span></h3>
+		<button class="mui-btn mui-pull-right editor">筛选</button>
+	</header>
+	
+	<section class="page-container mui-content">
+		<nav class="nav-bar">
+			<div class="nav-item">
+				<a class="prev-month">上一月</a>
+			</div>
+			<div class="nav-item">
+				<div class="inner-box">
+					<span class="icon-calendar"></span>
+					<a class="year"><span class="year-num">2018</span>年<span class="mui-icon icon-arrow "></span></a>
+					<a class="month"><span class="month-num">4</span>月<span class="mui-icon icon-arrow "></span></a>
+				</div>				
+			</div>
+			<div class="nav-item">
+				<a class="next-month">
+					下一月
+				</a>
+			</div>
+			<div class="year-select">				
+			</div>
+			<div class="month-select">				
+			</div>
+			<ul class="options">
+				<li class="options-item mui-active" data-type=120001><a >买茶记录</a></li>
+				<li class="options-item" data-type=120002><a >卖茶记录</a></li>
+				<li class="options-item" data-type=120003><a >仓储费记录</a></li>
+				<li class="options-item" data-type=120004><a >取茶记录</a></li>
+				<li class="options-item" data-type=120005><a >充值记录</a></li>
+				<li class="options-item" data-type=120006><a >提现记录</a></li>
+				<li class="options-item" data-type=120007><a >退款记录</a></li>
+			</ul>
+		</nav>
+		<div class=" mui-scroll-wrapper" id="bill-wrapper" >
+			<div class="mui-scroll">
+				<ul class="mui-table-view">
+				</ul>
+			</div>			
+		</div>
+	</section>
+	
+    <script src="../../lib/mui/js/mui.min.js"></script>
+    <script src="../../lib/jquery/jquery-3.3.1.min.js"></script>
+    <script src="../../static/js/common/common.js"></script>
+    <script src="../../static/js/bill/bill_list.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

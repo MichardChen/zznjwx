@@ -150,7 +150,9 @@
 				if(data.code == REQUEST_OK){
 					setCookie(data.data,10);
 					mui.toast("登录成功！")
-					mui.back();
+					setTimeout(function(){
+						mui.back();
+					},500)					
 				}else{
 					mui.toast("账号密码错误，请重新输入！")
 				}

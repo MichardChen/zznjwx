@@ -1,5 +1,6 @@
 package my.wx.controller;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import my.core.model.Member;
 import my.core.model.ReturnData;
 import my.core.vo.UserData;
 import my.pvcloud.dto.LoginDTO;
+import my.pvcloud.util.DateUtil;
 import my.pvcloud.util.StringUtil;
 import my.pvcloud.util.TextUtil;
 import my.pvcloud.util.VertifyUtil;
@@ -44,6 +46,29 @@ public class WXNoAuthController extends Controller{
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(data);
 	}*/
+	
+	private int onLogin(int userId,String userTypeCd,String token,String platForm){
+		
+		userTypeCd="010001";
+		platForm="020005";
+		AcceessToken acceessToken = AcceessToken.dao.queryToken(userId, userTypeCd, platForm);
+		if(acceessToken == null){
+			//没有登录
+			return 0;
+		}else{
+			//判断是否过期
+			Timestamp now = DateUtil.getNowTimestamp();
+			Timestamp expireTime = acceessToken.getTimestamp("expire_time");
+			if(expireTime == null || now.after(expireTime)){
+				return 1;
+			}
+			if(!StringUtil.equals(token, acceessToken.getStr("token"))){
+				//异地登录
+				return 2;
+			}
+			return 3;
+		}
+	}
 	
 	public void loginInit() throws Exception{
 		render("/wx/pages/login.html");
@@ -191,16 +216,29 @@ public class WXNoAuthController extends Controller{
 	}
 	
 	//退出
-	public void logout() {
-		ReturnData data = new ReturnData();
-		Subject subject = SecurityUtils.getSubject();
-		if (subject != null) {
-			subject.logout();
+	public void logout() throws Exception{
+		
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		if(loginFlg != 3){
+			ReturnData data = new ReturnData();
+			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
+			if(loginFlg == 0){
+				data.setMessage("您还未登陆，请先登陆");
+			}
+			if(loginFlg == 1){
+				data.setMessage("您的账号登录过期");
+			}
+			if(loginFlg == 2){
+				data.setMessage("您的账号已在其他终端登录");
+			}
+			
+			getResponse().addHeader("Access-Control-Allow-Origin", "*");
+			renderJson(data);
+			return;
 		}
-		data.setCode(Constants.STATUS_CODE.SUCCESS);
-		data.setMessage("退出成功");
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
-		renderJson(data);
+		renderJson(service.logoutWX(dto));
 	}
 	
 	//资讯列表

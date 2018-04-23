@@ -141,11 +141,108 @@
 	}
 	
 	//选择
+	mui(".mui-table-view").on("change","input[type=checkbox]",function(){
+		var flag = this.checked ? true : false;
+		var option = $(".mui-table-view").find("input[type=checkbox]:checked");
+		if($('.mui-bar-nav button').hasClass('editor')){
+			var price =parseInt($('.money').attr("data-money"));
+			if(flag){			
+				var productPrice = parseInt($(this).data('price'));
+				var productNum = parseInt($(this).data('num'));
+				price += productPrice*productNum;
+				if(option.length==1){
+					$('.order-btn').find('button').removeClass('mui-disabled');
+				}
+			}else{
+				
+				if(option.length==0){
+					price = 0;
+					$('.order-btn').find('button').addClass('mui-disabled');
+				}else{
+					price = parseInt($('.money').attr("data-money"))-parseInt($(this).data('price'))*parseInt($(this).data('num'));
+				}					
+			}
+			$('.money').html('￥'+price).attr('data-money',price);
+		}else{
+			if(flag){
+				if(option.length==1){
+				$('.delete-btn').find('button').removeClass('mui-disabled');
+				}
+			}else{
+				if(option.length==0){
+				$('.delete-btn').find('button').addClass('mui-disabled');
+				}
+			}
+		}
+	})
+	
+	//删除购物车
+	
+	mui(".mui-bar-tab").on("tap",".delete-btn",function(){
+		var deleteOptions = $(".mui-table-view").find("input[type=checkbox]:checked");
+		var cartId = "";
+		if(deleteOptions){
+			for(var i=0;i<deleteOptions.length;i++){
+				if(cartId == ""){
+					cartId = $(deleteOptions[i]).data("id");
+				}else{
+					cartId +=","+$(deleteOptions[i]).data("id");
+				}
+			}
+		}
+		var cookieParam = getCookie();
+		$.ajax({
+            url:REQUEST_URL+"wxmrest/deleteBuyCart",
+            type:"post",
+            data:{
+				"token":cookieParam.token,
+				"mobile":cookieParam.mobile,
+				"userId":cookieParam.userId,
+				"buyCartIds":cartId
+			},
+            dataType:"json",
+            async:true,
+            success:function(data){
+               if(data.code==REQUEST_OK){
+               	    mui.toast(data.message);
+               	    for(var i=0;i<deleteOptions.length;i++){
+               	    	$(deleteOptions[i]).parents('.mui-table-view-cell').remove();
+               	    }
+               }else{
+               		mui.toast(data.message);
+               }
+            }
+        })
+	})
+	
 	
 	
 	mui.ready(function(){
 		toggleModel();
 		allSelect();
+		mui(".mui-bar-tab").on("tap",".order-btn",function(){
+			var cartSelect = $(".mui-table-view-cell").find("input[type=checkbox]:checked");
+			var cartId="";
+			console.log(typeof(cartSelect));
+			for(var i=0;i<cartSelect.length;i++){
+				if(cartId == ""){
+					cartId = $(cartSelect[i]).data("id");
+				}else{
+					cartId+="," + $(cartSelect[i]).data("id");
+				}
+			}
+			if(cartId !== ""){
+				mui.openWindow({
+					url:"./place_order.html?"+cartId,
+					id:"place_order.html"
+				})
+			}
+			
+		})
+		
+		
+		
+		
 	})
 	
 	

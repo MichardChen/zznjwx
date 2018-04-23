@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../../lib/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../static/font/style.css">
+    <link rel="stylesheet" href="../../static/css/common/reset.css">
+     <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <link rel="stylesheet" href="../../static/css/store/store_desc.css">
+    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.6&key=373f652b48d2c24e5b9295fa1b1bbc54"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+</head>
+
+<body>
+	<header class="mui-bar mui-bar-nav">
+		<a class="mui-action-back mui-pull-left mui-icon mui-icon-arrowleft"></a>
+		<h3 class="mui-title">茶店详情</h3>
+	</header>
+	<section class="page-container">
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<div class="store">
+						<h3 class="store-name"></h3>
+						<p class="store-address"><span class="mui-icon"></span><span class="address-desc"></span></p>
+					</div>
+					<div class="phone">
+						<span class="icon-phone"></span>						
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<div id="slider" class="mui-slider" >
+						<div class="mui-slider-group">							
+						</div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<div class="title">门店信息</div>
+					<div class="desc-content">
+						<p class="bussiness-time"></p>
+						<p class="store-desc"></p>
+					</div>
+					<div id="map"></div>
+				</li>
+				<li class="mui-table-view-cell">
+					<!--<div class="more-box mui-clearfix"><a class="more mui-pull-right">更多评价<span class="icon-next"></span></a></div>-->
+					<ul class="evaluate-content">
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</section>
+	<script src="../../lib/mui/js/mui.min.js"></script>
+    <script src="../../lib/jquery/jquery-3.3.1.min.js"></script>
+    <script src="../../static/js/common/common.js"></script>
+    
+    <script src="../../static/js/store/store_desc.js"></script>
+</body>
+</html>

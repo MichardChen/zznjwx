@@ -92,8 +92,22 @@
 .page-container .information-list .mui-table-view:after {
   visibility: hidden;
 }
+.jq-alert .alert .content {
+  padding: 15px;
+}
 .jq-alert .alert .fd-btn a {
   height: 35px;
-  padding: 5px;
+  padding: 24px;
   font-size: 16px;
+}
+.jq-alert .alert .fd-btn a:first-child {
+  flex: 0 0 80px;
+}
+.jq-alert .alert .fd-btn a:last-child {
+  flex: 1;
+  background: #ff5400;
+  color: #fff;
+}
+.jq-alert .alert .fd-btn a.confirm:active {
+  background: #ff5400;
 }

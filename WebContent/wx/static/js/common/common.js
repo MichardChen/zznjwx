@@ -1,7 +1,7 @@
 //常量定义
 
 var REQUEST_URL = 'http://www.yibuwangluo.cn/zznjwx/';
-//var REQUEST_URL = 'http://192.168.1.91:8088/zznjwx/';
+
 var REQUEST_OK = 5600;
 
 
@@ -53,10 +53,15 @@ var REQUEST_OK = 5600;
 			fn();
 	    }
 	}
+	
+	 function delAllCookie(){    
+          setCookie("",-1);
+      } 
 
 	function loadList(obj){
 		var id = obj.id;
 		var fn = obj.fn;
+		
 		mui.init({
 			pullRefresh: {
 				container: id,
@@ -97,7 +102,7 @@ var REQUEST_OK = 5600;
 		 */
 		function pullupRefresh() {
 			setTimeout(function() {																
-				if(obj.fresh){
+				if(status !== undefined){
 					pulldownRefresh();
 				}else{
 					obj.pageSize = pageSize;
@@ -108,8 +113,18 @@ var REQUEST_OK = 5600;
 			mui(id).pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
 			}, 500);
 		}
-
-		mui.ready(function() {
+		mui.ready(function(){
 			mui(id).pullRefresh().pullupLoading();
-		});
+		})		
+	}
+
+	function appAlert(){
+		var btnArray = ['取消', '确定'];
+        mui.confirm('请下载掌上茶宝APP进行操作！', '', btnArray, function(e) {
+            if (e.index == 1) {
+                mui.alert("fjdskfj");
+            } else {
+                mui.alert("000");
+            }
+        })
 	}

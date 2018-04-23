@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../../../static/font/style.css">
     <link rel="stylesheet" href="../../../static/css/common/reset.css">
     <link rel="stylesheet" href="../../../static/css/mine/setter.css">
-    <title>Document</title>
 </head>
 
 <body>
@@ -21,10 +20,10 @@
 			<form class="mui-input-group">
 				<div class="mui-input-row">
 					<textarea id="textarea" placeholder="您有什么意见或建议，快来告诉我吧！" rows="5"></textarea>
-					<div class="text-num-row mui-clearfix"><span class="mui-pull-right">0/300</span></div>
+					<div class="text-num-row mui-clearfix"><span class="mui-pull-right"><span class="font-num">0</span>/300</span></div>
 				</div>
 			</form>
-			<div class="excit-btn mui-button-row mui-clearfix">
+			<div class="submit-btn mui-button-row mui-clearfix">
 				<button class="mui-btn mui-btn-block mui-disabled">提交</button>
 			</div>
 		</div>	
@@ -32,5 +31,54 @@
 	<script src="../../../lib/mui/js/mui.min.js"></script>
     <script src="../../../lib/jquery/jquery-3.3.1.min.js"></script>
     <script src="../../../static/js/common/common.js"></script>
+    <script type="text/javascript">
+    	
+    	mui(".feedback").on('keyup','#textarea',function(){
+    		var textStr = $(this).val();
+    		$('.font-num').html(textStr.length);
+    		if(textStr.length > 300){
+    			mui.toast('已超出最大字数限定！');
+    		}
+    		if(textStr !== ""){
+    			$(".mui-btn").removeClass("mui-disabled");
+    		}else{
+    			$(".mui-btn").addClass("mui-disabled");
+    		}
+    	})
+    	
+		mui(".submit-btn").on("tap",".mui-btn",function(){
+			var textStr = $("#textarea").val();
+			var cookieParam = getCookie();
+			if(textStr == ""){
+				mui.confirm("请输入反馈内容！","提示",["取消","确定"]);
+				return;
+			}
+			if(textStr.length > 300){
+    			mui.toast('已超出最大字数限定！');
+    			return;
+    		}
+			$.ajax({
+				type:"post",
+				url:REQUEST_URL+"wxmrest/updateNickName",
+				data:{
+				"token":cookieParam.token,
+				"mobile":cookieParam.mobile,
+				"userId":cookieParam.userId,
+				"feedBack":textStr
+				},
+				dataType:"json",
+				async:true,
+				success:function(data){
+					if(data.code == REQUEST_OK){
+						mui.back();
+						mui.toast(data.message);
+					}else{
+						mui.toast(data.message);
+					}
+				}
+			})
+		})
+    	   	
+    </script>
 </body>
 </html>

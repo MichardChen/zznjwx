@@ -64,7 +64,7 @@
 	
 	loadList(paramObj);
 	
-	$('.mui-bar').on('tap','.piece-size',function(){
+	mui('.mui-bar').on('tap','.piece-size',function(){
 		var size = $(this).data('size');
 		var priceFlag = $('.options .price .mui-active').data('priceFlag');
 		var quality = $('.options .count .mui-active').data('quality');
@@ -74,26 +74,26 @@
 		paramObj.fresh = true;
 		loadList(paramObj);
 	})
-	$('.mui-bar').on('tap','.filter-option',function(e){
+	mui('.mui-bar').on('tap','.filter-option',function(e){
 		$('.options').toggle();
 	})
-	$('.options').on('tap','.price span',function(){
+	mui('.options').on('tap','.price span',function(){
 		$(".price span").removeClass('mui-active');
 		$(this).addClass('mui-active');
 	})
-	$('.options').on('tap','.count span',function(){
+	mui('.options').on('tap','.count span',function(){
 		$(".count span").removeClass('mui-active');
 		$(this).addClass('mui-active');
 	})
 	
-	$('.options').on('tap','.reset',function(){
+	mui('.options').on('tap','.reset',function(){
 		$(".price span").removeClass('mui-active');
 		$(".price span").eq(0).addClass('mui-active');
 		$(".count span").removeClass('mui-active');
 		$(".count span").eq(0).addClass('mui-active');
 	})
 	
-	$('.options').on('tap','.sure',function(){
+	mui('.options').on('tap','.sure',function(){
 		var size = $('.piece-size.mui-active').data('size');
 		var priceFlag = $('.options .price .mui-active').data('priceFlag');
 		var quality = $('.options .count .mui-active').data('quality');
@@ -102,6 +102,15 @@
 		paramObj.size = size;
 		paramObj.fresh = true;
 		loadList(paramObj);
+	})
+	
+	mui(".mui-table-view").on("tap",".mui-table-view-cell",function(){
+		var teaId = $(this).data("id");
+		mui.openWindow({
+			url:"../../new_tea_publish/select_spec.html?"+teaId,
+			id:"select_spec.html"
+		})
+		
 	})
 	
 	

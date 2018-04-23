@@ -1047,6 +1047,8 @@ public class WXController extends Controller{
 	}
 	
 	//获取预支付信息
+	//购物车下单：获取预支付信息->添加资金记录->返回前端，唤起支付->微信回调，更新资金记录，减卖家库存，增买家库存
+	//直接购买：获取预支付信息->添加资金记录->返回前端，唤起支付->微信回调，更新资金记录，减卖家库存，增买家库存
 	public void getPrePayInfo() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		BigDecimal moneys = dto.getMoney().setScale(2);

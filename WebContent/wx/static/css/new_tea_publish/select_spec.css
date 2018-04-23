@@ -20,6 +20,9 @@
 .mui-content .mui-table-view:before {
   display: none;
 }
+.mui-toast-container {
+  bottom: 50%;
+}
 .mui-table-view .mui-table-view-cell.mui-active {
   background: #fff;
 }
@@ -79,14 +82,14 @@
 .buy-bar {
   display: flex;
 }
-.buy-bar .service {
+.buy-bar .add-cart {
   flex: 0 0 80px;
   text-align: center;
 }
-.buy-bar .service .icon-cart {
+.buy-bar .add-cart .icon-cart {
   font-size: 28px;
 }
-.buy-bar .service p {
+.buy-bar .add-cart p {
   font-size: 14px;
 }
 .buy-bar .buy-btn {

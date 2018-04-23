@@ -1,0 +1,54 @@
+@import 'common.less';
+
+.mui-content{
+    >.mui-table-view:first-child{
+        margin-top: 0;
+    }
+    .mui-table-view{
+        background: none;
+        .mui-table-view-cell:first-child{
+            .tea-title{
+                color: #333;
+                font-size: 16px;
+                line-height: 30px;
+            }
+            .bottom-part{
+                margin-top:15px;
+            }
+            .tea-tag{
+                padding:1px 6px;
+                border:1px solid #76675F;
+                line-height: 28px;
+                font-size: 14px;
+                border-radius: 3px;
+                color:#76675F;                
+            }
+        }
+        .mui-table-view-cell{
+            background: #fff;
+            margin-bottom: 10px;
+            .storage-name{
+                font-size: 16px;
+                padding: 10px 0;
+            }
+            .sale-box,.get-box{
+                padding: 8px 0;
+                span{
+                    font-size: 14px;
+                    line-height: 28px;
+                    color:#666;
+                }
+            }
+            .sale-box{
+                .mui-btn-danger{
+                    background: #ff5400;
+                }
+            }
+            .get-box{
+                .mui-btn-success{
+                    background: #23b84a;
+                }
+            }
+        }
+    }
+}

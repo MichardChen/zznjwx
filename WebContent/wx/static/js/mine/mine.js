@@ -1,16 +1,4 @@
 +(function(){
-	
-	var login = function(){
-		mui.openWindow({
-    		url:"../login/login.html",
-    		id:"login.html",
-    		show:{
-		      autoShow:true,//页面loaded事件发生后自动显示，默认为true
-		      aniShow:"slide-in-down",//页面显示动画，默认为”slide-in-right“；
-		      duration:100//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-		    }
-        })
-	}
     //mui初始化
     mui.init();
      //数据回填
@@ -29,19 +17,19 @@
         $('.name p').text(nickname);
         var storeHtml;
         if(storeFlg == 0){
-            storeHtml = '<div class="buytea-record">'
-                      + '<a href=""><i class="icon-record"></i>买茶记录</a>'
+            storeHtml = '<div class="buytea-record" data-id=120001>'
+                      + '<a><i class="icon-record"></i>买茶记录</a>'
                       + '</div>'
-                      + '<div class="gettea-record">'
-                      + '<a href=""><i class="icon-time"></i>取茶记录</a>'
+                      + '<div class="gettea-record" data-id=120004>'
+                      + '<a><i class="icon-time"></i>取茶记录</a>'
                       + '</div>';
             $('.bottom-part').html(storeHtml);
         }else{
             storeHtml = '<div class="vip-manage">'
-                      + '<a href=""><i class="icon-members"></i>会员管理</a>'
+                      + '<a><i class="icon-members"></i>会员管理</a>'
                       + '</div>'
                       + '<div class="store-manage">'
-                      + '<a href=""><i class="icon-store-manage"></i>店铺管理</a>'
+                      + '<a><i class="icon-store-manage"></i>店铺管理</a>'
                       + '</div>';
             $('.bottom-part').html(storeHtml);
         }
@@ -68,7 +56,6 @@
                     filledPersonalData(personal_data);    
                 }else{
                     mui.toast(data.message);
-                    login();
                 }               
             }
         })
@@ -78,15 +65,15 @@
         getPersonalData();
 
         mui(".mine-list").on("tap",".my-acount",function(){
-            mui.toast("下载客户端app，查看账户！")
+            appAlert()
         })
 
         mui(".mine-list").on("tap",".my-card",function(){
-            mui.toast("下载客户端app，查看账户！")
+            appAlert()
         })
 
         mui(".mine-list").on("tap",".invoice",function(){
-            mui.toast("下载客户端app，查看账户！")
+          appAlert()
         })
         mui('.header-card').on('tap','.modify',function(){
         	mui.openWindow({
@@ -112,5 +99,51 @@
         		id:"platform_rules.html"
         	})
         })
+		mui(".mine-list").on("tap",".contact",function(){
+            mui.openWindow({
+        		url:"./subpages/contact_us.html",
+        		id:"contact_us.html"
+        	})
+        })
+		mui(".mine-list").on("tap",".my-bill",function(){
+           mui.openWindow({
+           	  url:"../bill/bill_list.html",
+           	  id:"bill_list.html"
+           })
+        })
+		mui(".mine-list").on("tap",".contact",function(){
+           mui.openWindow({
+           	  url:"./subpages/contact_us.html",
+           	  id:"contact_us.html"
+           })
+        })
+		mui(".mine-list").on("tap",".my-store",function(){
+           mui.openWindow({
+           	  url:"../store/store_desc.html",
+           	  id:"stores_desc.html"
+           })
+        })
+		
+		mui(".header-card").on("tap",".vip-manage",function(){
+            appAlert()
+        })
+		mui(".header-card").on("tap",".store-manage",function(){
+           appAlert()
+        })
+		mui(".header-card").on("tap",".buytea-record",function(){
+		   var billType = $(this).data("id");
+           mui.openWindow({
+           	  url:"../bill/bill_list.html?"+billType,
+           	  id:"bill_list.html"
+           })
+        })
+		mui(".header-card").on("tap",".gettea-record",function(){
+		   var billType = $(this).data("id");
+           mui.openWindow({
+           	  url:"../bill/bill_list.html?"+billType,
+           	  id:"bill_list.html"
+           })
+        })
+		
     })
 })()

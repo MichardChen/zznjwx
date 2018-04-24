@@ -122,9 +122,9 @@ var REQUEST_OK = 5600;
 		var btnArray = ['取消', '确定'];
         mui.confirm('请下载掌上茶宝APP进行操作！', '', btnArray, function(e) {
             if (e.index == 1) {
-                mui.alert("fjdskfj");
-            } else {
-                mui.alert("000");
+                mui.openWindow({
+                	url:'http://a.app.qq.com/o/simple.jsp?pkgname=com.tea.tongji'
+                })
             }
         })
 	}

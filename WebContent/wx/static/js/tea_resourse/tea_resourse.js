@@ -57,7 +57,6 @@
 	
 	mui(".header-nav").on("tap",".buy-tea",function(){
 		var cookieParam = getCookie();  
-		debugger;
     	$.ajax({
     		url:REQUEST_URL+'wxnonAuthRest/queryDocument',
     		type:"get",
@@ -70,14 +69,13 @@
     			"typeCd":'060011'
     		},
     		success:function(data){
-    			debugger;
     			console.log(data);
-    			var html = "<iframe src='"+data+"'></iframe>";
-	        	 jqalert({
+    			var html = "<iframe src="+data.data.url+" scrolling=no width=100% height=300px></iframe>";
+	        	jqalert({
 			        content: html,
 			        yestext: '同意并继续',
 			        notext: '取消',
-			        yesfn:function(){
+			        yesfn: function(){
 			        	mui.openWindow({
 			        		url:"../buytea/tea_list.html",
 			        		id:'tea_list.html'

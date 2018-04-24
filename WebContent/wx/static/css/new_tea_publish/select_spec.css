@@ -23,6 +23,9 @@
 .mui-toast-container {
   bottom: 50%;
 }
+.mui-content {
+  padding-top: 0;
+}
 .mui-table-view .mui-table-view-cell.mui-active {
   background: #fff;
 }

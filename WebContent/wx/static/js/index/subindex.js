@@ -102,7 +102,7 @@
         })
         mui('.mui-table-view-cell').on('tap','.more',function(){
         	mui.openWindow({
-        		url:"./information.html",
+        		url:"./subpages/information_sub.html",
 	    		id:"information.html",
 	    		show:{
 			      autoShow:true,//页面loaded事件发生后自动显示，默认为true
@@ -112,12 +112,10 @@
         	})
         })
         
-/*        mui('.mui-table-view').on('tap','.information',function(){
+        mui('.mui-table-view').on('tap','.information',function(){
         	var url = $(this).find('a').attr('href');
-        	document.location.href = url;
         	mui.openWindow({
-        		url:"./information_desc.html?"+url,
-	    		id:"information.html",
+        		url:url,
 	    		show:{
 			      autoShow:true,//页面loaded事件发生后自动显示，默认为true
 			      aniShow:"slide-in-right",//页面显示动画，默认为”slide-in-right“；
@@ -125,7 +123,7 @@
 			    }
         	})
         	
-        })*/
+        })
         
         mui('.nav-bar').on('tap','.tea-publish',function(){
         	var cookieParam = checkCookie(login);        		        	 
@@ -141,19 +139,21 @@
         		},
         		success:function(data){
         			console.log(data);
-        			var html ="<iframe src="+data.data.url+" scrolling=no width=100% height=300px></iframe>";	
+        			var radioBox = '<div class="mui-checkbox mui-left"><input type="checkbox">下次不再提醒</div>';
+        			var html ="<div><iframe src="+data.data.url+" scrolling=no width=100% height=300px></iframe></div>"+radioBox;	
         			jqalert({
 				        content: html,
 				        yestext: '同意并继续',
 				        notext: '取消',
 				        yesfn: function(){
-				        	alert("dsjkfjsd")
 				        	mui.openWindow({
 				        		url:"../new_tea_publish/new_tea_publish.html",
 				        		id:'new_tea_publish.html'
 				        	})
 				        }
 				    })
+				   
+				   
         		}
         	})
         	

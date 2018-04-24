@@ -20,6 +20,9 @@
 .mui-content .mui-table-view:before {
   display: none;
 }
+.mui-toast-container {
+  bottom: 50%;
+}
 .mui-content p.desc {
   font-size: 14px;
   padding: 10px 0;
@@ -36,7 +39,4 @@
   font-size: 14px;
   border-color: transparent;
   padding: 0;
-}
-.mui-checkbox input[type=checkbox]:checked:before, .mui-radio input[type=radio]:checked:before{
-	color: #ff5400;
 }

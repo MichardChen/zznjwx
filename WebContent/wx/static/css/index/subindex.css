@@ -16,6 +16,9 @@
 .mui-bar .icon-box .icon-message {
   color: #fff;
 }
+.page-container {
+  padding-bottom: 20px;
+}
 .page-container .mui-slider .mui-slider-indicator {
   background: rgba(0, 0, 0, 0.3);
   bottom: 0;
@@ -93,7 +96,11 @@
   visibility: hidden;
 }
 .jq-alert .alert .content {
-  padding: 15px;
+  padding: 15px 15px 5px 15px;
+}
+.jq-alert .alert .content div {
+  -webkit-overflow-scrolling: touch;
+  overflow: scroll;
 }
 .jq-alert .alert .fd-btn a {
   height: 35px;
@@ -110,4 +117,13 @@
 }
 .jq-alert .alert .fd-btn a.confirm:active {
   background: #ff5400;
+}
+.jq-alert .alert .mui-checkbox {
+  font-size: 14px;
+  padding-left: 50px;
+  line-height: 36px;
+}
+.mui-checkbox input[type=checkbox]:checked:before,
+.mui-radio input[type=radio]:checked:before {
+  color: #ff5400;
 }

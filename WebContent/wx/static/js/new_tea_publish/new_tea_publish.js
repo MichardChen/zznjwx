@@ -90,5 +90,14 @@
 		
 	})
 	
+	mui('.mui-bar-tab').on('tap',".mui-btn",function(){
+		var cookieParam = getCookie();  
+		mui.openWindow({
+			url:"../bill/bill_list.html?120001",
+			id:"bill.html"
+		})
+		
+	})
+	
 	
 })()

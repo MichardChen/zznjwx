@@ -1193,6 +1193,7 @@ public class WXController extends Controller{
 	//购物车下单：获取预支付信息->添加资金记录->返回前端，唤起支付->微信回调，更新资金记录，减卖家库存，增买家库存
 	//直接购买：获取预支付信息->添加资金记录->返回前端，唤起支付->微信回调，更新资金记录，减卖家库存，增买家库存
 	public void getBuyCartPrePayInfo() throws Exception{
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		String str[] = dto.getTeas().split(",");
 		int iSize = str.length;
@@ -1418,6 +1419,7 @@ public class WXController extends Controller{
 	
 	//直接下单获取预支付信息
 	public void getOrderPrePayInfo() throws Exception{
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		//总价
 		ReturnData data = new ReturnData();

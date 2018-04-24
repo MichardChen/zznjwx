@@ -177,6 +177,15 @@ public class LoginDTO extends BaseDTO{
 	private String mail;
 	private String status;
 	private String invoiceIds;
+	private String tradeNo;
+	
+	public String getTradeNo() {
+		return tradeNo;
+	}
+
+	public void setTradeNo(String tradeNo) {
+		this.tradeNo = tradeNo;
+	}
 
 	public int getMemberId() {
 		return memberId;

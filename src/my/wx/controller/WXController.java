@@ -24,10 +24,16 @@ import my.app.service.FileService;
 import my.core.constants.Constants;
 import my.core.interceptor.RequestInterceptor;
 import my.core.model.AcceessToken;
+import my.core.model.BuyCart;
 import my.core.model.CashJournal;
+import my.core.model.CashPay;
+import my.core.model.CodeMst;
 import my.core.model.Member;
 import my.core.model.PayRecord;
 import my.core.model.ReturnData;
+import my.core.model.Tea;
+import my.core.model.WarehouseTeaMember;
+import my.core.model.WarehouseTeaMemberItem;
 import my.core.pay.RequestXml;
 import my.core.vo.UserData;
 import my.core.vo.WXPrepayModel;
@@ -996,62 +1002,459 @@ public class WXController extends Controller{
         return status;
     }
 	
-	//付款(选择规格=下单)
+	//付款(选择规格=下单)，微信回调
 	public void pay() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
-		if(loginFlg != 3){
-			ReturnData data = new ReturnData();
-			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
-			if(loginFlg == 0){
-				data.setMessage("您还未登陆，请先登陆");
+	
+		HttpServletRequest request = getRequest();
+		PropertiesUtil propertiesUtil = PropertiesUtil.getInstance();
+		Map<String,String> params = RequestXml.parseXml(request);
+	
+		//
+		StringBuffer sb = new StringBuffer();
+	    InputStream is = request.getInputStream();
+	    InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+	    BufferedReader br = new BufferedReader(isr);
+	    String s = "";
+	    while ((s = br.readLine()) != null) {
+	        sb.append(s);
+	    }
+	    Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
+	    System.out.println("=======回调的参数========");
+	    while(iterator.hasNext()){
+	    	Map.Entry<String, String> entry = iterator.next();
+	    	System.out.println("key:"+entry.getKey()+"==value:"+entry.getValue());
+	    }
+	    System.out.println("========================");
+	        
+		//返回状态码、返回信息
+		String returnCode = params.get("return_code");
+		String returnMsg = params.get("return_msg");
+		System.out.println("return_code:"+returnCode+"--return_msg:"+returnMsg);
+		//验证签名
+		boolean checkSign = WXPayUtil.isSignatureValid(params, propertiesUtil.getProperties("wx_key"));
+		if(checkSign&&(StringUtil.equals(returnCode, "SUCCESS"))&&(StringUtil.isBlank(returnMsg))){
+			System.out.println("签名有效");
+			//签名有效
+			String orderNo = params.get("out_trade_no");
+			CashPay pay = CashPay.dao.queryByCashNo(orderNo);
+			CashJournal cashJournal = CashJournal.dao.queryByCashNo(orderNo);
+			if(cashJournal != null){
+				dto.setUserId(cashJournal.getInt("member_id"));
+			}else{
+				System.out.println("微信支付回调，支付失败");
+				//签名有效，失败
+				String trade_no=params.get("transaction_id");
+				int updateFlg = CashJournal.dao.updateStatus(orderNo, Constants.FEE_TYPE_STATUS.APPLY_FAIL,trade_no);
+				if(updateFlg != 0){
+					renderText("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+					renderText("success");
+				}else{
+					renderText("fail");
+				}
 			}
-			if(loginFlg == 1){
-				data.setMessage("您的账号登录过期");
+			if(pay != null){
+				String[] paramsArray = pay.getStr("params").split(",");
+				dto.setTeaId(StringUtil.toInteger(paramsArray[0]));
+				dto.setQuality(StringUtil.toInteger(paramsArray[1]));
+				dto.setOrderNo(orderNo);
+				String trade_no=params.get("transaction_id");
+				dto.setTradeNo(trade_no);
+				ReturnData data = service.pay(dto);
+				//更新状态
+				if(StringUtil.equals(data.getCode(), Constants.STATUS_CODE.SUCCESS)){
+					renderText("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+				}else{
+					renderText("fail");
+				}
+				System.out.println("微信支付回调成功");
+			}else{
+				System.out.println("微信支付回调，支付失败");
+				//签名有效，失败
+				String trade_no=params.get("transaction_id");
+				int updateFlg = CashJournal.dao.updateStatus(orderNo, Constants.FEE_TYPE_STATUS.APPLY_FAIL,trade_no);
+				if(updateFlg != 0){
+					renderText("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+					renderText("success");
+				}else{
+					renderText("fail");
+				}
 			}
-			if(loginFlg == 2){
-				data.setMessage("您的账号已在其他终端登录");
+		}else if(checkSign&&(StringUtil.equals(returnCode, "FAIL"))){
+			System.out.println("微信支付回调，支付失败");
+			//签名有效，失败
+			String orderNo = params.get("out_trade_no");
+			String trade_no=params.get("transaction_id");
+			int updateFlg = CashJournal.dao.updateStatus(orderNo, Constants.FEE_TYPE_STATUS.APPLY_FAIL,trade_no);
+			if(updateFlg != 0){
+				renderText("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+				renderText("success");
+			}else{
+				renderText("fail");
 			}
-			
-			getResponse().addHeader("Access-Control-Allow-Origin", "*");
-			renderJson(data);
-			return;
+		}else{
+			System.out.println("微信回调，签名错误");
 		}
-		getResponse().addHeader("Access-Control-Allow-Origin", "*");
-		renderJson(service.pay(dto));
 	}
 		
-	//购物车下单
+	//购物车下单回调
 	public void addOrder() throws Exception{
+		HttpServletRequest request = getRequest();
+		PropertiesUtil propertiesUtil = PropertiesUtil.getInstance();
+		Map<String,String> params = RequestXml.parseXml(request);
+	
+		//
+		StringBuffer sb = new StringBuffer();
+	    InputStream is = request.getInputStream();
+	    InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+	    BufferedReader br = new BufferedReader(isr);
+	    String s = "";
+	    while ((s = br.readLine()) != null) {
+	        sb.append(s);
+	    }
+	    Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
+	    System.out.println("=======回调的参数========");
+	    while(iterator.hasNext()){
+	    	Map.Entry<String, String> entry = iterator.next();
+	    	System.out.println("key:"+entry.getKey()+"==value:"+entry.getValue());
+	    }
+	    System.out.println("========================");
+	        
+		//返回状态码、返回信息
+		String returnCode = params.get("return_code");
+		String returnMsg = params.get("return_msg");
+		System.out.println("return_code:"+returnCode+"--return_msg:"+returnMsg);
+		//验证签名
+		boolean checkSign = WXPayUtil.isSignatureValid(params, propertiesUtil.getProperties("wx_key"));
+		if(checkSign&&(StringUtil.equals(returnCode, "SUCCESS"))&&(StringUtil.isBlank(returnMsg))){
+			System.out.println("签名有效");
+			//签名有效
+			String orderNo = params.get("out_trade_no");
+			LoginDTO dto = LoginDTO.getInstance(request);
+			CashPay pay = CashPay.dao.queryByCashNo(orderNo);
+			CashJournal cashJournal = CashJournal.dao.queryByCashNo(orderNo);
+			if(cashJournal != null){
+				dto.setUserId(cashJournal.getInt("member_id"));
+			}else{
+				System.out.println("微信支付回调，支付失败");
+				//签名有效，失败
+				String trade_no=params.get("transaction_id");
+				int updateFlg = CashJournal.dao.updateStatus(orderNo, Constants.FEE_TYPE_STATUS.APPLY_FAIL,trade_no);
+				if(updateFlg != 0){
+					renderText("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+					renderText("success");
+				}else{
+					renderText("fail");
+				}
+			}
+			if(pay != null){
+				dto.setTeas(pay.getStr("params"));
+				dto.setOrderNo(orderNo);
+				String trade_no=params.get("transaction_id");
+				dto.setTradeNo(trade_no);
+				ReturnData data = service.addOrder(dto);
+				//更新状态
+				if(StringUtil.equals(data.getCode(), Constants.STATUS_CODE.SUCCESS)){
+					renderText("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+				}else{
+					renderText("fail");
+				}
+				System.out.println("微信支付回调成功");
+			}else{
+				System.out.println("微信支付回调，支付失败");
+				//签名有效，失败
+				String trade_no=params.get("transaction_id");
+				int updateFlg = CashJournal.dao.updateStatus(orderNo, Constants.FEE_TYPE_STATUS.APPLY_FAIL,trade_no);
+				if(updateFlg != 0){
+					renderText("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+					renderText("success");
+				}else{
+					renderText("fail");
+				}
+			}
+		}else if(checkSign&&(StringUtil.equals(returnCode, "FAIL"))){
+			System.out.println("微信支付回调，支付失败");
+			//签名有效，失败
+			String orderNo = params.get("out_trade_no");
+			String trade_no=params.get("transaction_id");
+			int updateFlg = CashJournal.dao.updateStatus(orderNo, Constants.FEE_TYPE_STATUS.APPLY_FAIL,trade_no);
+			if(updateFlg != 0){
+				renderText("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+				renderText("success");
+			}else{
+				renderText("fail");
+			}
+		}else{
+			System.out.println("微信回调，签名错误");
+		}
+	}
+	
+	//获取购物车预支付信息
+	//购物车下单：获取预支付信息->添加资金记录->返回前端，唤起支付->微信回调，更新资金记录，减卖家库存，增买家库存
+	//直接购买：获取预支付信息->添加资金记录->返回前端，唤起支付->微信回调，更新资金记录，减卖家库存，增买家库存
+	public void getBuyCartPrePayInfo() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
-		if(loginFlg != 3){
-			ReturnData data = new ReturnData();
-			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
-			if(loginFlg == 0){
-				data.setMessage("您还未登陆，请先登陆");
-			}
-			if(loginFlg == 1){
-				data.setMessage("您的账号登录过期");
-			}
-			if(loginFlg == 2){
-				data.setMessage("您的账号已在其他终端登录");
-			}
-			
-			getResponse().addHeader("Access-Control-Allow-Origin", "*");
+		String str[] = dto.getTeas().split(",");
+		int iSize = str.length;
+		ReturnData data = new ReturnData();
+		if(iSize <= 0){
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("购物车数量不能小于0");
 			renderJson(data);
 			return;
 		}
-		getResponse().addHeader("Access-Control-Allow-Origin", "*");
-		renderJson(service.addOrder(dto));
+		
+		//总价
+		BigDecimal amount = new BigDecimal("0");
+		for(int i = 0; i < iSize; i++){
+			//判断购物车
+			BuyCart cart = BuyCart.dao.queryById(StringUtil.toInteger(str[i]));
+			int wtmItemId = cart.getInt("warehouse_tea_member_item_id");
+			int quality = (int)cart.getInt("quality");
+			WarehouseTeaMemberItem item = WarehouseTeaMemberItem.dao.queryByKeyId(wtmItemId);
+			if(item == null){
+				data.setCode(Constants.STATUS_CODE.FAIL);
+				data.setMessage("对不起，你所选中的第"+(i+1)+"种茶叶已不存在，请重新选择要购买的产品");
+				renderJson(data);
+				return;
+			}
+			WarehouseTeaMember wtm = WarehouseTeaMember.dao.queryById(item.getInt("warehouse_tea_member_id"));
+			if(wtm == null){
+				data.setCode(Constants.STATUS_CODE.FAIL);
+				data.setMessage("对不起，你所选中的第"+(i+1)+"种茶叶已不存在，请重新选择要购买的产品");
+				renderJson(data);
+				return;
+			}
+			Tea tea = Tea.dao.queryById(wtm.getInt("tea_id"));
+			if(tea == null){
+				data.setCode(Constants.STATUS_CODE.FAIL);
+				data.setMessage("对不起，你所选中的第"+(i+1)+"种茶叶已不存在，请重新选择要购买的产品");
+				renderJson(data);
+				return;
+			}
+			String teaName = tea.getStr("tea_title");
+			
+			int itemStock = item.getInt("quality");
+			CodeMst sizeType = CodeMst.dao.queryCodestByCode(item.getStr("size_type_cd"));
+			if(quality > itemStock){
+				data.setCode(Constants.STATUS_CODE.FAIL);
+				data.setMessage("对不起，"+teaName+"库存不足"+quality+sizeType.getStr("name"));
+				renderJson(data);
+				return;
+			}
+			if(StringUtil.isNoneBlank(item.getStr("status"))
+					&&(!StringUtil.equals(item.getStr("status"), Constants.TEA_STATUS.ON_SALE))){
+				data.setCode(Constants.STATUS_CODE.FAIL);
+				data.setMessage("对不起，"+teaName+"已停售");
+				renderJson(data);
+				return;
+			}
+			
+			amount = amount.add(item.getBigDecimal("price").multiply(new BigDecimal(quality)));
+		}
+	
+		BigDecimal moneys = amount.setScale(2);
+		
+		String orderNo = CashJournal.dao.queryCurrentCashNo();
+		int moneyInt = moneys.multiply(new BigDecimal("100")).intValue();
+		//生成微信支付信息
+		PropertiesUtil propertiesUtil = PropertiesUtil.getInstance();
+        String wx_appid = propertiesUtil.getProperties("wx_appid");
+        String wx_mch_id = propertiesUtil.getProperties("wx_mch_id");
+        String wx_key = propertiesUtil.getProperties("wx_key");
+        String wx_unifiedorder = propertiesUtil.getProperties("wx_unifiedorder");
+        String wx_notify_url = propertiesUtil.getProperties("wxh5_buycart_notify_url");
+        String nonStr = WXPayUtil.generateNonceStr();
+        String UTF8 = "UTF-8";
+        String stringA="appid="+wx_appid
+        			  +"&body=掌上茶宝-购买茶叶"
+        			  +"&mch_id="+wx_mch_id
+        			  +"&nonce_str="+nonStr
+        			  +"&notify_url="+wx_notify_url
+        			  +"&out_trade_no="+orderNo
+        			  +"&scene_info={\"h5_info\":{\"type\":\"Wap\",\"wap_url\":\"http://www.yibuwangluo.cn\",\"wap_name\":\"购买茶叶\"}}"
+        			  +"&spbill_create_ip=120.41.149.248"
+        			  +"&total_fee="+moneyInt
+        			  +"&trade_type=MWEB";
+        String md5StringA = WXPayUtil.MD5(stringA+"&key="+wx_key);
+        String reqBody = "<xml>"
+        				+"<appid>"+wx_appid+"</appid>"
+        				+"<body>掌上茶宝-购买茶叶</body>"
+        				+"<mch_id>"+wx_mch_id+"</mch_id>"
+        				+"<nonce_str>"+nonStr+"</nonce_str>"
+        				+"<notify_url>"+wx_notify_url+"</notify_url>"
+        				+"<out_trade_no>"+orderNo+"</out_trade_no>"
+        				+"<scene_info>{\"h5_info\":{\"type\":\"Wap\",\"wap_url\":\"http://www.yibuwangluo.cn\",\"wap_name\":\"购买茶叶\"}}</scene_info>"
+        				+"<spbill_create_ip>120.41.149.248</spbill_create_ip>"
+        				+"<total_fee>"+moneyInt+"</total_fee>"
+        				+"<trade_type>MWEB</trade_type>"
+        				+"<sign>"+md5StringA+"</sign>"
+        				+"</xml>";
+        
+        //请求统一下单接口
+        URL httpUrl = new URL(wx_unifiedorder);
+        HttpURLConnection httpURLConnection = (HttpURLConnection) httpUrl.openConnection();
+       // httpURLConnection.setRequestProperty("Host", "api.mch.weixin.qq.com");
+        httpURLConnection.setDoOutput(true);
+        httpURLConnection.setRequestMethod("POST");
+        httpURLConnection.setConnectTimeout(10*1000);
+        httpURLConnection.setReadTimeout(10*1000);
+        httpURLConnection.connect();
+        OutputStream outputStream = httpURLConnection.getOutputStream();
+        outputStream.write(reqBody.getBytes(UTF8));
+
+        //获取内容
+        InputStream inputStream = httpURLConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, UTF8));
+        final StringBuffer stringBuffer = new StringBuffer();
+        String line = null;
+        while ((line = bufferedReader.readLine()) != null) {
+            stringBuffer.append(line);
+        }
+        String resp = stringBuffer.toString();
+        if (stringBuffer!=null) {
+            try {
+                bufferedReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (inputStream!=null) {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (outputStream!=null) {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Map<String, String> retMap = processResponseXml(resp);
+        WXPrepayModel model = new WXPrepayModel();
+        if((!retMap.isEmpty())&&(StringUtil.equals(retMap.get("return_code"), "SUCCESS"))){
+        	//重新生成签名，二次生成签名
+	        String wx_appid2 = propertiesUtil.getProperties("wx_appid");
+	        String wx_mch_id2 = propertiesUtil.getProperties("wx_mch_id");
+	        String nonStr2 = WXPayUtil.generateNonceStr();
+	        String stringA2="appid="+wx_appid2
+	        			  +"&noncestr="+nonStr2
+	        			  +"&package=Sign=WXPay"
+	        			  +"&partnerid="+wx_mch_id2
+	        			  +"&prepayid="+retMap.get("prepay_id")
+	        			  +"&timestamp="+StringUtil.getTimeStamp();
+	        String md5StringA2 = WXPayUtil.MD5(stringA2+"&key="+wx_key);
+	        
+        	model.setAppId(retMap.get("appid"));
+        	model.setPartnerId(retMap.get("mch_id"));
+        	model.setPrepayId(retMap.get("prepay_id"));
+        	model.setPackageValue("Sign=WXPay");
+        	model.setNonceStr(nonStr2);
+        	model.setTimeStamp(StringUtil.getTimeStamp());
+        	model.setSign(md5StringA2);
+        	model.setMwebUrl(retMap.get("mweb_url"));
+        	
+		    Map<String, Object> dataMap = new HashMap<>();
+		    dataMap.put("payInfo", model);
+		    data.setCode(Constants.STATUS_CODE.SUCCESS);
+		    data.setMessage("获取微信预支付信息成功");
+		    data.setData(dataMap); 
+		    //保存自己记录
+		    //成功充值记录
+			CashJournal cash = new CashJournal();
+			cash.set("cash_journal_no", orderNo);
+			cash.set("member_id", dto.getUserId());
+			cash.set("pi_type", Constants.PI_TYPE.ADD_ORDER);
+			cash.set("fee_status", Constants.FEE_TYPE_STATUS.APPLING);
+			cash.set("occur_date", new Date());
+			cash.set("act_rev_amount", moneys);
+			cash.set("act_pay_amount", moneys);
+			cash.set("opening_balance", moneys);
+			cash.set("closing_balance", moneys);
+			cash.set("remarks", "微信支付购买"+moneys);
+			cash.set("create_time", DateUtil.getNowTimestamp());
+			cash.set("update_time", DateUtil.getNowTimestamp());
+			boolean saveFlg = CashJournal.dao.saveInfo(cash);
+			//保存
+			if(saveFlg){
+				CashPay pay = new CashPay();
+				pay.set("cash_no", orderNo);
+				pay.set("params", dto.getTeas());
+				//0表示购物车
+				pay.set("flg", 0);
+				pay.set("create_time", DateUtil.getNowTimestamp());
+				pay.set("update_time", DateUtil.getNowTimestamp());
+				boolean paySaveFlg = CashPay.dao.saveInfo(pay);
+				if(paySaveFlg){
+					renderJson(data);
+					return;
+				}else{
+					data.setCode(Constants.STATUS_CODE.FAIL);
+					data.setMessage("获取微信预支付信息失败");
+					renderJson(data);
+					return;
+				}
+			}else{
+				data.setCode(Constants.STATUS_CODE.FAIL);
+				data.setMessage("获取微信预支付信息失败");
+				renderJson(data);
+				return;
+			}
+		    
+        }else{
+		    Map<String, Object> dataMap = new HashMap<>();
+		    dataMap.put("payInfo", model);
+		    data.setCode(Constants.STATUS_CODE.FAIL);
+		    data.setMessage("获取微信预支付信息失败");
+		    data.setData(dataMap); 
+		    renderJson(data);
+		    return;
+        }
 	}
 	
-	//获取预支付信息
-	//购物车下单：获取预支付信息->添加资金记录->返回前端，唤起支付->微信回调，更新资金记录，减卖家库存，增买家库存
-	//直接购买：获取预支付信息->添加资金记录->返回前端，唤起支付->微信回调，更新资金记录，减卖家库存，增买家库存
-	public void getPrePayInfo() throws Exception{
+	//直接下单获取预支付信息
+	public void getOrderPrePayInfo() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		BigDecimal moneys = dto.getMoney().setScale(2);
+		//总价
+		ReturnData data = new ReturnData();
+		int wtmItemId = dto.getTeaId();
+		int quality = dto.getQuality();
+		
+		WarehouseTeaMemberItem item = WarehouseTeaMemberItem.dao.queryByKeyId(wtmItemId);
+		if(item == null){
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("对不起，茶叶数据出错");
+			renderJson(data);
+			return;
+		}
+		if(quality <= 0){
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("对不起，购买数量不能为0");
+			renderJson(data);
+			return;
+		}
+		int itemStock = item.getInt("quality");
+		CodeMst sizeType = CodeMst.dao.queryCodestByCode(item.getStr("size_type_cd"));
+		if(quality > itemStock){
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("对不起，此茶叶库存不足"+quality+sizeType.getStr("name"));
+			renderJson(data);
+			return;
+		}
+		System.out.println(wtmItemId+"---"+item.getStr("status"));
+		if(StringUtil.isNoneBlank(item.getStr("status"))
+				&&(!StringUtil.equals(item.getStr("status"), Constants.TEA_STATUS.ON_SALE))){
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("对不起，此茶叶已停售");
+			renderJson(data);
+			return;
+		}
+	
+		BigDecimal moneys = item.getBigDecimal("price").multiply(new BigDecimal(quality)).setScale(2);
 		
 		String orderNo = CashJournal.dao.queryCurrentCashNo();
 		int moneyInt = moneys.multiply(new BigDecimal("100")).intValue();
@@ -1156,7 +1559,6 @@ public class WXController extends Controller{
         	model.setSign(md5StringA2);
         	model.setMwebUrl(retMap.get("mweb_url"));
         	
-        	ReturnData data = new ReturnData();
 		    Map<String, Object> dataMap = new HashMap<>();
 		    dataMap.put("payInfo", model);
 		    data.setCode(Constants.STATUS_CODE.SUCCESS);
@@ -1177,16 +1579,41 @@ public class WXController extends Controller{
 			cash.set("remarks", "微信支付购买"+moneys);
 			cash.set("create_time", DateUtil.getNowTimestamp());
 			cash.set("update_time", DateUtil.getNowTimestamp());
-			CashJournal.dao.saveInfo(cash);
-		    renderJson(data);
+			boolean saveFlg = CashJournal.dao.saveInfo(cash);
+			//保存
+			if(saveFlg){
+				CashPay pay = new CashPay();
+				pay.set("cash_no", orderNo);
+				pay.set("params", wtmItemId+","+quality);
+				//1表示直接下单
+				pay.set("flg", 1);
+				pay.set("create_time", DateUtil.getNowTimestamp());
+				pay.set("update_time", DateUtil.getNowTimestamp());
+				boolean paySaveFlg = CashPay.dao.saveInfo(pay);
+				if(paySaveFlg){
+					renderJson(data);
+					return;
+				}else{
+					data.setCode(Constants.STATUS_CODE.FAIL);
+					data.setMessage("获取微信预支付信息失败");
+					renderJson(data);
+					return;
+				}
+			}else{
+				data.setCode(Constants.STATUS_CODE.FAIL);
+				data.setMessage("获取微信预支付信息失败");
+				renderJson(data);
+				return;
+			}
+		    
         }else{
-        	ReturnData data = new ReturnData();
 		    Map<String, Object> dataMap = new HashMap<>();
 		    dataMap.put("payInfo", model);
 		    data.setCode(Constants.STATUS_CODE.FAIL);
 		    data.setMessage("获取微信预支付信息失败");
 		    data.setData(dataMap); 
 		    renderJson(data);
+		    return;
         }
 	}
 	

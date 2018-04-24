@@ -22,6 +22,10 @@ public class CashJournal extends Model<CashJournal> {
 		return CashJournal.dao.findFirst("select * from t_cash_journal where id = ?", id);
 	}
 	
+	public CashJournal queryByCashNo(String cashNo) {
+		return CashJournal.dao.findFirst("select * from t_cash_journal where cash_journal_no = ?", cashNo);
+	}
+	
 	public boolean updateInfo(CashJournal data){
 		return new CashJournal().setAttrs(data).update();
 	}

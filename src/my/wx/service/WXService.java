@@ -3740,48 +3740,15 @@ public class WXService {
 		ReturnData data = new ReturnData();
 		int wtmItemId = dto.getTeaId();
 		int quality = dto.getQuality();
-		
-		Member buyUserMember = Member.dao.queryById(dto.getUserId());
-		if(!StringUtil.equals(StringUtil.checkCode(dto.getPayPwd()), buyUserMember.getStr("paypwd"))){
-			data.setCode(Constants.STATUS_CODE.PAYPWD_ERROR);
-			data.setMessage("对不起，支付密码错误");
-			return data;
-		}
-		
 		WarehouseTeaMemberItem item = WarehouseTeaMemberItem.dao.queryByKeyId(wtmItemId);
 		if(item == null){
 			data.setCode(Constants.STATUS_CODE.FAIL);
-			data.setMessage("对不起，茶叶数据出错");
+			data.setMessage("数据不存在");
 			return data;
 		}
-		if(quality <= 0){
-			data.setCode(Constants.STATUS_CODE.FAIL);
-			data.setMessage("对不起，购买数量不能为0");
-			return data;
-		}
-		int itemStock = item.getInt("quality");
-		CodeMst sizeType = CodeMst.dao.queryCodestByCode(item.getStr("size_type_cd"));
-		if(quality > itemStock){
-			data.setCode(Constants.STATUS_CODE.FAIL);
-			data.setMessage("对不起，此茶叶库存不足"+quality+sizeType.getStr("name"));
-			return data;
-		}
-		System.out.println(wtmItemId+"---"+item.getStr("status"));
-		if(StringUtil.isNoneBlank(item.getStr("status"))
-				&&(!StringUtil.equals(item.getStr("status"), Constants.TEA_STATUS.ON_SALE))){
-			data.setCode(Constants.STATUS_CODE.FAIL);
-			data.setMessage("对不起，此茶叶已停售");
-			return data;
-		}
-		
 		//判断账号金额够不够
 		BigDecimal all = item.getBigDecimal("price").multiply(new BigDecimal(quality));
-		if(all.compareTo(buyUserMember.getBigDecimal("moneys"))==1){
-			//余额不够
-			data.setCode(Constants.STATUS_CODE.ACCOUNT_MONEY_NOT_ENOUGH);
-			data.setMessage("对不起，账户余额不足");
-			return data;
-		}
+		
 		//添加订单
 		Order order = new Order();
 		order.set("order_no", StringUtil.getOrderNo());
@@ -3801,10 +3768,6 @@ public class WXService {
 			if(wtm != null){
 				item2.set("sale_id", wtm.getInt("member_id"));
 				item2.set("sale_user_type", wtm.getStr("member_type_cd"));
-			}else{
-				data.setCode(Constants.STATUS_CODE.FAIL);
-				data.setMessage("下单失败，卖家茶叶不存在");
-				return data;
 			}
 			
 			item2.set("order_id", orderId);
@@ -3877,27 +3840,8 @@ public class WXService {
 				int allQuality = 0;
 				if(ret != 0){
 					//买家扣款
-					BigDecimal openBalance = buyUserMember.getBigDecimal("moneys");
-					int rt = Member.dao.updateMoneys(dto.getUserId(), buyUserMember.getBigDecimal("moneys").subtract(all));
+					int rt = CashJournal.dao.updateStatus(dto.getOrderNo(), Constants.FEE_TYPE_STATUS.APPLY_SUCCESS, dto.getTradeNo());
 					if(rt != 0){
-						//下单记录
-						CashJournal cash = new CashJournal();
-						cash.set("cash_journal_no", CashJournal.dao.queryCurrentCashNo());
-						cash.set("member_id", dto.getUserId());
-						cash.set("pi_type", Constants.PI_TYPE.ADD_ORDER);
-						cash.set("fee_status", Constants.FEE_TYPE_STATUS.APPLY_SUCCESS);
-						cash.set("occur_date", new Date());
-						cash.set("act_rev_amount", all);
-						cash.set("act_pay_amount", all);
-						Member member = Member.dao.queryById(dto.getUserId());
-						cash.set("opening_balance",openBalance);
-						cash.set("closing_balance", member.getBigDecimal("moneys"));
-						cash.set("remarks", "下单"+all);
-						cash.set("member_type_cd", Constants.USER_TYPE.USER_TYPE_CLIENT);
-						cash.set("create_time", DateUtil.getNowTimestamp());
-						cash.set("update_time", DateUtil.getNowTimestamp());
-						CashJournal.dao.saveInfo(cash);
-						
 						//减少卖家库存
 						int update = WarehouseTeaMemberItem.dao.cutTeaQuality(quality, wtmItemId);
 						//20171121如果库存变为0，更新卖茶成功
@@ -3974,7 +3918,6 @@ public class WXService {
 									message.set("update_time", DateUtil.getNowTimestamp());
 									message.set("user_id", wtm.getInt("member_id"));
 									boolean messageSave = Message.dao.saveInfo(message);
-									
 									return data;
 								}else{
 									data.setCode(Constants.STATUS_CODE.FAIL);
@@ -4006,7 +3949,6 @@ public class WXService {
 											message.set("update_time", DateUtil.getNowTimestamp());
 											message.set("user_id", wtm.getInt("member_id"));
 											boolean messageSave = Message.dao.saveInfo(message);
-											
 											return data;
 										}else{
 											data.setCode(Constants.STATUS_CODE.FAIL);
@@ -4035,7 +3977,6 @@ public class WXService {
 										message.set("update_time", DateUtil.getNowTimestamp());
 										message.set("user_id", wtm.getInt("member_id"));
 										boolean messageSave = Message.dao.saveInfo(message);
-										
 										return data;
 									}else{
 										data.setCode(Constants.STATUS_CODE.FAIL);
@@ -4073,74 +4014,24 @@ public class WXService {
 	}
 	
 	//购物车付款
+	@Transient
 	public ReturnData addOrder(LoginDTO dto) throws Exception{
 		ReturnData data = new ReturnData();
 		String str[] = dto.getTeas().split(",");
 		int iSize = str.length;
 		
-		Member buyUserMembers = Member.dao.queryById(dto.getUserId());
-		if(!StringUtil.equals(StringUtil.checkCode(dto.getPayPwd()), buyUserMembers.getStr("paypwd"))){
-			data.setCode(Constants.STATUS_CODE.PAYPWD_ERROR);
-			data.setMessage("对不起，支付密码错误");
+		//查看资金记录
+		CashJournal cashJournal = CashJournal.dao.queryByCashNo(dto.getOrderNo());
+		if(cashJournal == null){
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("资金记录不存在");
 			return data;
 		}
-		
-		//总价
-		BigDecimal amount = new BigDecimal("0");
-		for (int i = 0; i < iSize; i++) {
-			
-			BuyCart cart = BuyCart.dao.queryById(StringUtil.toInteger(str[i]));
-			int wtmItemId = cart.getInt("warehouse_tea_member_item_id");
-			int quality = (int)cart.getInt("quality");
-			WarehouseTeaMemberItem item = WarehouseTeaMemberItem.dao.queryByKeyId(wtmItemId);
-			if(item == null){
-				data.setCode(Constants.STATUS_CODE.FAIL);
-				data.setMessage("对不起，你所选中的第"+(i+1)+"种茶叶已不存在，请重新选择要购买的产品");
-				return data;
-			}
-			WarehouseTeaMember wtm = WarehouseTeaMember.dao.queryById(item.getInt("warehouse_tea_member_id"));
-			if(wtm == null){
-				data.setCode(Constants.STATUS_CODE.FAIL);
-				data.setMessage("对不起，你所选中的第"+(i+1)+"种茶叶已不存在，请重新选择要购买的产品");
-				return data;
-			}
-			Tea tea = Tea.dao.queryById(wtm.getInt("tea_id"));
-			if(tea == null){
-				data.setCode(Constants.STATUS_CODE.FAIL);
-				data.setMessage("对不起，你所选中的第"+(i+1)+"种茶叶已不存在，请重新选择要购买的产品");
-				return data;
-			}
-			String teaName = tea.getStr("tea_title");
-			
-			int itemStock = item.getInt("quality");
-			CodeMst sizeType = CodeMst.dao.queryCodestByCode(item.getStr("size_type_cd"));
-			if(quality > itemStock){
-				data.setCode(Constants.STATUS_CODE.FAIL);
-				data.setMessage("对不起，"+teaName+"库存不足"+quality+sizeType.getStr("name"));
-				return data;
-			}
-			if(StringUtil.isNoneBlank(item.getStr("status"))
-					&&(!StringUtil.equals(item.getStr("status"), Constants.TEA_STATUS.ON_SALE))){
-				data.setCode(Constants.STATUS_CODE.FAIL);
-				data.setMessage("对不起，"+teaName+"已停售");
-				return data;
-			}
-			
-			amount = amount.add(item.getBigDecimal("price").multiply(new BigDecimal(quality)));
-		}
-		Member buyUserMember = Member.dao.queryById(dto.getUserId());
-		if(amount.compareTo(buyUserMember.getBigDecimal("moneys"))==1){
-			//余额不够
-			data.setCode(Constants.STATUS_CODE.ACCOUNT_MONEY_NOT_ENOUGH);
-			data.setMessage("对不起，账户余额不足");
-			return data;
-		}
-		
 		//添加订单
 		String orderNo = StringUtil.getOrderNo();
 		Order order = new Order();
 		order.set("order_no", orderNo);
-		order.set("pay_amount", amount);
+		order.set("pay_amount", cashJournal.getBigDecimal("act_rev_amount"));
 		order.set("create_time", DateUtil.getNowTimestamp());
 		order.set("update_time", DateUtil.getNowTimestamp());
 		order.set("pay_time", DateUtil.getNowTimestamp());
@@ -4161,10 +4052,6 @@ public class WXService {
 				if(wtm != null){
 					item2.set("sale_id", wtm.getInt("member_id"));
 					item2.set("sale_user_type", wtm.getStr("member_type_cd"));
-				}else{
-					data.setCode(Constants.STATUS_CODE.FAIL);
-					data.setMessage("下单失败，卖家茶叶不存在");
-					return data;
 				}
 				
 				item2.set("order_id", orderId);
@@ -4238,26 +4125,8 @@ public class WXService {
 					
 					if(ret != 0){
 						//买家扣款
-						Member m1 = Member.dao.queryById(dto.getUserId());
-						int rt = Member.dao.cutMoneys(dto.getUserId(), itemAmount);
+						int rt = CashJournal.dao.updateStatus(orderNo, Constants.FEE_TYPE_STATUS.APPLY_SUCCESS, dto.getTradeNo());
 						if(rt != 0){
-							//成功充值记录
-							CashJournal cash = new CashJournal();
-							cash.set("cash_journal_no", CashJournal.dao.queryCurrentCashNo());
-							cash.set("member_id", dto.getUserId());
-							cash.set("pi_type", Constants.PI_TYPE.ADD_ORDER);
-							cash.set("fee_status", Constants.FEE_TYPE_STATUS.APPLY_SUCCESS);
-							cash.set("occur_date", new Date());
-							cash.set("act_rev_amount", itemAmount);
-							cash.set("act_pay_amount", itemAmount);
-							Member member = Member.dao.queryById(dto.getUserId());
-							cash.set("opening_balance", m1.getBigDecimal("moneys"));
-							cash.set("closing_balance", member.getBigDecimal("moneys"));
-							cash.set("remarks", "下单"+itemAmount);
-							cash.set("create_time", DateUtil.getNowTimestamp());
-							cash.set("update_time", DateUtil.getNowTimestamp());
-							CashJournal.dao.saveInfo(cash);
-							
 							//如果是卖家是平台,减少WarehouseTeaMem的库存
 							boolean cutFlg = true;
 							if(StringUtil.equals(wtm.getStr("member_type_cd"), Constants.USER_TYPE.PLATFORM_USER)){
@@ -4331,7 +4200,6 @@ public class WXService {
 										message.set("update_time", DateUtil.getNowTimestamp());
 										message.set("user_id", wtm.getInt("member_id"));
 										boolean messageSave = Message.dao.saveInfo(message);
-										
 										continue;
 									}else{
 										data.setCode(Constants.STATUS_CODE.FAIL);

@@ -26,6 +26,7 @@
 		$("#personal-img").attr('src',data.icon);
 		$(".phone-num").html(String(data.mobile));
 		$('.gender').html(data.sex == 0 ? "女":"男");
+		$('.gender').attr('data-sex',data.sex);
 		$('.wxNo').html(data.wxNo == null ? "" : data.wxNo);
 		$('.QQNo').html(data.qqNo == null ? "" : data.qqNo);
 		$('.nickname').html(data.nickName);
@@ -75,8 +76,17 @@
 			});
 		})
 		mui(".mui-content").on('tap','.modify-genter',function(){
-			var html='<div class="mui-input-row mui-radio mui-left"><label>男</label><input name="radio1" value=1 type="radio"></div>'
-					+'<div class="mui-input-row mui-radio mui-left"><label>女</label><input name="radio1" value=0 type="radio"></div>'
+			var sex = $('.gender').attr('data-sex');
+			var html="";
+			if(sex == 0){
+				html+='<div class="mui-input-row mui-radio mui-left"><label>女</label><input name="radio1" value=0 type="radio" checked></div>'
+					 +'<div class="mui-input-row mui-radio mui-left"><label>男</label><input name="radio1" value=1 type="radio"></div>'
+			}else{
+				html+='<div class="mui-input-row mui-radio mui-left"><label>女</label><input name="radio1" value=0 type="radio"></div>'
+					+'<div class="mui-input-row mui-radio mui-left"><label>男</label><input name="radio1" value=1 type="radio" checked></div>'
+			}
+			
+					
 			var btnArr = ['取消','确定'];
 			mui.confirm(html,"请选择您的性别",btnArr,function(e){
 				var sex = $('input[type=radio]:checked').val();
@@ -97,6 +107,7 @@
 							if(data.code == REQUEST_OK){
 								mui.toast("保存成功");
 								$('.gender').html(sex == 0 ? "女":"男");
+								$('.gender').attr('data-sex',sex);
 							}else{
 								mui.toast(data.message);
 							}

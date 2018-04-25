@@ -8,6 +8,9 @@
   color: #fff;
   text-align: center;
 }
+.header-nav .mui-nav-item span {
+  color: #fff;
+}
 .header-nav .mui-nav-item .mui-icon {
   display: block;
   padding-top: 20px;
@@ -72,4 +75,32 @@
 }
 .mui-toast-container {
   bottom: 50%;
+}
+.jq-alert .alert .content {
+  padding: 15px 15px 5px 15px;
+}
+.jq-alert .alert .content div {
+  -webkit-overflow-scrolling: touch;
+  overflow: scroll;
+}
+.jq-alert .alert .fd-btn a {
+  height: 35px;
+  padding: 24px;
+  font-size: 16px;
+}
+.jq-alert .alert .fd-btn a:first-child {
+  flex: 0 0 80px;
+}
+.jq-alert .alert .fd-btn a:last-child {
+  flex: 1;
+  background: #ff5400;
+  color: #fff;
+}
+.jq-alert .alert .fd-btn a.confirm:active {
+  background: #ff5400;
+}
+.jq-alert .alert .mui-checkbox {
+  font-size: 14px;
+  padding-left: 50px;
+  line-height: 36px;
 }

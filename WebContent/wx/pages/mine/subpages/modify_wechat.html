@@ -58,7 +58,7 @@
 						success:function(data){
 							if(data.code == REQUEST_OK){
 								mui.back();
-								mui.toast("保存成功");
+								mui.toast(data.message);
 							}else{
 								mui.toast(data.message);
 							}

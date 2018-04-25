@@ -40,6 +40,7 @@ import my.core.vo.WXPrepayModel;
 import my.core.wxpay.WXPayUtil;
 import my.pvcloud.dto.LoginDTO;
 import my.pvcloud.util.DateUtil;
+import my.pvcloud.util.HttpRequest;
 import my.pvcloud.util.ImageTools;
 import my.pvcloud.util.ImageZipUtil;
 import my.pvcloud.util.PropertiesUtil;
@@ -54,6 +55,7 @@ import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.session.mgt.WebSessionKey;
 import org.huadalink.route.ControllerBind;
+import org.json.JSONObject;
 
 import com.github.wxpay.sdk.WXPayConstants;
 import com.github.wxpay.sdk.WXPayConstants.SignType;
@@ -61,6 +63,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.aop.Enhancer;
 import com.jfinal.core.Controller;
 import com.jfinal.upload.UploadFile;
+import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
 
 @ControllerBind(key = "/wxmrest", path = "/wx")
 public class WXController extends Controller{
@@ -1273,10 +1276,10 @@ public class WXController extends Controller{
         			  +"&nonce_str="+nonStr
         			  +"&notify_url="+wx_notify_url
         			  +"&out_trade_no="+orderNo
-        			  +"&scene_info={\"h5_info\":{\"type\":\"Wap\",\"wap_url\":\"http://www.yibuwangluo.cn\",\"wap_name\":\"购买茶叶\"}}"
+        			  //+"&scene_info={\"h5_info\":{\"type\":\"Wap\",\"wap_url\":\"http://www.yibuwangluo.cn\",\"wap_name\":\"购买茶叶\"}}"
         			  +"&spbill_create_ip=120.41.149.248"
         			  +"&total_fee="+moneyInt
-        			  +"&trade_type=MWEB";
+        			  +"&trade_type=JSAPI";
         String md5StringA = WXPayUtil.MD5(stringA+"&key="+wx_key);
         String reqBody = "<xml>"
         				+"<appid>"+wx_appid+"</appid>"
@@ -1285,10 +1288,10 @@ public class WXController extends Controller{
         				+"<nonce_str>"+nonStr+"</nonce_str>"
         				+"<notify_url>"+wx_notify_url+"</notify_url>"
         				+"<out_trade_no>"+orderNo+"</out_trade_no>"
-        				+"<scene_info>{\"h5_info\":{\"type\":\"Wap\",\"wap_url\":\"http://www.yibuwangluo.cn\",\"wap_name\":\"购买茶叶\"}}</scene_info>"
+        				//+"<scene_info>{\"h5_info\":{\"type\":\"Wap\",\"wap_url\":\"http://www.yibuwangluo.cn\",\"wap_name\":\"购买茶叶\"}}</scene_info>"
         				+"<spbill_create_ip>120.41.149.248</spbill_create_ip>"
         				+"<total_fee>"+moneyInt+"</total_fee>"
-        				+"<trade_type>MWEB</trade_type>"
+        				+"<trade_type>JSAPI</trade_type>"
         				+"<sign>"+md5StringA+"</sign>"
         				+"</xml>";
         
@@ -1475,10 +1478,10 @@ public class WXController extends Controller{
         			  +"&nonce_str="+nonStr
         			  +"&notify_url="+wx_notify_url
         			  +"&out_trade_no="+orderNo
-        			  +"&scene_info={\"h5_info\":{\"type\":\"Wap\",\"wap_url\":\"http://www.yibuwangluo.cn\",\"wap_name\":\"购买茶叶\"}}"
+        			  //+"&scene_info={\"h5_info\":{\"type\":\"Wap\",\"wap_url\":\"http://www.yibuwangluo.cn\",\"wap_name\":\"购买茶叶\"}}"
         			  +"&spbill_create_ip=120.41.149.248"
         			  +"&total_fee="+moneyInt
-        			  +"&trade_type=MWEB";
+        			  +"&trade_type=JSAPI";
         String md5StringA = WXPayUtil.MD5(stringA+"&key="+wx_key);
         String reqBody = "<xml>"
         				+"<appid>"+wx_appid+"</appid>"
@@ -1487,10 +1490,10 @@ public class WXController extends Controller{
         				+"<nonce_str>"+nonStr+"</nonce_str>"
         				+"<notify_url>"+wx_notify_url+"</notify_url>"
         				+"<out_trade_no>"+orderNo+"</out_trade_no>"
-        				+"<scene_info>{\"h5_info\":{\"type\":\"Wap\",\"wap_url\":\"http://www.yibuwangluo.cn\",\"wap_name\":\"购买茶叶\"}}</scene_info>"
+        			//	+"<scene_info>{\"h5_info\":{\"type\":\"Wap\",\"wap_url\":\"http://www.yibuwangluo.cn\",\"wap_name\":\"购买茶叶\"}}</scene_info>"
         				+"<spbill_create_ip>120.41.149.248</spbill_create_ip>"
         				+"<total_fee>"+moneyInt+"</total_fee>"
-        				+"<trade_type>MWEB</trade_type>"
+        				+"<trade_type>JSAPI</trade_type>"
         				+"<sign>"+md5StringA+"</sign>"
         				+"</xml>";
         
@@ -1731,4 +1734,14 @@ public class WXController extends Controller{
 			System.out.println("微信回调，签名错误");
 		}
 	}
+    
+    public void wxLoginCallBack() throws Exception{
+		HttpServletRequest request = getRequest();
+		System.out.println("code:"+request.getParameter("code"));
+		System.out.println("state:"+request.getParameter("state"));
+		String ret = HttpRequest.sendGet("https://api.weixin.qq.com/sns/oauth2/access_token", "ppid=wxd01256c927894106&secret=78939AOPQI986202cd38TJ0928ng058K&code="+request.getParameter("code")+"&grant_type=authorization_code");
+		System.out.println("ret:"+ret);
+		JSONObject retJson1 = new JSONObject(ret);
+		System.out.println("openId:"+retJson1.getString("openid"));
+    }
 }

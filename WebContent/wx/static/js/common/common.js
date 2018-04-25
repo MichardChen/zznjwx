@@ -128,3 +128,9 @@ var REQUEST_OK = 5600;
             }
         })
 	}
+	
+/*	var old_back = mui.back;
+	mui.back = function(){	 
+	    old_back();
+	   opener.location.reload()    	
+	}*/

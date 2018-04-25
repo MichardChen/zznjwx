@@ -6,6 +6,9 @@
         flex:1;
         color: #fff;
         text-align: center;
+        span{
+            color: #fff;
+        }
         .mui-icon{          
             display: block;
             padding-top: 20px;            
@@ -71,4 +74,40 @@
 }
 .mui-toast-container{
     bottom: 50%;
+}
+
+.jq-alert {
+    .alert {
+        .content{
+            padding: 15px 15px 5px 15px;
+            div{
+               -webkit-overflow-scrolling:touch; 
+                overflow: scroll; 
+            }
+            
+        }
+        .fd-btn{
+            a{
+                height: 35px;
+                padding: 24px;
+                font-size: 16px; 
+            }
+            a:first-child{
+                flex:0 0 80px
+            }
+            a:last-child{
+                flex: 1;
+                background: #ff5400;
+                color: #fff;
+            }
+            a.confirm:active{
+                background: #ff5400;
+            }
+        }
+        .mui-checkbox{
+            font-size: 14px;
+            padding-left: 50px;
+            line-height: 36px;
+        }
+    }
 }

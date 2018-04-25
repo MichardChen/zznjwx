@@ -4,6 +4,7 @@
         .mui-table-view{
             .mui-table-view-cell{
                 padding-right:36px;
+                position: relative;
                 a{
                     margin-right:-36px;
                     line-height: 30px;
@@ -14,6 +15,14 @@
                         color:#999;
                     }
                 }
+                .head-input{
+                    width: 100%;
+                    height: 50px;
+                    position: absolute;
+                    top:10px;
+                    left: 0;
+                    opacity: 0;
+                }
             }
             .mui-table-view-cell:first-child{
                 a{
@@ -22,4 +31,7 @@
             }
         }
     }
+}
+.mui-popup-title+.mui-popup-text{
+    padding: 0 35px;
 }

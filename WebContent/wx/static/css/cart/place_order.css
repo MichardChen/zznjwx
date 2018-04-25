@@ -20,6 +20,12 @@
 .mui-content .mui-table-view:before {
   display: none;
 }
+.mui-toast-container {
+  bottom: 50%;
+}
+.place-order-page {
+  padding-top: 0 ;
+}
 .place-order-page .mui-table-view .mui-table-view-cell {
   padding: 5px 15px;
   margin-bottom: 10px;

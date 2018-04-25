@@ -145,5 +145,11 @@
            })
         })
 		
+		mui(".mine-list").on("tap",".share",function(){
+           mui.openWindow({
+           	  url:"http://www.yibuwangluo.cn/zznjwx/h5/download.jsp"
+           })
+        })
+		
     })
 })()

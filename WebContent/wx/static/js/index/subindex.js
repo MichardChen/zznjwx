@@ -90,8 +90,8 @@
         	var cookie = checkCookie(login);
         	if(cookie){
         		mui.openWindow({
-        			url:"./message.html",
-		    		id:"message.html",
+        			url:"./subpages/message_sub.html",
+		    		id:"message_sub.html",
 		    		show:{
 				      autoShow:true,//页面loaded事件发生后自动显示，默认为true
 				      aniShow:"slide-in-right",//页面显示动画，默认为”slide-in-right“；

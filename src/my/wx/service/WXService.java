@@ -921,7 +921,7 @@ public class WXService {
 		ReturnData data = new ReturnData();
 		FeedBack feedBack = new FeedBack();
 		feedBack.set("user_id", dto.getUserId());
-		feedBack.set("user_type_cd", dto.getUserTypeCd());
+		feedBack.set("user_type_cd", "010001");
 		feedBack.set("feedback", StringUtil.checkCode(dto.getFeedBack()));
 		feedBack.set("create_time", DateUtil.getNowTimestamp());
 		feedBack.set("update_time", DateUtil.getNowTimestamp());

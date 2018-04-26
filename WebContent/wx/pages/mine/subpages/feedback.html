@@ -56,7 +56,7 @@
     		}
 			$.ajax({
 				type:"post",
-				url:REQUEST_URL+"wxmrest/updateNickName",
+				url:REQUEST_URL+"wxmrest/saveFeedBack",
 				data:{
 				"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
@@ -67,8 +67,10 @@
 				async:true,
 				success:function(data){
 					if(data.code == REQUEST_OK){
-						mui.back();
 						mui.toast(data.message);
+						setTimeout(function(){
+							mui.back();
+						}, 2000);
 					}else{
 						mui.toast(data.message);
 					}

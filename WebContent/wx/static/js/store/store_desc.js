@@ -17,6 +17,7 @@
 					console.log(data.data);
 					var store = data.data.store;
 					var evaluateList = data.data.evaluateList;
+					$(".phone").attr("data-mobile",store.mobile);
 					$('.store-name').html(store.name);
 					$(".address-desc").html(store.address);
 					createsliderDom(store.imgs);
@@ -36,7 +37,7 @@
 	var createsliderDom = function(data){
 		var slider = $('.mui-slider-group');
 		data.forEach(function(n){
-			var img = '<a><img src="'+n+'" width=75 height=75 ></a>';
+			var img = '<a><img src="'+n+'" width=75 height=75 data-preview-src=""  data-preview-group="1"></a>';
 			slider.append(img);
 		})
 	}
@@ -58,7 +59,7 @@
 		data.forEach(function(n){
 			var li = $('<li/>');
 			var user = $('<div class="user"/>');
-			var userimg = '<a class="user-img"><img src='+n.icon+' width=50 height=50></a>';
+			var userimg = '<a class="user-img"><img src='+n.icon+' width=50 height=50 ></a>';
 			var userName = '<div class="user-desc"><h3>'+n.userName+'</h3><p class="evaluate">评分 '+computedStar(n.point)+'<span class="mui-pull-right">'+n.createDate+'</span></p></div>';
 			user.html(userimg+userName);
 			var evaluate = $('<p class="valuate-text">'+n.comment+'</p>')
@@ -87,5 +88,11 @@
 	    });
 	}
 	
+	mui(".mui-table-view-cell").on('tap','.phone',function(){
+		var mobile = $(this).attr("data-mobile");
+		mui.confirm(mobile,' ',["取消","呼叫"]);
+	})
+	
+	mui.previewImage();
 	
 })()

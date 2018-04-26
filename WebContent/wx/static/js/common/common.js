@@ -1,6 +1,7 @@
 //常量定义
 
-var REQUEST_URL = 'http://www.yibuwangluo.cn/zznjwx/';
+//var REQUEST_URL = 'http://www.yibuwangluo.cn/zznjwx/';
+var REQUEST_URL = 'http://192.168.1.91:8088/zznjwx/';
 
 var REQUEST_OK = 5600;
 
@@ -129,8 +130,13 @@ var REQUEST_OK = 5600;
         })
 	}
 	
-/*	var old_back = mui.back;
-	mui.back = function(){	 
-	    old_back();
-	   opener.location.reload()    	
-	}*/
+	var old_back = mui.back;
+	mui.back = function(){	
+		document.location.reload()
+		mui.openWindow({
+			url:document.referrer
+		})
+		setTimeout(function(){
+			 old_back(); 
+		},500)	    	
+	}

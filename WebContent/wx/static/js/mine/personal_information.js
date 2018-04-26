@@ -55,6 +55,7 @@
 				success:function(data){
 					if(data.code == REQUEST_OK){
 						mui.toast(data.message);
+						document.location.reload()
 						if (window.FileReader) {
 						        var reader = new FileReader();
 						    } else {

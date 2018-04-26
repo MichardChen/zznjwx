@@ -45,36 +45,36 @@
 		  //若当前input为空，则alert提醒		  
 		  	if(this.className.indexOf('register-phone')!= -1){
 		  		if(!this.value||$.trim(this.value)==""){
-		  			mui.toast("手机号码不能为空！");
+		  			mui.toast("手机号码不能为空");
 		  			return flag = false;
 		  		}else{
 		  			var phoneReg=/^[1][3,4,5,7,8][0-9]{9}$/;  
 			         if (!phoneReg.test(this.value)) {  
-		              mui.toast('请输入正确的手机号码！') 
+		              mui.toast('请输入正确的手机号码') 
 		              return flag = false;
 				  	}
 			    }
 		  	}
 		  	if(this.className.indexOf('reset-msg-code')!=-1){
 		  		if(!this.value||$.trim(this.value)==""){
-			  		mui.toast("验证码不能为空！")
+			  		mui.toast("验证码不能为空")
 			  		return flag = false;
 		  		}else{
 		  			var codeReg=/^[0-9]{6}$/;  
 			         if (!codeReg.test(this.value)) {  
-		              mui.toast('请输入正确的验证码！') ;
+		              mui.toast('请输入正确的验证码') ;
 		              return flag = false;
 				  	}			    
 		  		}
 		  	}
 		  	if(this.className.indexOf('reset-password')!= -1){
 		  		if(!this.value||$.trim(this.value)==""){
-		  			mui.toast("新密码不能为空！")
+		  			mui.toast("新密码不能为空")
 		  			return flag = false;
 		  		}else{
 		  			var passwordReg = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,20}$/;
 		  			if (!passwordReg.test(this.value)) {  
-		              mui.toast('请输入正确的密码格式！') ;
+		              mui.toast('请输入正确的密码格式') ;
 		              return flag = false;
 				  	}
 		  		}
@@ -86,11 +86,11 @@
 	var getMsgCode = function(){
 		var phoneNum = mui('.register-phone')[0].value;
 		if(phoneNum == ""){
-			mui.toast('请输入手机号码！')
+			mui.toast('请输入手机号码')
 		}else{
 		  var phoneReg=/^[1][3,4,5,7,8][0-9]{9}$/;  
           if (!phoneReg.test(phoneNum)) {  
-              mui.toast('请输入正确的手机号码！') 
+              mui.toast('请输入正确的手机号码') 
           } else {  
           	  phoneNum = encryptMobile(phoneNum);
               $.ajax({

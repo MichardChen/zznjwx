@@ -9,6 +9,7 @@
             success:function(data){
                 if(data.code == REQUEST_OK){
                     var indexData = data.data;
+                    console.log(data);
                     createSlide(indexData);
                     createList(indexData);
                 }else{
@@ -35,7 +36,7 @@
             }else{
                 dot = $("<div class='mui-indicator'/>")
             }
-            var a  = $("<a href='#'/>")
+            var a  = $("<a href="+n.realUrl+"/>")
             a.html("<img src="+n.imgUrl+">");
             sliderItem.html(a);
             sliderBox.append(sliderItem);
@@ -85,7 +86,21 @@
 	}
      //初始化
      mui.ready(function(){
-        getSubIndexData();       
+        getSubIndexData();    
+        mui('.mui-slider-group').on('tap','.mui-slider-item',function(){
+        	var url = $(this).find('a').attr('href');
+        	if(url !== "#"){
+        		mui.openWindow({
+        			url:url,
+		    		show:{
+				      autoShow:true,//页面loaded事件发生后自动显示，默认为true
+				      aniShow:"slide-in-right",//页面显示动画，默认为”slide-in-right“；
+				      duration:100//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+				    }
+        		})
+        	}
+        })
+        
         mui('.mui-bar').on('click','.icon-box',function(){
         	var cookie = checkCookie(login);
         	if(cookie){
@@ -100,6 +115,7 @@
         		})
         	}
         })
+        
         mui('.mui-table-view-cell').on('tap','.more',function(){
         	mui.openWindow({
         		url:"./subpages/information_sub.html",

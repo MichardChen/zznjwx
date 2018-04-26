@@ -19,7 +19,7 @@
                     $(".app-logo").html(icon);
                     $(".phone").html(contact_data.phone);
                     $('.wechat').html(contact_data.wx);
-                    $('.email').html("");
+                    $('.email').html("tongji1688@163.com");
                     $('.website').html(contact_data.netUrl);
    					
                 }else{

@@ -17,15 +17,16 @@
 			},
 			dataType:'json',
 			success:function(data){
-				if(data == QEQUEST_OK){
+				if(data == REQUEST_OK){
 					console.log(data);
-					mui.toast("注册成功！")
+					mui.toast(data.message);
 					mui.back();
 				}else{
-					mui.toast("注册失败，请核对信息重新注册！")
-					$("#register-form .require").each(function () {
+					console.log(data);
+					mui.toast(data.message)
+					/*$("#register-form .require").each(function () {
 						this.value = "";
-					})
+					})*/
 				}
 			}
 		});
@@ -48,39 +49,44 @@
 		  //若当前input为空，则alert提醒		  
 		  	if(this.className.indexOf('register-phone')!= -1){
 		  		if(!this.value||$.trim(this.value)==""){
-		  			mui.toast("手机号码不能为空！");
+		  			mui.toast("手机号码不能为空");
 		  			return flag = false;
 		  		}else{
 		  			var phoneReg=/^[1][3,4,5,7,8][0-9]{9}$/;  
 			         if (!phoneReg.test(this.value)) {  
-		              mui.toast('请输入正确的手机号码！') 
+		              mui.toast('请输入正确的手机号码') 
 		              return flag = false;
 				  	}
 			    }
 		  	}
 		  	if(this.className.indexOf('register-msg-code')!=-1){
 		  		if(!this.value||$.trim(this.value)==""){
-			  		mui.toast("验证码不能为空！")
+			  		mui.toast("验证码不能为空")
 			  		return flag = false;
-		  		}else{
+		  		}/*else{
 		  			var codeReg=/^[0-9]{6}$/;  
 			         if (!codeReg.test(this.value)) {  
-		              mui.toast('请输入正确的验证码！') ;
+		              mui.toast('请输入正确的验证码') ;
 		              return flag = false;
 				  	}			    
-		  		}
+		  		}*/
 		  	}
 		  	if(this.className.indexOf('register-password')!= -1){
 		  		if(!this.value||$.trim(this.value)==""){
-		  			mui.toast("密码不能为空！")
+		  			mui.toast("密码不能为空")
 		  			return flag = false;
-		  		}else{
+		  		}
+		  		if($.trim(this.value).length < 6){
+		  			mui.toast("密码长度不能小于6位")
+		  			return flag = false;
+		  		}
+		  		/*else{
 		  			var passwordReg = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,20}$/;
 		  			if (!passwordReg.test(this.value)) {  
-		              mui.toast('请输入正确的密码格式！') ;
+		              mui.toast('请输入正确的密码格式') ;
 		              return flag = false;
 				  	}
-		  		}
+		  		}*/
 		  	}		    		  			 
 		});
 		return flag;
@@ -89,11 +95,11 @@
 	var getMsgCode = function(){
 		var phoneNum = mui('.register-phone')[0].value;
 		if(phoneNum == ""){
-			mui.toast('请输入手机号码！')
+			mui.toast('请输入手机号码')
 		}else{
 		  var phoneReg=/^[1][3,4,5,7,8][0-9]{9}$/;  
           if (!phoneReg.test(phoneNum)) {  
-              mui.toast('请输入正确的手机号码！') 
+              mui.toast('请输入正确的手机号码') 
           } else {  
           	  phoneNum = encryptMobile(phoneNum);
               $.ajax({
@@ -106,25 +112,24 @@
           		success:function(data){
           			if(data.code == REQUEST_OK){
           				mui.toast(data.message);
+          				$(".get-msg").hide();      
+          				var second = 60;
+              			$(".countdown").html(second);
+              			$(".countdown").show();
+    					var timer = setInterval(function(){						
+    						if(second == 0){
+    	          				$(".get-msg").show();
+    	          				$(".countdown").hide();
+    	          				clearInterval(timer);
+    	          				second=60;
+    	          			}else{
+    	          				second --;	
+    							$(".countdown").html(second);
+    	          			}
+    					},1000)
           			}else{
-          				mui.toast('短信已发送，请注意查看信息！');
+          				mui.toast(data.message);
           			}
-          			$(".get-msg").hide();         			
-          			var second = 60;
-          			$(".countdown").html(second);
-          			$(".countdown").show();
-					var timer = setInterval(function(){						
-						if(second == 0){
-	          				$(".get-msg").show();
-	          				$(".countdown").hide();
-	          				clearInterval(timer);
-	          				second=60;
-	          			}else{
-	          				second --;	
-							$(".countdown").html(second);
-	          			}
-					},1000)
-          			
           		}
               })
           }  
@@ -149,16 +154,40 @@
 			success:function(data){
 				if(data.code == REQUEST_OK){
 					setCookie(data.data,10);
-					mui.toast("登录成功！")
+					mui.toast(data.message);
 					setTimeout(function(){
 						mui.back();
 					},500)					
 				}else{
-					mui.toast("账号密码错误，请重新输入！")
+					mui.toast(data.message);
 				}
 			}
 		});
 	}
+	
+	//跳转网址
+	var url = function(typeCd){
+		$.ajax({
+			type:"get",
+			url:REQUEST_URL+"wxnonAuthRest/queryDocument",
+			async:true,
+			data:{
+				'typeCd':typeCd
+			},
+			dataType:'json',
+			success:function(data){
+				if(data.code == REQUEST_OK){
+					mui.openWindow({
+				 		url:data.data.url,
+				 		id:'documentfile.html'
+				 	})
+				}else{
+					mui.toast(data.message);
+				}
+			}
+		});
+	}
+	
 	var getLoginParam = function(){
 		var flag = checkLoginInput();
 		var param = [];
@@ -175,22 +204,22 @@
 		  //若当前input为空，则alert提醒		  
 		  	if(this.className.indexOf('login-phone')!= -1){
 		  		if(!this.value||$.trim(this.value)==""){
-		  			mui.toast("手机号码不能为空！");
+		  			mui.toast("手机号码不能为空");
 		  			return flag = false;
 		  		}else{
 		  			var phoneReg=/^[1][3,4,5,7,8][0-9]{9}$/;  
 			         if (!phoneReg.test(this.value)) {  
-		              mui.toast('请输入正确的手机号码！') 
+		              mui.toast('请输入正确的手机号码') 
 		              return flag = false;
 				  	}
 			    }
 		  	}
 		  	if(this.className.indexOf('login-password')!= -1){
 		  		if(!this.value||$.trim(this.value)==""){
-		  			mui.toast("密码不能为空！")
+		  			mui.toast("密码不能为空")
 		  			return flag = false;
 		  		}
-		  	}		  
+		  	}		
 		})
 		return flag;
 	}
@@ -206,6 +235,9 @@
 	mui.plusReady(function() {
 		alert('kfdsjfksd')
 	})
+	mui('.mui-text-row').on('tap','.register-file1',function(){
+		url('060009');
+	});
 
 	mui('.page-container').on('click','.forget-password',function(){
 		mui.openWindow({

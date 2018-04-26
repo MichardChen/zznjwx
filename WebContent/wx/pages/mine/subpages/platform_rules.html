@@ -7,37 +7,20 @@
       <link rel="stylesheet" href="../../../lib/mui/css/mui.min.css">
     <link rel="stylesheet" href="../../../static/font/style.css">
     <link rel="stylesheet" href="../../../static/css/common/reset.css">
-    <title>平台规则</title>
+    <link rel="stylesheet" href="../../../static/css/mine/new_address.css">
+    <title>使用帮助</title>
 </head>
 
 <body>
 	<section class="page-container">
 		<div class="mui-content" style="padding-top: 0;">
 			<div class="mui-table-view" style="margin-top: 0;">
-				<div class="mui-table-view-cell" data-typeid = 060009>
-					<a href="">掌上茶宝服务协议</a>
-				</div>
-				<div class="mui-table-view-cell" data-typeid = 060008>
-					<a href="">掌上茶宝商城交易合同</a>
-				</div>
-				<div class="mui-table-view-cell" data-typeid = 060011>
-					<a href="">掌上茶宝新茶发行合同</a>
-				</div>
 			</div>
 		</div>	
 	</section>
 	<script src="../../../lib/mui/js/mui.min.js"></script>
     <script src="../../../lib/jquery/jquery-3.3.1.min.js"></script>
     <script src="../../../static/js/common/common.js"></script>
-    <script type="text/javascript">
-    	$(".mui-table-view").on("tap",".mui-table-view-cell",function(){
-    		var typeId = $(this).data("typeid");
-   			var title = $(this).find("a").html();
-    		mui.openWindow({
-    			url:"./documentfile.html?"+typeId+"&"+title,
-    			id:"documentfile.html"
-    		})
-    	})
-    </script>
+    <script src="../../../static/js/mine/platform_rules.js"></script>
 </body>
 </html>

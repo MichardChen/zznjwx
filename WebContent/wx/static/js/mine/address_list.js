@@ -19,7 +19,11 @@
 				if(data.code == REQUEST_OK){
 					var ListData =  data.data.address;
 					console.log(ListData);
-					createListDom(ListData)
+					if(ListData.length == 0){
+						noAddressView()
+					}else{
+						createListDom(ListData)
+					}					
 				}else{
 					return ;
 				}
@@ -39,6 +43,14 @@
 			li.append(titleBox,desc);
 			table.append(li);
 		})
+	}
+	
+	var noAddressView = function(){
+		var table = $('.mui-table-view');
+		var li = $('<li class="mui-table-view-cell no-address"/>')
+		var p = "<p>暂无收货地址</p>"
+		li.html(p);
+		table.append(li);
 	}
 	
 	var paramObj = {

@@ -30,8 +30,20 @@
 			var phone = document.querySelector('.phone').value;
 			var linkage = document.querySelector('#address').value;
 			var address_desc = document.querySelector('.address-desc').value;
-			if(name == "" || phone == "" || linkage =="" || address_desc == ""){
-				mui.confirm("以上输入框为必填，请输入相应的内容！","提示",["取消","确定"]);
+			if(name == ""){
+				mui.confirm("请输入收货人姓名");
+				return;
+			}
+			if(phone == ""){
+				mui.confirm("请输入联系电话");
+				return;
+			}
+			if(linkage ==""){
+				mui.confirm("请选择省市区");
+				return;
+			}
+			if(address_desc == ""){
+				mui.confirm("请输入详细地址");
 				return;
 			}
 			var linkAgeId = document.querySelector('#address').getAttribute("data-id");
@@ -65,6 +77,9 @@
 				success:function(data){
 					if(data.code == REQUEST_OK){
 						mui.toast(data.message);
+						setTimeout(function(){
+							mui.back();
+						}, 2000);
 					}else{
 						mui.toast(data.message);
 					}

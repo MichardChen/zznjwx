@@ -15,15 +15,12 @@ import org.huadalink.plugin.shiro.CaptchaUsernamePasswordToken;
 import org.huadalink.plugin.shiro.IncorrectCaptchaException;
 import org.huadalink.route.ControllerBind;
 
-import com.alibaba.druid.util.StringUtils;
 import com.jfinal.aop.Enhancer;
 import com.jfinal.core.Controller;
 
 import my.core.constants.Constants;
 import my.core.model.AcceessToken;
-import my.core.model.CodeMst;
 import my.core.model.Document;
-import my.core.model.Log;
 import my.core.model.Member;
 import my.core.model.ReturnData;
 import my.core.vo.UserData;

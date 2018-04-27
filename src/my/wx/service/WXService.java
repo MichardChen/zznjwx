@@ -3396,7 +3396,19 @@ public class WXService {
 	public ReturnData bindMember(LoginDTO dto){
 		ReturnData data = new ReturnData();
 		//商家id
-		int businessId = dto.getBusinessId();
+		int storeId = dto.getStoreId();
+		if(storeId == 0){
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("绑定失败，您绑定门店不存在");
+			return data;
+		}
+		Store store = Store.dao.queryById(storeId);
+		if(store == null){
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("绑定失败，您绑定门店不存在");
+			return data;
+		}
+		int businessId = store.getInt("member_id");
 		int userId = dto.getUserId();
 		if(businessId == userId){
 			data.setCode(Constants.STATUS_CODE.FAIL);
@@ -3408,14 +3420,7 @@ public class WXService {
 			data.setMessage("绑定失败，您绑定门店不存在");
 			return data;
 		}
-		Store store = Store.dao.queryMemberStore(businessId);
-		if(store == null){
-			data.setCode(Constants.STATUS_CODE.FAIL);
-			data.setMessage("绑定失败，您绑定门店不存在");
-			return data;
-		}
 		
-		int storeId = store.getInt("id");
 		if(userId == 0){
 			data.setCode(Constants.STATUS_CODE.FAIL);
 			data.setMessage("绑定失败，用户数据有误");

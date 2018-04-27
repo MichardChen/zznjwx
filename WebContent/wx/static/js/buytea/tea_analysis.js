@@ -21,7 +21,7 @@
 					var amountChartData = teaData.bargainTrend;
 					var descData = teaData.data;
 					$('.amout').text(teaData.allQuality+"片");
-					$('.price').text(teaData.allAmount+"元");
+					$('.price').text((teaData.allAmount == null ? 0 :teaData.allAmount)+"元");
 					createChart("lineChart",priceChartData);
 					createChart("amountChart",amountChartData);
 					createTbody(descData);

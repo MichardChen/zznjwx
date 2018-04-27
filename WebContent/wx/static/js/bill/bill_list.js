@@ -100,7 +100,7 @@
 		
 	}
 		
-	var getBillData = function(obj){
+	var getBillData = function(pageNum,obj){
 		var cookieParam = getCookie();
 		$.ajax({
 			url:REQUEST_URL+"wxmrest/queryRecord",
@@ -112,7 +112,7 @@
 				"mobile":cookieParam.mobile,
 				"userId":cookieParam.userId,
 				'pageSize':10,
-				'pageNum':obj.pageNum,
+				'pageNum':pageNum,
 				'typeCd':obj.typeCd,
 				'date':obj.dateStr
 			},
@@ -120,11 +120,7 @@
 				if(data.code == REQUEST_OK){
 					var billData = data.data.logs;
 					console.log(billData);
-					if(billData.length == 0){
-						mui("#bill-wrapper").pullRefresh().endPullupToRefresh(true);
-					}else{
-						createListDom (billData);
-					}					
+					createListDom (billData);				
 				}else{
 					mui.toast(data.message)
 				}
@@ -149,11 +145,18 @@
 	}
 	
 	var pageNum = 1;
-	
+	var type = $(".options").find('.mui-active').data('type');
+	var dateStr = $('.year-num').html()+"-"+$('.month-num').html();	
+	var paramObj = {
+			dateStr:dateStr,
+			typeCd:type
+		}			
 	function freshView(){
 		$(".mui-table-view").html("");
 		var type = $(".options").find('.mui-active').data('type');
 		var dateStr = $('.year-num').html()+"-"+$('.month-num').html();	
+		paramObj.dateStr = dateStr;
+		paramObj.typeCd = type;
 		pageNum =1;
 		pullupRefresh();
 		mui("#bill-wrapper").pullRefresh().refresh(true);
@@ -164,13 +167,8 @@
 			$(".mui-table-view").html("");
 			var type = $(".options").find('.mui-active').data('type');
 			var dateStr = $('.year-num').html()+"-"+$('.month-num').html();	
-			var pageNum =1;
-			var paramObj = {
-				dateStr:dateStr,
-				typeCd:type,
-				pageNum:pageNum
-			}			
-			getBillData(paramObj);
+			pageNum =1;
+			getBillData(pageNum,paramObj);
 			mui("#bill-wrapper").pullRefresh().endPulldownToRefresh();
 		},500);
 	}
@@ -178,15 +176,10 @@
 	function pullupRefresh(){
 		setTimeout(function(){
 			var type = $(".options").find('.mui-active').data('type');
-			var dateStr = $('.year-num').html()+"-"+$('.month-num').html();	
-			var paramObj = {
-				dateStr:dateStr,
-				typeCd:type,
-				pageNum:pageNum
-			}			
-			getBillData(paramObj);
+			var dateStr = $('.year-num').html()+"-"+$('.month-num').html();			
+			getBillData(pageNum,paramObj);
 			pageNum++;
-			mui("#bill-wrapper").pullRefresh().endPulldownToRefresh();
+			mui("#bill-wrapper").pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
 		},500);
 	}
 				

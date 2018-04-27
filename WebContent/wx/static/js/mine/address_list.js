@@ -1,8 +1,53 @@
 +(function(){
+	//初始化mui
+	mui.init({
+		pullRefresh: {
+			container: "#address_list",
+			down: {
+				contentdown : "下拉可以刷新",
+      			contentover : "释放立即刷新",
+      			contentrefresh : "正在刷新...",
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
+	
+	var pageSize = 10;
+	var pageNum =1;
+	
+	function pulldownRefresh() {
+		setTimeout(function() {	
+			pageNum = 1;
+			$('.mui-table-view').html("");			
+			getAddressData(pageSize,pageNum);			
+			mui("#address_list").pullRefresh().endPulldownToRefresh(); //refresh completed
+			pageNum++;
+		}, 500);
+	}
+	
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh() {
+		setTimeout(function() {	
+		mui("#address_list").pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+		getAddressData(pageSize,pageNum);
+		pageNum++;		
+		}, 500);
+	}
+	mui.ready(function(){
+		mui("#address_list").pullRefresh().pullupLoading();
+	})		
+	
+	
 	//获取cookie值
 	var cookieParam = getCookie();
 	//请求收货地址列表数据
-	var getAddressData = function(obj){
+	var getAddressData = function(pageSize,pageNum){
 		$.ajax({
 			type:"get",
 			url:REQUEST_URL+"wxmrest/queryMemberAddressList",
@@ -10,8 +55,8 @@
 				"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
 				"userId":cookieParam.userId,
-				"pageSize":obj.pageSize,
-				"pageNum":obj.pageNum
+				"pageSize":pageSize,
+				"pageNum":pageNum
 			},
 			async:false,
 			dataType:"json",
@@ -19,9 +64,12 @@
 				if(data.code == REQUEST_OK){
 					var ListData =  data.data.address;
 					console.log(ListData);
-					if(ListData.length == 0){
-						noAddressView()
+					if(pageNum==1 && ListData.length == 0){
+						$('.no-address').show();
+						$('#address_list').hide();
 					}else{
+						$('.no-address').hide();
+						$('#address_list').show();
 						createListDom(ListData)
 					}					
 				}else{
@@ -44,21 +92,6 @@
 			table.append(li);
 		})
 	}
-	
-	var noAddressView = function(){
-		var table = $('.mui-table-view');
-		var li = $('<li class="mui-table-view-cell no-address"/>')
-		var p = "<p>暂无收货地址</p>"
-		li.html(p);
-		table.append(li);
-	}
-	
-	var paramObj = {
-		id:"#address_list",
-		fn:getAddressData
-	}
-	
-	loadList(paramObj);
 	
 	mui('.mui-bar-tab').on('tap','.mui-btn',function(){
 		

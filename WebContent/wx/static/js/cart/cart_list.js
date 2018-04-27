@@ -1,4 +1,50 @@
 +(function(){
+	
+	//初始化mui
+	mui.init({
+		pullRefresh: {
+			container: "#cart-list",
+			down: {
+				contentdown : "下拉可以刷新",
+      			contentover : "释放立即刷新",
+      			contentrefresh : "正在刷新...",
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
+	
+	var pageSize = 10;
+	var pageNum =1;
+	
+	function pulldownRefresh() {
+		setTimeout(function() {	
+			pageNum = 1;
+			$('.mui-table-view').html("");			
+			getCartData(pageSize,pageNum);			
+			mui("#cart-list").pullRefresh().endPulldownToRefresh(); //refresh completed
+			pageNum++;
+		}, 500);
+	}
+	
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh(name) {
+		setTimeout(function() {	
+		mui("#cart-list").pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+		getCartData(pageSize,pageNum);
+		pageNum++;		
+		}, 500);
+	}
+	mui.ready(function(){
+		mui("#cart-list").pullRefresh().pullupLoading();
+	})		
+	
+	
 	var login = function(){
 		mui.openWindow({
     		url:"../login/login.html",
@@ -10,7 +56,7 @@
 		    }
         })
 	}
-	var getCartData = function(obj){
+	var getCartData = function(pageSize,pageNum){
 		var cookieParam = checkCookie(login);
 		$.ajax({
             url:REQUEST_URL+"wxmrest/queryBuyCartList",
@@ -19,8 +65,8 @@
 				"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
 				"userId":cookieParam.userId,
-				"pageSize":obj.pageSize,
-				"pageNum":obj.pageNum
+				"pageSize":pageSize,
+				"pageNum":pageNum
 			},
             dataType:"json",
             async:true,
@@ -28,8 +74,19 @@
                 if(data.code == REQUEST_OK){
                 	cartData = data.data.data;
                 	console.log(data);
-                	$('.product-num').text("("+data.data.buycartCount+")")
-                	createListDom(cartData)
+                	if(pageNum == 1 && cartData.length == 0){
+                		 $('#cart-list').hide();
+                		 $(".cart-bar").hide();
+                		 $('.editor').hide();
+                		 $('.default-page').show();
+                	}else{
+                		$('.product-num').text("("+data.data.buycartCount+")")
+                		$('#cart-list').show();
+                		$(".cart-bar").show();
+                		$('.editor').show();
+                		$('.default-page').hide();
+                		createListDom(cartData)
+                	}               	
                 }else{               	
                     mui.toast(data.message);
                     login();
@@ -68,14 +125,6 @@
 		}
 	}
 	
-	var paramObj = {
-		id:"#cart-list",
-		fn:getCartData
-	}
-	
-	loadList(paramObj);
-
-	
 	//切换列表模式
 	var toggleModel = function(){
 		mui('.mui-bar-nav').on('tap','.editor',function(){
@@ -85,8 +134,9 @@
 			$('.delete').css('display','flex');
 			$('.mui-table-cell').find('input').prop('checked',false);
 			$('.mui-table-view').html('');
-			paramObj.fresh = true;
-			loadList(paramObj);
+			pageNum =1;
+			pullupRefresh();
+			mui("#cart-list").pullRefresh().refresh(true);
 		})
 		mui('.mui-bar-nav').on('tap','.complete',function(){
 			$(this).html("编辑");
@@ -95,8 +145,9 @@
 			$('.delete').css('display','none');
 			$('.mui-table-cell').find('input').prop('checked',false);
 			$('.mui-table-view').html('');
-			paramObj.fresh = true;
-			loadList(paramObj);
+			pageNum =1;
+			pullupRefresh();
+			mui("#cart-list").pullRefresh().refresh(true);
 		})
 	}
 	
@@ -215,38 +266,32 @@
         })
 	})
 	
-	
-	
-	mui.ready(function(){
-		toggleModel();
-		allSelect();
-		mui(".mui-bar-tab").on("tap",".order-btn",function(){
-			var cartSelect = $(".mui-table-view-cell").find("input[type=checkbox]:checked");
-			var cartId="";
-			console.log(typeof(cartSelect));
-			for(var i=0;i<cartSelect.length;i++){
-				if(cartId == ""){
-					cartId = $(cartSelect[i]).data("id");
-				}else{
-					cartId+="," + $(cartSelect[i]).data("id");
-				}
+
+	toggleModel();
+	allSelect();
+	mui(".mui-bar-tab").on("tap",".order-btn",function(){
+		var cartSelect = $(".mui-table-view-cell").find("input[type=checkbox]:checked");
+		var cartId="";
+		console.log(typeof(cartSelect));
+		for(var i=0;i<cartSelect.length;i++){
+			if(cartId == ""){
+				cartId = $(cartSelect[i]).data("id");
+			}else{
+				cartId+="," + $(cartSelect[i]).data("id");
 			}
-			if(cartId !== ""){
-				mui.openWindow({
-					url:"./place_order.html?"+cartId,
-					id:"place_order.html"
-				})
-			}
-			
-		})
-		
-		
-		
+		}
+		if(cartId !== ""){
+			mui.openWindow({
+				url:"./place_order.html?"+cartId,
+				id:"place_order.html"
+			})
+		}
 		
 	})
 	
-	
-	
-	
-	
+	mui('.default-page').on("tap",'.go',function(){
+		mui.openWindow({
+			url:'../buytea/tea_list.html'
+		})
+	})		
 })()

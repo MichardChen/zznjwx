@@ -19,19 +19,19 @@
 				checkCookie(login); 
     		}    		              		
         })
+    	
+    	var url = $('.mui-iframe-wrapper').find('iframe').attr('src')
+    	
+    	$('.mui-bar-tab').find('a').each(function(i,n){
+    		var aUrl = $(n).attr('href');
+    		if(url == aUrl){
+    			$('.mui-bar-tab a').removeClass('mui-active');
+    			$(n).addClass("mui-active");
+    		}
+    	})
+    	
     });
-    //自定义事件，模拟点击“首页选项卡”
-    document.addEventListener('gohome', function() {
-        var defaultTab = document.getElementById("defaultTab");
-        //模拟首页点击
-        mui.trigger(defaultTab, 'tap');
-        //切换选项卡高亮
-        var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
-        if (defaultTab !== current) {
-            current.classList.remove('mui-active');
-            defaultTab.classList.add('mui-active');
-        }
-    });
+   
 	var login = function(){
 		mui.openWindow({
     		url:"./pages/login/login.html",
@@ -47,4 +47,5 @@
 		$('.mui-iframe-wrapper').find('iframe').attr('src',targetUrl);
 		
 	}
+	
 })()

@@ -1,7 +1,50 @@
 +(function(){
+	//初始化mui
+	mui.init({
+		pullRefresh: {
+			container: "#messages-list",
+			down: {
+				contentdown : "下拉可以刷新",
+      			contentover : "释放立即刷新",
+      			contentrefresh : "正在刷新...",
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
 	
+	var pageSize = 10;
+	var pageNum =1;
 	
-	var getMessageData = function(obj){
+	function pulldownRefresh() {
+		setTimeout(function() {	
+			pageNum = 1;
+			$('.mui-table-view').html("");			
+			getMessageData(pageSize,pageNum);			
+			mui("#messages-list").pullRefresh().endPulldownToRefresh(); //refresh completed
+			pageNum++;
+		}, 500);
+	}
+	
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh() {
+		setTimeout(function() {	
+		mui("#messages-list").pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+		getMessageData(pageSize,pageNum);
+		pageNum++;		
+		}, 500);
+	}
+	mui.ready(function(){
+		mui("#messages-list").pullRefresh().pullupLoading();
+	})		
+
+	
+	var getMessageData = function(pageSize,pageNum){
 		//获取cookie
 		var cookieParam = getCookie();
 		//请求数据
@@ -14,13 +57,18 @@
 				"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
 				"userId":cookieParam.userId,
-				"pageSize":obj.pageSize,
-				"pageNum":obj.pageNum
+				"pageSize":pageSize,
+				"pageNum":pageNum
 			},
 			success:function(data){
 				if(data.code == REQUEST_OK){
-					var messageData = data.data;
-					createListDom(messageData);
+					if(pageNum==1&&data.data.messages.length == 0){
+						createNoData();
+						mui("#messages-list").pullRefresh().endPullupToRefresh(true);
+					}else{
+						var messageData = data.data;
+						createListDom(messageData);
+					}					
 				}else{
 					mui.toast(data.message)
 				}
@@ -46,12 +94,17 @@
 		}
 	}
 	
-	var paramObj = {
-		id:'#messages-list',
-		fn:getMessageData
-	}
+	//构建缺省页
 	
-	loadList(paramObj);
+	var createNoData = function(){
+		var table  = $('.mui-table-view');
+		var li;
+		li = $('<li class="no-product"/>')
+		var noProductText = $("<p/>")
+		noProductText.text("当前暂无消息")
+		li.html(noProductText);
+		table.html(li);
+	}
 	
 	mui('.mui-table-view').on('tap','.mui-table-view-cell',function(){
 		var msgid = $(this).data("messageid");

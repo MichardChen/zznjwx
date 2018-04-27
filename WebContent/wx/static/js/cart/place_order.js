@@ -1,5 +1,6 @@
 +(function(){
-	var getCartData = function(pageSize,pageNum){
+	
+	var getCartData = function(){
 		var cookieParam = getCookie();
 		var cartId = document.location.href.substring(document.location.href.indexOf("?")+1);
 		$.ajax({
@@ -59,42 +60,39 @@
 		$(".money").html("￥"+totalprice);
 		
 	}
-	
-	var paramObj = {
-		id:"#cart-list",
-		fn:getCartData
-	}
-	
-	loadList(paramObj);
-	
+
 	mui(".place-order-bar").on("tap",".buy-btn",function(){
-			var teaId = $('.mui-table-view-cell').data("teaid");
-			var cookieParam = getCookie();
-			$.ajax({
-				url:REQUEST_URL+"wxmrest/getBuyCartPrePayInfo",
-				type:"get",
-				dataType:"json",
-				async:true,
-				data:{
-					"token":cookieParam.token,
-					"mobile":cookieParam.mobile,
-					"userId":cookieParam.userId,
-					"teas":teaId,
-				},
-				success:function(data){
-					if(data.code == REQUEST_OK){
-						mui.toast(data.message)
-						mui.openWindow({
-							url:data.data.payInfo.mwebUrl
-						})
-					}else{
-						mui.toast(data.message)
-					}
-				},
-				error:function(msg){
-					console.log(msg);
+		var teaId = $('.mui-table-view-cell').data("teaid");
+		var cookieParam = getCookie();
+		$.ajax({
+			url:REQUEST_URL+"wxmrest/getBuyCartPrePayInfo",
+			type:"get",
+			dataType:"json",
+			async:true,
+			data:{
+				"token":cookieParam.token,
+				"mobile":cookieParam.mobile,
+				"userId":cookieParam.userId,
+				"teas":teaId,
+			},
+			success:function(data){
+				if(data.code == REQUEST_OK){
+					mui.toast(data.message)
+					mui.openWindow({
+						url:data.data.payInfo.mwebUrl
+					})
+				}else{
+					mui.toast(data.message)
 				}
-			})
+			},
+			error:function(msg){
+				console.log(msg);
+			}
 		})
-	
+	})
+
+	mui.ready(function(){
+		getCartData();
+	})
+
 })()

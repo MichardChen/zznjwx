@@ -49,7 +49,7 @@ public class WXNoAuthController extends Controller{
 		userTypeCd="010001";
 		platForm="020005";
 		AcceessToken acceessToken = AcceessToken.dao.queryToken(userId, userTypeCd, platForm);
-		if(acceessToken == null){
+		if(acceessToken == null || StringUtil.isBlank(acceessToken.getStr("token"))){
 			//没有登录
 			return 0;
 		}else{
@@ -134,6 +134,7 @@ public class WXNoAuthController extends Controller{
 		} catch (Exception e) {
 			e.printStackTrace();
 			msg = "请重新登录!";
+			code = "5700";
 		}
 		data.setCode(code);
 		data.setMessage(msg);
@@ -188,6 +189,7 @@ public class WXNoAuthController extends Controller{
 			} catch (AuthenticationException e) {
 				msg = "对不起 没有权限访问!";
 			} catch (Exception e) {
+				code = "5700";
 				e.printStackTrace();
 				msg = "请重新登录!";
 			}

@@ -1,6 +1,51 @@
 +(function(){
+	//初始化mui
+	mui.init({
+		pullRefresh: {
+			container: "#newtea-list",
+			down: {
+				contentdown : "下拉可以刷新",
+      			contentover : "释放立即刷新",
+      			contentrefresh : "正在刷新...",
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
+	
+	var pageSize = 10;
+	var pageNum =1;
+	
+	function pulldownRefresh() {
+		setTimeout(function() {	
+			pageNum = 1;
+			$('.mui-table-view').html("");			
+			getNewTeaData(pageSize,pageNum);			
+			mui("#newtea-list").pullRefresh().endPulldownToRefresh(); //refresh completed
+			pageNum++;
+		}, 500);
+	}
+	
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh() {
+		setTimeout(function() {	
+		mui("#newtea-list").pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+		getNewTeaData(pageSize,pageNum);
+		pageNum++;		
+		}, 500);
+	}
+	mui.ready(function(){
+		mui("#newtea-list").pullRefresh().pullupLoading();
+	})		
+	
+	
 	//请求数据
-	var getNewTeaData = function(obj){
+	var getNewTeaData = function(pageSize,pageNum){
 		//获取cookie
 		var cookieParam = getCookie();
 		//请求数据
@@ -13,8 +58,8 @@
 				"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
 				"userId":cookieParam.userId,
-				"pageSize":obj.pageSize,
-				"pageNum":obj.pageNum
+				"pageSize":pageSize,
+				"pageNum":pageNum
 			},
 			success:function(data){
 				if(data.code == REQUEST_OK){
@@ -53,11 +98,6 @@
 			table.append(li);
 		})
 	}
-	var paramObj = {
-		id:"#newtea-list",
-		fn:getNewTeaData
-	}
-	loadList(paramObj);
 	
 	mui('.mui-table-view').on('tap',".mui-table-view-cell",function(){
 		var teaId = $(this).find('.tea-img').data('teaid');

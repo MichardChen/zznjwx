@@ -1,6 +1,51 @@
 +(function(){
+	
+	//初始化mui
+	mui.init({
+		pullRefresh: {
+			container: "#resourse-list",
+			down: {
+				contentdown : "下拉可以刷新",
+      			contentover : "释放立即刷新",
+      			contentrefresh : "正在刷新...",
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
+	
+	var pageSize = 10;
+	var pageNum =1;
+	
+	function pulldownRefresh() {
+		setTimeout(function() {	
+			pageNum = 1;
+			$('.mui-table-view').html("");			
+			getListData(pageSize,pageNum);			
+			mui("#resourse-list").pullRefresh().endPulldownToRefresh(); //refresh completed
+			pageNum++;
+		}, 500);
+	}
+	
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh() {
+		setTimeout(function() {	
+		mui("#resourse-list").pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+		getListData(pageSize,pageNum);
+		pageNum++;		
+		}, 500);
+	}
+	mui.ready(function(){
+		mui("#resourse-list").pullRefresh().pullupLoading();
+	})		
+	
 	//请求列表数据
-	var getListData = function(obj){
+	var getListData = function(pageSize,pageNum){
 		var cookieParam = checkCookie();
 		$.ajax({
 			type:"get",
@@ -10,14 +55,19 @@
 				"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
 				"userId":cookieParam.userId,
-				"pageSize":obj.pageSize,
-				"pageNum":obj.pageNum
+				"pageSize":pageSize,
+				"pageNum":pageNum
 			},
 			dataType:"json",
 			success:function(data){
 				if(data.code == REQUEST_OK){
 					console.log(data.data);
-					createListDom(data.data.tea);
+					if(pageNum ==1 && data.data.tea.length == 0){
+						createNoData();
+					}else{
+						createListDom(data.data.tea);
+					}
+					
 				}else{
 					mui.toast(data.message);
 				}
@@ -28,32 +78,31 @@
 	var createListDom = function(data){
 		var listWapper = $(".mui-table-view");
 		var li;
-		if(data.length == 0){
-			li = $('<li class="mui-table-view-cell no-product"/>')
-			var noProductText = $("<p/>")
-			noProductText.text("当前暂无仓储")
-			li.html(noProductText);
-			listWapper.html(li);
-		}else{
-			data.forEach(function(n){
-				li = $('<li class="mui-table-view-cell" data-teaId='+n.teaId+'/>')
-				var topPart = $('<div class="top-part"/>')
-				var topPartContent = '<p class="tea-title">'+n.name+'</p><p class="mui-pull-right tea-num">库存：'+n.stock+n.size+'</p>';
-				topPart.html(topPartContent);
-				var bottomPart = $('<div class="bottom-part"/>');
-				var bottomPartContent = '<span class="tea-tag">'+n.type+'</span><a class="mui-pull-right">查看详情<i class="icon-next"></i></a>'
-				bottomPart.html(bottomPartContent);
-				li.append(topPart);
-				li.append(bottomPart);
-				listWapper.append(li);
-			})
-		}
+		data.forEach(function(n){
+			li = $('<li class="mui-table-view-cell" data-teaId='+n.teaId+'/>')
+			var topPart = $('<div class="top-part"/>')
+			var topPartContent = '<p class="tea-title">'+n.name+'</p><p class="mui-pull-right tea-num">库存：'+n.stock+n.size+'</p>';
+			topPart.html(topPartContent);
+			var bottomPart = $('<div class="bottom-part"/>');
+			var bottomPartContent = '<span class="tea-tag">'+n.type+'</span><a class="mui-pull-right">查看详情<i class="icon-next"></i></a>'
+			bottomPart.html(bottomPartContent);
+			li.append(topPart);
+			li.append(bottomPart);
+			listWapper.append(li);
+		})
 	}
-	var paramObj = {
-		id:"#resourse-list",
-		fn:getListData
+	
+	//构建缺省页
+	
+	var createNoData = function(){
+		var table  = $('.mui-table-view');
+		var li;
+		li = $('<li class="no-product"/>')
+		var noProductText = $("<p/>")
+		noProductText.text("当前暂无仓储")
+		li.html(noProductText);
+		table.html(li);
 	}
-	loadList(paramObj);
 	
 	mui(".header-nav").on("tap",".buy-tea",function(){
 		var cookieParam = getCookie();  

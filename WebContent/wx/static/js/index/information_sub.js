@@ -1,26 +1,75 @@
 +(function(){
+	//初始化mui
+	mui.init({
+		pullRefresh: {
+			container: "#fresh-news",
+			down: {
+				contentdown : "下拉可以刷新",
+      			contentover : "释放立即刷新",
+      			contentrefresh : "正在刷新...",
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
+	
+	var pageSize = 10;
+	var pageNum =1;
+	
+	function pulldownRefresh() {
+		setTimeout(function() {	
+			pageNum = 1;
+			$('.mui-table-view').html("");			
+			getInformationData(pageSize,pageNum);			
+			mui("#fresh-news").pullRefresh().endPulldownToRefresh(); //refresh completed
+			pageNum++;
+		}, 500);
+	}
+	
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh() {
+		setTimeout(function() {	
+		mui("#fresh-news").pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+		getInformationData(pageSize,pageNum);
+		pageNum++;		
+		}, 500);
+	}
+	mui.ready(function(){
+		mui("#fresh-news").pullRefresh().pullupLoading();
+	})		
+
 	//请求数据
-	var getInformationData = function(obj){
+	var getInformationData = function(pageSize,pageNum){
 		$.ajax({
 			url:REQUEST_URL+"wxnonAuthRest/queryNewsList",
 			type:"get",
 			dataType:"json",
 			async:true,
 			data:{
-				"pageSize":obj.pageSize,
-				"pageNum":obj.pageNum
+				"pageSize":pageSize,
+				"pageNum":pageNum
 			},
 			success:function(data){
 				if(data.code == REQUEST_OK){
-					var informationData = data.data;
-					createDom(informationData);
+					console.log(data);
+					if(pageNum ==1 && data.data.news.length == 0){
+						createNoData();
+					}else{
+						var informationData = data.data;
+						createDom(informationData);
+					}					
 				}else{
 					mui.toast(data.message)
 				}
 			}
 		})
 	}
-	
+	//构建列表dom
 	var createDom = function(data){
 		var table = $('.mui-table-view');
 		for (var i = 0; i < data.news.length; i++) {
@@ -38,12 +87,18 @@
 		}
 	}
 	
-	var paramObj = {
-		id:"#fresh-news",
-		fn:getInformationData
+	//构建缺省页
+	
+	var createNoData = function(){
+		var table  = $('.mui-table-view');
+		var li;
+		li = $('<li class="no-product"/>')
+		var noProductText = $("<p/>")
+		noProductText.text("当前暂无资讯")
+		li.html(noProductText);
+		table.html(li);
 	}
-
-	loadList(paramObj);
+	
 	
 	mui('.mui-table-view').on('tap','.mui-table-view-cell',function(){
 		var url = $(this).find('a').attr('href');

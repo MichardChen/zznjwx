@@ -1,6 +1,58 @@
 +(function(){
+	//初始化mui
+	mui.init({
+		pullRefresh: {
+			container: "#buytea-list",
+			down: {
+				contentdown : "下拉可以刷新",
+      			contentover : "释放立即刷新",
+      			contentrefresh : "正在刷新...",
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
 	
-	var getbuyTeaData = function(obj){
+	var pageSize = 10;
+	var pageNum =1;
+	var id = parseInt(document.location.href.substr(document.location.href.indexOf("?")+1));
+	var paramObj = {
+  		teaId:id,
+  		priceFlg:2,
+  		wareHouseId:0,
+  		quality:2,
+  		size:150001
+  	}
+	
+	function pulldownRefresh() {
+		setTimeout(function() {	
+			pageNum = 1;
+			$('.mui-table-view').html("");			
+			getbuyTeaData(pageSize,pageNum,paramObj);			
+			mui("#buytea-list").pullRefresh().endPulldownToRefresh(); //refresh completed
+			pageNum++;
+		}, 500);
+	}
+	
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh(obj) {
+		setTimeout(function() {	
+		mui("#buytea-list").pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+		getbuyTeaData(pageSize,pageNum,paramObj);
+		pageNum++;		
+		}, 500);
+	}
+	
+	mui.ready(function(){
+		mui("#buytea-list").pullRefresh().pullupLoading();
+	})		
+	
+	var getbuyTeaData = function(pageSize,pageNum,obj){
 		var cookieParam = getCookie();
 		$.ajax({
 			url:REQUEST_URL+"wxmrest/queryTeaList",
@@ -11,8 +63,8 @@
 				"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
 				"userId":cookieParam.userId,
-				'pageSize':obj.pageSize,
-				'pageNum':obj.pageNum,
+				'pageSize':pageSize,
+				'pageNum':pageNum,
 				'teaId':obj.teaId,
 				'priceFlg':obj.priceFlg,
 				'wareHouseId':obj.wareHouseId,
@@ -50,20 +102,6 @@
 		})
 	}
 	
-	var id = parseInt(document.location.href.substr(document.location.href.indexOf("?")+1));
-	
-  	var paramObj = {
-  		id:"#buytea-list",
-  		fn:getbuyTeaData,
-  		teaId:id,
-  		priceFlg:2,
-  		wareHouseId:0,
-  		quality:2,
-  		size:150001
-  	}
-	
-	loadList(paramObj);
-	
 	mui('.mui-bar').on('tap','.piece-size',function(){
 		var size = $(this).data('size');
 		var priceFlag = $('.options .price .mui-active').data('priceFlag');
@@ -71,8 +109,10 @@
 		paramObj.priceFlg = priceFlag;
 		paramObj.quality = quality;
 		paramObj.size = size;
-		paramObj.fresh = true;
-		loadList(paramObj);
+		$('.mui-table-view').html('');
+		pageNum =1;
+		pullupRefresh(paramObj);
+		mui("#buytea-list").pullRefresh().refresh(true);
 	})
 	mui('.mui-bar').on('tap','.filter-option',function(e){
 		$('.options').toggle();
@@ -100,8 +140,12 @@
 		paramObj.priceFlg = priceFlag;
 		paramObj.quality = quality;
 		paramObj.size = size;
-		paramObj.fresh = true;
-		loadList(paramObj);
+		$('.options').slideUp();
+		$('.mui-table-view').html('');
+		pageNum =1;
+		pullupRefresh(paramObj);
+		mui("#buytea-list").pullRefresh().refresh(true);
+	
 	})
 	
 	mui(".mui-table-view").on("tap",".mui-table-view-cell",function(){

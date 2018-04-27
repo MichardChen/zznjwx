@@ -59,7 +59,7 @@
 						if (window.FileReader) {
 						        var reader = new FileReader();
 						    } else {
-						        alert("您的设备不支持图片预览功能，如需该功能请升级您的设备！");
+						        alert("您的设备不支持图片预览功能，如需该功能请升级您的设备");
 						    }
 						    //获取图片
 						    if (file.files && file.files[0]){

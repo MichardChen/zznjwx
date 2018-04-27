@@ -1,5 +1,49 @@
 +(function(){
-	var getbuyTeaData = function(obj){
+	//初始化mui
+	mui.init({
+		pullRefresh: {
+			container: "#buytea-list",
+			down: {
+				contentdown : "下拉可以刷新",
+      			contentover : "释放立即刷新",
+      			contentrefresh : "正在刷新...",
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
+	
+	var pageSize = 10;
+	var pageNum =1;
+	
+	function pulldownRefresh() {
+		setTimeout(function() {	
+			pageNum = 1;
+			$('.mui-table-view').html("");			
+			getbuyTeaData(pageSize,pageNum);			
+			mui("#buytea-list").pullRefresh().endPulldownToRefresh(); //refresh completed
+			pageNum++;
+		}, 500);
+	}
+	
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh(name) {
+		setTimeout(function() {	
+		mui("#buytea-list").pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+		getbuyTeaData(pageSize,pageNum,name);
+		pageNum++;		
+		}, 500);
+	}
+	mui.ready(function(){
+		mui("#buytea-list").pullRefresh().pullupLoading();
+	})		
+	
+	var getbuyTeaData = function(pageSize,pageNum,name){
 		var cookieParam = getCookie();
 		$.ajax({
 			url:REQUEST_URL+"wxmrest/queryBuyTeaList",
@@ -10,9 +54,9 @@
 				"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
 				"userId":cookieParam.userId,
-				'pageSize':obj.pageSize,
-				'pageNum':obj.pageNum,
-				'name':obj.name
+				'pageSize':pageSize,
+				'pageNum':pageNum,
+				'name':name
 			},
 			success:function(data){
 				if(data.code == REQUEST_OK){
@@ -43,13 +87,6 @@
 		})
 	}
 	
-	var paramObj = {
-		id:"#buytea-list",
-		fn:getbuyTeaData,
-	}
-	
-	loadList(paramObj);
-	
 	$('.mui-table-view').on("tap",'.mui-table-view-cell',function(){
 		var id = $(this).data('id');
 		mui.openWindow({
@@ -63,15 +100,13 @@
 		})
 	})
 	
-	
-	mui.ready(function(){
-		$('.mui-input-clear').on('keyup',function(){
-			var key = this.value;
-			paramObj.name = key;
-			paramObj.fresh = true;
-			loadList(paramObj);
-		})
+	$('.mui-input-clear').on('keyup',function(){
+		$('.mui-table-view').html('');
+		var key = this.value;
+		pageNum =1;
+		pullupRefresh(key);
+		mui("#buytea-list").pullRefresh().refresh(true);
 	})
-	
+
 	
 })()

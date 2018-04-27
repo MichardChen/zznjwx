@@ -30,6 +30,7 @@ import my.core.model.CashPay;
 import my.core.model.CodeMst;
 import my.core.model.Member;
 import my.core.model.PayRecord;
+import my.core.model.RecordListModel;
 import my.core.model.ReturnData;
 import my.core.model.Tea;
 import my.core.model.WarehouseTeaMember;
@@ -983,7 +984,7 @@ public class WXController extends Controller{
 		userTypeCd="010001";
 		platForm="020005";
 		AcceessToken acceessToken = AcceessToken.dao.queryToken(userId, userTypeCd, platForm);
-		if(acceessToken == null){
+		if(acceessToken == null || StringUtil.isBlank(acceessToken.getStr("token"))){
 			//没有登录
 			return 0;
 		}else{
@@ -1760,4 +1761,97 @@ public class WXController extends Controller{
 		JSONObject retJson1 = new JSONObject(ret);
 		System.out.println("openId:"+retJson1.getString("openid"));
     }
+    
+    //关联门店
+    public void bindMember() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		if(loginFlg != 3){
+			ReturnData data = new ReturnData();
+			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
+			if(loginFlg == 0){
+				data.setMessage("您还未登陆，请先登陆");
+			}
+			if(loginFlg == 1){
+				data.setMessage("您的账号登录过期");
+			}
+			if(loginFlg == 2){
+				data.setMessage("您的账号已在其他终端登录");
+			}
+			
+			getResponse().addHeader("Access-Control-Allow-Origin", "*");
+			renderJson(data);
+			return;
+		}
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.bindMember(dto));
+	}
+    
+    public void queryCheckOrderDetail() throws Exception{
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		if(loginFlg != 3){
+			ReturnData data = new ReturnData();
+			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
+			if(loginFlg == 0){
+				data.setMessage("您还未登陆，请先登陆");
+			}
+			if(loginFlg == 1){
+				data.setMessage("您的账号登录过期");
+			}
+			if(loginFlg == 2){
+				data.setMessage("您的账号已在其他终端登录");
+			}
+			
+			getResponse().addHeader("Access-Control-Allow-Origin", "*");
+			renderJson(data);
+			return;
+		}
+		
+		
+		String queryType = dto.getType();
+		RecordListModel model = null;
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.BUY_TEA)){
+			//买茶记录
+			model = service.queryBuyNewTeaRecordDetail(dto);
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.SALE_TEA)){
+			//卖茶记录
+			model = service.querySaleTeaRecordDetail(dto);
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.WAREHOUSE_FEE)){
+			//仓储费记录
+			model = service.queryWareHouseRecordsDetail(dto);
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.GET_TEA)){
+			//取茶记录
+			model = service.queryGetTeaRecordsModel(dto);
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.RECHARGE)){
+			//充值记录
+			model = service.queryRechargeRecordsDetail(dto);
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.WITHDRAW)){
+			//提现记录
+			model = service.queryWithDrawRecordsDetail(dto);
+		}
+		
+		if(StringUtil.equals(queryType, Constants.LOG_TYPE_CD.REFUND)){
+			//退款记录
+			model = service.queryRefundRecordsDetail(dto);
+		}
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
+		ReturnData data = new ReturnData();
+		data.setCode(Constants.STATUS_CODE.SUCCESS);
+		data.setMessage("查询成功");
+		Map<String, Object> map = new HashMap<>();
+		map.put("data", model);
+		data.setData(map);
+		renderJson(data);
+	}
 }

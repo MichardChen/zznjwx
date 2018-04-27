@@ -34,7 +34,7 @@
     		var textStr = $(this).val();
     		$('.font-num').html(textStr.length);
     		if(textStr.length > 300){
-    			mui.toast('已超出最大字数限定！');
+    			mui.toast('已超出最大字数限定');
     		}
     		if(textStr !== ""){
     			$(".mui-btn").removeClass("mui-disabled");
@@ -47,11 +47,11 @@
 			var textStr = $("#textarea").val();
 			var cookieParam = getCookie();
 			if(textStr == ""){
-				mui.confirm("请输入反馈内容！","提示",["取消","确定"]);
+				mui.confirm("请输入反馈内容","提示",["取消","确定"]);
 				return;
 			}
 			if(textStr.length > 300){
-    			mui.toast('已超出最大字数限定！');
+    			mui.toast('已超出最大字数限定');
     			return;
     		}
 			$.ajax({

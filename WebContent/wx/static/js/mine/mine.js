@@ -56,6 +56,9 @@
                     filledPersonalData(personal_data);    
                 }else{
                     mui.toast(data.message);
+                    setTimeout(function(){
+						noLoginHandle();
+					}, 2000);
                 }               
             }
         })

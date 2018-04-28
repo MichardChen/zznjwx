@@ -27,6 +27,9 @@
 					createTbody(descData);
 				}else{
 					mui.toast(data.message)
+					setTimeout(function(){
+						noLoginHandle();
+					}, 2000);
 				}
 			},
 			error:function(msg){

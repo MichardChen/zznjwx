@@ -156,7 +156,12 @@
 					setCookie(data.data,10);
 					mui.toast(data.message);
 					setTimeout(function(){
-						mui.back();
+						//mui.back();
+						//没有登陆的情况，重新登陆后，不要返回之前的页面，不然会出现，再返回还是登陆页面，
+						//h5跟原生不一样，没有关闭很多关联页面，所以直接重新登陆后，跳转到首页
+						 mui.openWindow({
+			                	url:INDEX_URL
+			                })
 					},500)					
 				}else{
 					mui.toast(data.message);
@@ -164,6 +169,7 @@
 			}
 		});
 	}
+	
 	
 	//跳转网址
 	var url = function(typeCd){

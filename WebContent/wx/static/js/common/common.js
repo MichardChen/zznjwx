@@ -1,7 +1,9 @@
 //常量定义
 
-var REQUEST_URL = 'http://www.yibuwangluo.cn/zznjwx/';
-/*var REQUEST_URL = 'http://192.168.1.91:8088/zznjwx/';*/
+//var REQUEST_URL = 'http://www.yibuwangluo.cn/zznjwx/';
+var REQUEST_URL = 'http://192.168.1.91:8088/zznjwx/';
+var LOGIN_URL = "http://192.168.1.91:8088/zznjwx/wx/pages/login/login.html";
+var INDEX_URL = "http://192.168.1.91:8088/zznjwx/wx/index.html";
 
 var REQUEST_OK = 5600;
 
@@ -125,6 +127,12 @@ var REQUEST_OK = 5600;
                 })
             }
         })
+	}
+	
+	function noLoginHandle(){
+                mui.openWindow({
+                	url:LOGIN_URL
+                })
 	}
 	
 	var old_back = mui.back;

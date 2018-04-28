@@ -63,6 +63,9 @@
 								mui.toast(data.message);
 							}else{
 								mui.toast(data.message);
+								setTimeout(function(){
+									noLoginHandle();
+								}, 2000);
 							}
 						}
 					});

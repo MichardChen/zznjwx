@@ -632,7 +632,7 @@ public class WXController extends Controller{
 	//新茶发售列表
 	public void queryNewTeaSaleList(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		/*int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
 		if(loginFlg != 3){
 			ReturnData data = new ReturnData();
 			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
@@ -649,7 +649,7 @@ public class WXController extends Controller{
 			getResponse().addHeader("Access-Control-Allow-Origin", "*");
 			renderJson(data);
 			return;
-		}
+		}*/
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryNewTeaSaleList(dto));
 	}
@@ -657,7 +657,7 @@ public class WXController extends Controller{
 	//查询新茶发售详情
 	public void queryNewTeaById(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		/*int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
 		if(loginFlg != 3){
 			ReturnData data = new ReturnData();
 			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
@@ -674,7 +674,7 @@ public class WXController extends Controller{
 			getResponse().addHeader("Access-Control-Allow-Origin", "*");
 			renderJson(data);
 			return;
-		}
+		}*/
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryNewTeaById(dto));
 	}
@@ -757,7 +757,7 @@ public class WXController extends Controller{
 	//我要买茶列表
 	public void queryBuyTeaList(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		/*int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
 		if(loginFlg != 3){
 			ReturnData data = new ReturnData();
 			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
@@ -774,7 +774,7 @@ public class WXController extends Controller{
 			getResponse().addHeader("Access-Control-Allow-Origin", "*");
 			renderJson(data);
 			return;
-		}
+		}*/
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryTeaLists(dto));
 	}
@@ -782,7 +782,7 @@ public class WXController extends Controller{
 	//我要买茶按片按件列表
 	public void queryTeaList(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		/*int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
 		if(loginFlg != 3){
 			ReturnData data = new ReturnData();
 			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
@@ -799,7 +799,7 @@ public class WXController extends Controller{
 			getResponse().addHeader("Access-Control-Allow-Origin", "*");
 			renderJson(data);
 			return;
-		}
+		}*/
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryTeaByIdList(dto));
 	}
@@ -807,7 +807,7 @@ public class WXController extends Controller{
 	//我要买茶分析
 	public void queryTeaAnalysis(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		/*int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
 		if(loginFlg != 3){
 			ReturnData data = new ReturnData();
 			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
@@ -824,7 +824,7 @@ public class WXController extends Controller{
 			getResponse().addHeader("Access-Control-Allow-Origin", "*");
 			renderJson(data);
 			return;
-		}
+		}*/
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryTeaAnalysis(dto));
 	}
@@ -907,7 +907,7 @@ public class WXController extends Controller{
 	//我要喝茶列表
 	public void queryTeaStoreList(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		/*int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
 		if(loginFlg != 3){
 			ReturnData data = new ReturnData();
 			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
@@ -924,7 +924,7 @@ public class WXController extends Controller{
 			getResponse().addHeader("Access-Control-Allow-Origin", "*");
 			renderJson(data);
 			return;
-		}
+		}*/
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryTeaStoreList(dto));
 	}
@@ -953,7 +953,7 @@ public class WXController extends Controller{
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryTeaStoreDetail(dto));
 	}
-		
+	
 	//获取账号余额
 	public void queryMemberMoney() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());

@@ -1,0 +1,49 @@
+.selcet-option {
+  position: relative;
+  z-index: 3;
+  display: flex;
+}
+.selcet-option div {
+  position: relative;
+  flex: 1;
+  text-align: center;
+  background: #fff;
+}
+.selcet-option div select {
+  text-align: center;
+  width: auto;
+  margin-bottom: 0;
+}
+.selcet-option div span {
+  position: absolute;
+  right: 30px;
+  top: 15px;
+}
+.page-container {
+  padding-top: 45px;
+}
+.page-container .mui-pull-top-pocket {
+  top: 45px;
+}
+.page-container .mui-table-view-cell {
+  display: flex;
+}
+.page-container .mui-table-view-cell .store-img {
+  flex: 0 0 100px;
+}
+.page-container .mui-table-view-cell .store-desc {
+  flex: 1;
+}
+.page-container .mui-table-view-cell .store-desc h3 {
+  color: #333;
+  font-size: 16px;
+  line-height: 50px;
+}
+.page-container .mui-table-view-cell .store-desc p {
+  color: #666;
+  font-size: 13px;
+  line-height: 24px;
+}
+.page-container .mui-table-view-cell .store-desc p span {
+  color: #999;
+}

@@ -1,0 +1,50 @@
+.selcet-option{
+    position: relative;
+    z-index: 3;
+    display: flex;
+    div{
+        position: relative;
+        flex: 1;
+        text-align: center;
+        background: #fff;
+        select{
+            text-align: center;
+            width: auto;
+            margin-bottom: 0;
+        }
+        span{
+            position: absolute;
+            right: 30px;
+            top:15px;
+        }
+    }
+}
+
+.page-container{
+    padding-top: 45px;
+    .mui-pull-top-pocket{
+        top:45px
+    }
+    .mui-table-view-cell{
+        display: flex;
+        .store-img{
+            flex:0 0 100px;
+        }
+        .store-desc{
+            flex:1;
+            h3{
+                color: #333;
+                font-size: 16px;
+                line-height: 50px;
+            }
+            p{
+                color: #666;
+                font-size: 13px;
+                line-height: 24px;
+                span{
+                    color: #999;
+                }
+            }
+        }
+    }
+}

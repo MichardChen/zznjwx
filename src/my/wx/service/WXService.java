@@ -992,7 +992,7 @@ public class WXService {
 		String typeCd = dto.getType();
 		int pageSize = dto.getPageSize();
 		int pageNum = dto.getPageNum();
-		List<Message> messages = Message.dao.queryMessagesByPage(userId, typeCd,pageNum,pageSize);
+		List<Message> messages = Message.dao.queryMessagesByPage(userId, typeCd,pageSize,pageNum);
 		List<MessageListVO> vos = new ArrayList<>();
 		MessageListVO vo = null;
 		for(Message message : messages){

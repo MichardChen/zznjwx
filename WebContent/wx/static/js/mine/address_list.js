@@ -130,6 +130,9 @@
 						$(_this).parents(".mui-table-view-cell").remove();
 					}else{
 						mui.toast(data.message);
+						setTimeout(function(){
+							noLoginHandle();
+						}, 2000);
 					}
 				}
 			})

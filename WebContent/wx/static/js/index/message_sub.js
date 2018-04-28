@@ -58,7 +58,8 @@
 				"mobile":cookieParam.mobile,
 				"userId":cookieParam.userId,
 				"pageSize":pageSize,
-				"pageNum":pageNum
+				"pageNum":pageNum,
+				"typeCd":'080002'
 			},
 			success:function(data){
 				if(data.code == REQUEST_OK){
@@ -71,6 +72,9 @@
 					}					
 				}else{
 					mui.toast(data.message)
+					setTimeout(function(){
+						noLoginHandle();
+					}, 2000);
 				}
 			},
 			error:function(msg){

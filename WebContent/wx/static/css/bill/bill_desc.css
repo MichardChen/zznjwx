@@ -1,0 +1,12 @@
+.bill-desc-content {
+  padding: 15px;
+  background: #fff;
+}
+.bill-desc-content table tr td {
+  padding: 7.5px 5px;
+  color: #333;
+}
+.bill-desc-content table tr td span {
+  color: #ff5400;
+  padding-left: 30px;
+}

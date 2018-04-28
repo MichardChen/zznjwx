@@ -21,6 +21,9 @@
 					createStorageList(data.data.warehouse);
 				}else{
 					mui.toast(data.message);
+					setTimeout(function(){
+						noLoginHandle();
+					}, 2000);
 				}
 			}
 		});

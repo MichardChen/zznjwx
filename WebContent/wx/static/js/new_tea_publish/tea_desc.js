@@ -1,16 +1,16 @@
 +(function(){
 	var teaId = document.location.href.substring(document.location.href.indexOf("?")+1);
 	var getTeaDescData = function(){		
-		var cookieParam = getCookie();
+		//var cookieParam = getCookie();
 		$.ajax({
 			url:REQUEST_URL+"wxmrest/queryNewTeaById",
 			type:"get",
 			dataType:"json",
 			async:true,
 			data:{
-				"token":cookieParam.token,
+			/*	"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
-				"userId":cookieParam.userId,
+				"userId":cookieParam.userId,*/
 				"id":teaId
 			},
 			success:function(data){
@@ -22,6 +22,9 @@
 					//createListDom(teaListData.models);
 				}else{
 					mui.toast(data.message)
+					setTimeout(function(){
+						noLoginHandle();
+					}, 2000);
 				}
 			},
 			error:function(msg){

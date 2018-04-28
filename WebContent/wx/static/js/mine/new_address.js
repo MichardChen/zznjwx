@@ -82,6 +82,9 @@
 						}, 2000);
 					}else{
 						mui.toast(data.message);
+						setTimeout(function(){
+							noLoginHandle();
+						}, 2000);
 					}
 				}
 			})

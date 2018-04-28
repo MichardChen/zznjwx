@@ -142,15 +142,15 @@
         })
         
         mui('.nav-bar').on('tap','.tea-publish',function(){
-        	var cookieParam = checkCookie(login);        		        	 
+        	//var cookieParam = checkCookie(login);        	
         	$.ajax({
         		url:REQUEST_URL+'wxnonAuthRest/queryDocument',
         		type:"get",
         		dataType:"json",
         		data:{
-        			"token":cookieParam.token,
+        		/*	"token":cookieParam.token,
 					"mobile":cookieParam.mobile,
-					"userId":cookieParam.userId,
+					"userId":cookieParam.userId,*/
         			"typeCd":'060011'
         		},
         		success:function(data){

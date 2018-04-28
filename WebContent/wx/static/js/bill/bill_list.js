@@ -122,7 +122,10 @@
 					console.log(billData);
 					createListDom (billData);				
 				}else{
-					mui.toast(data.message)
+					mui.toast(data.message);
+					setTimeout(function(){
+						noLoginHandle();
+					}, 2000);
 				}
 			},
 			error:function(msg){
@@ -134,7 +137,7 @@
 	var createListDom = function(data){
 		var listWrapper = $(".mui-table-view");
 		data.forEach(function(n){
-			var listItem = $('<div class="mui-table-view-cell"/>');
+			var listItem = $('<div class="mui-table-view-cell" data-id='+n.id+'/>');
 			var content = $('<table class="bill-content"/>');
 			var contentHtml = '<tr><td class="bill-type">'+n.type+'</td><td class="bill-content">'+n.moneys+'</td></tr>';
 			var descHtml =  '<tr><td class="bill-time">'+n.date+'</td><td class="bill-desc-content">'+n.content+'</td></tr>';
@@ -205,7 +208,15 @@
 			$(this).addClass("mui-active");
 			$(".options").slideUp();
 			freshView();
-		})		
+		})	
+		
+		mui(".mui-table-view").on("tap",".mui-table-view-cell",function(){
+			var id = $(this).data('id');
+			var typeCd = $(".options").find(".mui-active").data('type');
+			mui.openWindow({
+				url:'./bill_desc.html?'+id+'&'+typeCd
+			})
+		})
 	})
 	
 })(jQuery)

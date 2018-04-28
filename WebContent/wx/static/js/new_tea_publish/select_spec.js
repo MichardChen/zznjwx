@@ -21,6 +21,9 @@
 
 				}else{
 					mui.toast(data.message)
+					setTimeout(function(){
+						noLoginHandle();
+					}, 2000);
 				}
 			},
 			error:function(msg){
@@ -87,6 +90,9 @@
 						mui.toast(data.message)
 					}else{
 						mui.toast(data.message)
+						setTimeout(function(){
+							noLoginHandle();
+						}, 2000);
 					}
 				},
 				error:function(msg){
@@ -122,6 +128,9 @@
 						})
 					}else{
 						mui.toast(data.message)
+						setTimeout(function(){
+							noLoginHandle();
+						}, 2000);
 					}
 				},
 				error:function(msg){

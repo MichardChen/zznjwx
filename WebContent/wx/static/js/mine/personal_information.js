@@ -18,6 +18,9 @@
 					fillData(personalData);
 				}else{
 					mui.toast(data.message);
+					setTimeout(function(){
+						noLoginHandle();
+					}, 2000);
 				}
 			}
 		})
@@ -72,6 +75,9 @@
 						    }
 					}else{
 						mui.toast(data.message);
+						setTimeout(function(){
+							noLoginHandle();
+						}, 2000);
 					}
 				}
 			});
@@ -111,6 +117,9 @@
 								$('.gender').attr('data-sex',sex);
 							}else{
 								mui.toast(data.message);
+								setTimeout(function(){
+									noLoginHandle();
+								}, 2000);
 							}
 						}
 					});

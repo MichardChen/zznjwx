@@ -295,6 +295,7 @@ public class WXNoAuthController extends Controller{
 	public void redirectAuth(){
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
 		System.out.println("授权登陆重定向接口。。。。。。。。。。。。。。");
+		System.out.println("code:"+dto.getCode());
 		renderJson(service.contactUs(dto));
 	}
 }

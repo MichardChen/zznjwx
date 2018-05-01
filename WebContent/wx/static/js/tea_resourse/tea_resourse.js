@@ -108,6 +108,13 @@
 	}
 	
 	mui(".header-nav").on("tap",".buy-tea",function(){
+		if(localStorage.remind == "1"){
+    		mui.openWindow({
+        		url:"../buytea/tea_list.html",
+        		id:'tea_list.html'
+        	})
+    		return;
+    	}
 		var cookieParam = getCookie();  
     	$.ajax({
     		url:REQUEST_URL+'wxnonAuthRest/queryDocument',
@@ -134,6 +141,12 @@
 			        	})
 			        }
 			    })
+	        	mui('.mui-remind').on("change",'input[type=checkbox]',function(){
+		        	var flag = this.checked ? true : false;
+		        	if(flag){
+		        		setLocalStorage(1);
+		        	}
+		        })
     		}
     	})
 	})

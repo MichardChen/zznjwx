@@ -111,15 +111,15 @@
 	})
 	
 	mui('.mui-bar-nav').on('tap',".mui-btn",function(){
-		var cookieParam = getCookie();  
+		//var cookieParam = getCookie();  
 		$.ajax({
     		url:REQUEST_URL+'wxnonAuthRest/queryDocument',
     		type:"get",
     		dataType:"json",
     		data:{
-    			"token":cookieParam.token,
+    			/*"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
-				"userId":cookieParam.userId,
+				"userId":cookieParam.userId,*/
     			"typeCd":'060001'
     		},
     		success:function(data){
@@ -134,11 +134,14 @@
 	})
 	
 	mui('.mui-bar-tab').on('tap',".mui-btn",function(){
-		var cookieParam = getCookie();  
-		mui.openWindow({
-			url:"../bill/bill_list.html?120001",
-			id:"bill.html"
-		})
+		var cookieParam = checkCookie(noLoginHandle);
+		if(cookieParam){
+			mui.openWindow({
+				url:"../bill/bill_list.html?120001",
+				id:"bill.html"
+			})	
+		}
+		
 		
 	})
 	

@@ -25,26 +25,70 @@
     .mui-pull-top-pocket{
         top:45px
     }
+    .mui-table-view{
+        background: none;
+    }
+    .mui-table-view:before,.mui-table-view:after{
+        display: none;
+    }
     .mui-table-view-cell{
-        display: flex;
-        .store-img{
-            flex:0 0 100px;
-        }
-        .store-desc{
-            flex:1;
-            h3{
-                color: #333;
-                font-size: 16px;
-                line-height: 50px;
+        background: #fff;
+        padding:0px;
+        margin-bottom: 10px;
+        .store-content{
+            padding: 15px;
+            display: flex;
+            border-bottom: 1px solid #ccc;
+            .store-img{
+                flex:0 0 100px;
             }
-            p{
-                color: #666;
-                font-size: 13px;
-                line-height: 24px;
-                span{
-                    color: #999;
+            .store-desc{
+                flex:1;
+                h3{
+                    color: #333;
+                    font-size: 16px;
+                    line-height: 35px;
                 }
+                p{
+                    color: #666;
+                    font-size: 13px;
+                    line-height: 20px;
+                    span{
+                        color: #999;
+                        
+                    }
+                    span:before{
+                        padding-right: 5px;
+                        color:#999;
+                    }
+                }
+            }
+                 
+        }
+        .mui-button-row{
+            .mui-btn{
+                border:none;
+                padding:5px;
+                color:#ff5400;
+                margin-bottom: 5px;
+                span:before{
+                    color: #999;
+                    padding-right: 10px;
+                }
+            }
+            .mui-btn:focus,.mui-btn:active{
+                background: #fff;
+                color: #ff5400;
             }
         }
     }
+}
+.no-store{
+     padding:15px;
+    padding-top: 70%;
+    background: none;
+    background-image: url('../../images/resourse.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    text-align: center;
 }

@@ -1,16 +1,16 @@
 +(function(){
 	
 	var getbuyTeaData = function(obj){
-		var cookieParam = getCookie();
+		//var cookieParam = getCookie();
 		$.ajax({
 			url:REQUEST_URL+"wxmrest/queryTeaAnalysis",
 			type:"get",
 			dataType:"json",
 			async:true,
 			data:{
-				"token":cookieParam.token,
+				/*"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
-				"userId":cookieParam.userId,
+				"userId":cookieParam.userId,*/
 				'teaId':obj.teaId
 			},
 			success:function(data){

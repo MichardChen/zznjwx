@@ -1,16 +1,16 @@
 +(function(){
 	var getSpecData = function(){
 		var teaId = document.location.href.substring(document.location.href.indexOf("?")+1);
-		var cookieParam = getCookie();
+		//var cookieParam = getCookie();
 		$.ajax({
 			url:REQUEST_URL+"wxmrest/queryTeaSize",
 			type:"get",
 			dataType:"json",
 			async:true,
 			data:{
-				"token":cookieParam.token,
+				/*"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
-				"userId":cookieParam.userId,
+				"userId":cookieParam.userId,*/
 				"teaId":teaId
 			},
 			success:function(data){
@@ -72,7 +72,10 @@
 			if(teaNum == 0){
 				return;
 			}
-			var cookieParam = getCookie();
+			var cookieParam = checkCookie(noLoginHandle);
+			if(!cookieParam){
+				return;
+			}
 			$.ajax({
 				url:REQUEST_URL+"wxmrest/addBuyCart",
 				type:"get",
@@ -107,7 +110,10 @@
 			if(teaNum == 0){
 				return;
 			}
-			var cookieParam = getCookie();
+			var cookieParam = checkCookie(noLoginHandle);
+			if(!cookieParam){
+				return;
+			}
 			$.ajax({
 				url:REQUEST_URL+"wxmrest/getOrderPrePayInfo",
 				type:"get",

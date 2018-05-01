@@ -25,25 +25,67 @@
 .page-container .mui-pull-top-pocket {
   top: 45px;
 }
-.page-container .mui-table-view-cell {
-  display: flex;
+.page-container .mui-table-view {
+  background: none;
 }
-.page-container .mui-table-view-cell .store-img {
+.page-container .mui-table-view:before,
+.page-container .mui-table-view:after {
+  display: none;
+}
+.page-container .mui-table-view-cell {
+  background: #fff;
+  padding: 0px;
+  margin-bottom: 10px;
+}
+.page-container .mui-table-view-cell .store-content {
+  padding: 15px;
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
+.page-container .mui-table-view-cell .store-content .store-img {
   flex: 0 0 100px;
 }
-.page-container .mui-table-view-cell .store-desc {
+.page-container .mui-table-view-cell .store-content .store-desc {
   flex: 1;
 }
-.page-container .mui-table-view-cell .store-desc h3 {
+.page-container .mui-table-view-cell .store-content .store-desc h3 {
   color: #333;
   font-size: 16px;
-  line-height: 50px;
+  line-height: 35px;
 }
-.page-container .mui-table-view-cell .store-desc p {
+.page-container .mui-table-view-cell .store-content .store-desc p {
   color: #666;
   font-size: 13px;
-  line-height: 24px;
+  line-height: 20px;
 }
-.page-container .mui-table-view-cell .store-desc p span {
+.page-container .mui-table-view-cell .store-content .store-desc p span {
   color: #999;
+}
+.page-container .mui-table-view-cell .store-content .store-desc p span:before {
+  padding-right: 5px;
+  color: #999;
+}
+.page-container .mui-table-view-cell .mui-button-row .mui-btn {
+  border: none;
+  padding: 5px;
+  color: #ff5400;
+  margin-bottom: 5px;
+}
+.page-container .mui-table-view-cell .mui-button-row .mui-btn span:before {
+  color: #999;
+  padding-right: 10px;
+}
+.page-container .mui-table-view-cell .mui-button-row .mui-btn:focus,
+.page-container .mui-table-view-cell .mui-button-row .mui-btn:active {
+  background: #fff;
+  color: #ff5400;
+}
+.no-store {
+  padding: 15px;
+  padding-top: 70%;
+  background: none;
+  background-image: url('../../images/resourse.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  text-align: center;
 }

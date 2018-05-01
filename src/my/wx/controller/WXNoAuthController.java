@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -14,6 +16,8 @@ import org.apache.shiro.subject.Subject;
 import org.huadalink.plugin.shiro.CaptchaUsernamePasswordToken;
 import org.huadalink.plugin.shiro.IncorrectCaptchaException;
 import org.huadalink.route.ControllerBind;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.jfinal.aop.Enhancer;
 import com.jfinal.core.Controller;
@@ -26,6 +30,7 @@ import my.core.model.ReturnData;
 import my.core.vo.UserData;
 import my.pvcloud.dto.LoginDTO;
 import my.pvcloud.util.DateUtil;
+import my.pvcloud.util.HttpRequest;
 import my.pvcloud.util.StringUtil;
 import my.pvcloud.util.TextUtil;
 import my.pvcloud.util.VertifyUtil;
@@ -293,9 +298,25 @@ public class WXNoAuthController extends Controller{
 	
 	//授权重定向接口
 	public void redirectAuth(){
-		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		//获取code
+		ReturnData data = new ReturnData();
+		HttpServletRequest request = getRequest();
+		LoginDTO dto = LoginDTO.getInstance(request);
 		System.out.println("授权登陆重定向接口。。。。。。。。。。。。。。");
 		System.out.println("code:"+dto.getCode());
-		renderJson(service.contactUs(dto));
+		//获取openId
+		String retJson = HttpRequest.sendGet("https://api.weixin.qq.com/sns/oauth2/access_token", "appid=wxfb13c4770990aeed&secret=f48f307963115e674255e2238b31d871&code="+dto.getCode()+"&grant_type=authorization_code");
+		try {
+			JSONObject retJson1 = new JSONObject(retJson);
+			data.setCode(Constants.STATUS_CODE.SUCCESS);
+			data.setMessage("查询成功");
+			data.setData(retJson);
+			System.out.println("openId:"+retJson1.getString("openid"));
+		} catch (JSONException e) {
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("查询失败");
+			e.printStackTrace();
+		}
+		renderJson(data);
 	}
 }

@@ -70,6 +70,7 @@
 			list.append(li);			
 		})		
 	}
+	
 	var createMap = function(data){
 		var latitude = data.latitude;
 		var longitude = data.longitude;
@@ -77,10 +78,11 @@
 		var map = new AMap.Map("map", {
         resizeEnable: true,
         center: [longitude, latitude],//地图中心点
-        zoom: 18 //地图显示的缩放级别
+        zoom: 18 //地图显示的缩放级别,
 	    });
+	    
 	    //添加点标记，并使用自己的icon
-	    new AMap.Marker({
+	    var marker = new AMap.Marker({
 	        map: map,
 			position: [longitude, latitude],
 	        icon: new AMap.Icon({            
@@ -89,6 +91,21 @@
 	            imageOffset: new AMap.Pixel(0, -60)
 	        })        
 	    });
+	    
+    marker.on('click',function(e){
+      mui.openWindow({
+      	url:'http://uri.amap.com/navigation?to='+longitude+','+latitude+',endpoint&via='+longitude+','+latitude+'&mode=car&src=nyx_super'
+      })
+    })
+    
+    AMap.plugin(['AMap.ToolBar','AMap.Scale'],function(){
+        var toolBar = new AMap.ToolBar();
+        var scale = new AMap.Scale();
+        map.addControl(toolBar);
+        map.addControl(scale);
+    })
+   
+	    
 	}
 	
 	mui(".mui-table-view-cell").on('tap','.phone',function(){

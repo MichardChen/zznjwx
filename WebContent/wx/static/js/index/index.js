@@ -11,6 +11,40 @@
     });        
 
     mui.ready(function(){
+    	//获取code
+    	$.ajax({
+			url:"https://open.weixin.qq.com/connect/oauth2/authorize",
+			type:"get",
+			dataType:"json",
+			async:true,
+			data:{
+				"appid":'wxfb13c4770990aeed',
+				"redirect_uri":encodeURIComponent('https://www.yibuwangluo.cn/zznjwx/wxnonAuthRest/redirectAuth'),
+				"response_type":'code',
+				"scope":'snsapi_base',
+				"state":'STATE#wechat_redirect'
+			},
+			success:function(data){
+				if(data.code == REQUEST_OK){
+					if(pageNum==1&&data.data.messages.length == 0){
+						createNoData();
+						mui("#messages-list").pullRefresh().endPullupToRefresh(true);
+					}else{
+						var messageData = data.data;
+						createListDom(messageData);
+					}					
+				}else{
+					mui.toast(data.message)
+					setTimeout(function(){
+						noLoginHandle();
+					}, 2000);
+				}
+			},
+			error:function(msg){
+				console.log(msg);
+			}
+		})
+		
     	mui('.mui-bar-tab').on('tap', 'a', function(e) {	
     		if($(this).hasClass('default-index')){
     			toggleTap(this);

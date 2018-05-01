@@ -4,8 +4,8 @@ var REQUEST_URL = 'http://www.yibuwangluo.cn/zznjwx/';
 var LOGIN_URL = "http://www.yibuwangluo.cn/zznjwx/wx/pages/login/login.html";
 var INDEX_URL = "http://www.yibuwangluo.cn/zznjwx/wx/index.html";
 //var REQUEST_URL = 'http://192.168.1.91:8088/zznjwx/';
-//var LOGIN_URL = "http://192.168.1.91:8088/zznjwx/wx/pages/login/login.html";
-//var INDEX_URL = "http://192.168.1.91:8088/zznjwx/wx/index.html";
+//var LOGIN_URL = "http://192.168.1.106:8020/wx/pages/login/login.html";
+//var INDEX_URL = "http://192.168.1.106:8020/wx/index.html";
 
 var REQUEST_OK = 5600;
 
@@ -63,62 +63,6 @@ var REQUEST_OK = 5600;
           setCookie("",-1);
       } 
 
-	function loadList(obj){
-		var id = obj.id;
-		var fn = obj.fn;
-		
-		mui.init({
-			pullRefresh: {
-				container: id,
-				down: {
-					contentdown : "下拉可以刷新",
-	      			contentover : "释放立即刷新",
-	      			contentrefresh : "正在刷新...",
-					callback: pulldownRefresh
-				},
-				up: {
-					contentrefresh: '正在加载...',
-					callback: pullupRefresh
-				}
-			}
-		});
-				
-		/**
-		 * 下拉刷新具体业务实现
-		 */
-		var pageSize = 10;
-		var pageNum = 1;
-		
-		function pulldownRefresh() {
-			setTimeout(function() {	
-				pageNum = 1;
-				$('.mui-table-view').html("");
-				obj.pageSize = pageSize;
-				obj.pageNum = pageNum;
-				fn(obj);
-				mui(id).pullRefresh().endPulldownToRefresh(); //refresh completed
-				pageNum++;
-			}, 500);
-		}
-		var count = 0;
-		
-		/**
-		 * 上拉加载具体业务实现
-		 */
-		function pullupRefresh() {
-			setTimeout(function() {																
-				obj.pageSize = pageSize;
-				obj.pageNum = pageNum;
-				fn(obj);
-				pageNum++;	
-				
-			mui(id).pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
-			}, 500);
-		}
-		mui.ready(function(){
-			mui(id).pullRefresh().pullupLoading();
-		})		
-	}
 
 	function appAlert(){
 		var btnArray = ['取消', '确定'];
@@ -132,9 +76,9 @@ var REQUEST_OK = 5600;
 	}
 	
 	function noLoginHandle(){
-                mui.openWindow({
-                	url:LOGIN_URL
-                })
+        mui.openWindow({
+        	url:LOGIN_URL
+        })
 	}
 	
 	var old_back = mui.back;
@@ -146,4 +90,13 @@ var REQUEST_OK = 5600;
 		setTimeout(function(){
 			 old_back(); 
 		},500)	    	
+	}
+	
+	function setLocalStorage(arg){
+		if (typeof(Storage) !== "undefined") {
+		    // Store
+		    localStorage.remind = arg;
+		} else {
+		    mui.alert('浏览器不支持localStorage')
+		}
 	}

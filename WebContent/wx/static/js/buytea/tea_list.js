@@ -44,16 +44,16 @@
 	})		
 	
 	var getbuyTeaData = function(pageSize,pageNum,name){
-		var cookieParam = getCookie();
+		//var cookieParam = getCookie();
 		$.ajax({
 			url:REQUEST_URL+"wxmrest/queryBuyTeaList",
 			type:"get",
 			dataType:"json",
 			async:true,
 			data:{
-				"token":cookieParam.token,
+				/*"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
-				"userId":cookieParam.userId,
+				"userId":cookieParam.userId,*/
 				'pageSize':pageSize,
 				'pageNum':pageNum,
 				'name':name

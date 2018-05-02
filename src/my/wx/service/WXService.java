@@ -1724,6 +1724,80 @@ public class WXService {
 		return data;
 	} 
 	
+	//购物车跳转下单
+	public ReturnData queryBuyCartListsForPay(LoginDTO dto){
+		
+		ReturnData data = new ReturnData();
+		List<BuyCart> carts = BuyCart.dao.queryBuyCartForPay(dto.getBuyCartIds());
+		
+		List<BuyCartListVO> vos = new ArrayList<>();
+		BuyCartListVO vo = null;
+		for(BuyCart cart:carts){
+			vo = new BuyCartListVO();
+			vo.setCartId(cart.getInt("id"));
+			vo.setQuality(cart.getInt("quality"));
+			CodeMst size = CodeMst.dao.queryCodestByCode(cart.getStr("size"));
+			if(size != null){
+				vo.setSize(size.getStr("name"));
+			}else{
+				vo.setSize(StringUtil.STRING_BLANK);
+			}
+			WarehouseTeaMemberItem item = WarehouseTeaMemberItem.dao.queryByKeyId(cart.getInt("warehouse_tea_member_item_id"));
+			WarehouseTeaMember wtm = null;
+			if(item != null){
+				wtm = WarehouseTeaMember.dao.queryById(item.getInt("warehouse_tea_member_id"));
+			}else{
+				continue;
+			}
+			
+			if(wtm != null){
+				WareHouse house = WareHouse.dao.queryById(wtm.getInt("warehouse_id"));
+				if(house != null){
+					vo.setWarehouse(house.getStr("warehouse_name"));
+				}else{
+					vo.setWarehouse(StringUtil.STRING_BLANK);
+				}
+				Tea tea = Tea.dao.queryById(wtm.getInt("tea_id"));
+				if(tea != null){
+					vo.setImg(StringUtil.getTeaIcon(tea.getStr("cover_img")));
+					vo.setName(tea.getStr("tea_title"));
+					CodeMst type = CodeMst.dao.queryCodestByCode(tea.getStr("type_cd"));
+					if(type!=null){
+						vo.setType(type.getStr("name"));
+					}else{
+						vo.setType(StringUtil.STRING_BLANK);
+					}
+				}else{
+					vo.setImg(StringUtil.STRING_BLANK);
+					vo.setName(StringUtil.STRING_BLANK);
+					vo.setType(StringUtil.STRING_BLANK);
+				}
+				
+				//WarehouseTeaMemberItem item = WarehouseTeaMemberItem.dao.queryById(wtm.getInt("id"));
+				if(item != null){
+					vo.setPrice(item.getBigDecimal("price"));
+				}else{
+					vo.setPrice(new BigDecimal("0"));
+				}
+				vo.setStock(wtm.getInt("stock"));
+			}else{
+				vo.setWarehouse(StringUtil.STRING_BLANK);
+				vo.setImg(StringUtil.STRING_BLANK);
+				vo.setName(StringUtil.STRING_BLANK);
+				vo.setPrice(new BigDecimal("0"));
+				vo.setType(StringUtil.STRING_BLANK);
+				vo.setStock(0);
+			}
+			vos.add(vo);
+		}
+		data.setCode(Constants.STATUS_CODE.SUCCESS);
+		data.setMessage("查询成功");
+		Map<String, Object> map = new HashMap<>();
+		map.put("data", vos);
+		data.setData(map);
+		return data;
+	} 
+
 	//我要买茶
 	public ReturnData queryTeaLists(LoginDTO dto){
 			

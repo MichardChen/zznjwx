@@ -96,12 +96,14 @@ public class LoginDTO extends BaseDTO{
 			dto.setTitle(StringUtil.checkCode(request.getParameter("title")));
 			dto.setInvoiceIds(StringUtil.checkCode(request.getParameter("invoiceIds")));
 			dto.setMemberId(StringUtil.toInteger(StringUtil.checkCode(request.getParameter("memberId"))));
+			dto.setOpenId(request.getParameter("openId"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		return dto;
 	}
 	
+	private String openId;
 	private int memberId;
 	private String title;
 	private int messageId;
@@ -179,6 +181,14 @@ public class LoginDTO extends BaseDTO{
 	private String invoiceIds;
 	private String tradeNo;
 	
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
 	public String getTradeNo() {
 		return tradeNo;
 	}

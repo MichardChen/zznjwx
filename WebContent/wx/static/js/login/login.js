@@ -6,6 +6,7 @@
 		if(param.length !=3){
 			return;
 		}
+		var openId = localStorage.openId;
 		$.ajax({
 			type:"post",
 			url:REQUEST_URL+"wxnonAuthRest/register",
@@ -13,7 +14,8 @@
 			data:{
 				"code":param[1],
 				"userPwd":md5(param[2]),
-				"mobile":param[0]
+				"mobile":param[0],
+				"openId":openId
 			},
 			dataType:'json',
 			success:function(data){
@@ -142,13 +144,15 @@
 		if(param.length !=2){
 			return;
 		}
+		var openId = localStorage.openId;
 		$.ajax({
 			type:"get",
 			url:REQUEST_URL+"wxnonAuthRest/login",
 			async:true,
 			data:{
 				"password":md5(param[1]),
-				"mobile":param[0]
+				"mobile":param[0],
+				"openId":openId
 			},
 			dataType:'json',
 			success:function(data){

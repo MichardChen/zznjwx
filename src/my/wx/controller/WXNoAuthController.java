@@ -107,6 +107,9 @@ public class WXNoAuthController extends Controller{
 			code = "5600";
 			msg = "登录成功";
 			Member member = Member.dao.queryMember(mobile, password);
+			if(StringUtil.isNoneBlank(dto.getOpenId())&&(!StringUtil.equals(dto.getOpenId(), member.getStr("open_id")))){
+				Member.dao.updateOpenId(member.getInt("id"), dto.getOpenId());
+			}
 			String accessToken = TextUtil.generateUUID();
 			//String accessToken = "6aa1c3b464074590ad1f37af0fd2aa67";
 			UserData userData = new UserData();
@@ -171,6 +174,9 @@ public class WXNoAuthController extends Controller{
 				userData.setToken(accessToken);
 				userData.setMobile(dto.getMobile());
 				userData.setUserTypeCd("010001");
+				if(StringUtil.isNoneBlank(dto.getOpenId())&&(!StringUtil.equals(dto.getOpenId(), member.getStr("open_id")))){
+					Member.dao.updateOpenId(member.getInt("id"), dto.getOpenId());
+				}
 				//判断access_token表是否存储
 				AcceessToken aToken = AcceessToken.dao.queryToken(member.getInt("id"), "010001", "020005");
 				if(aToken != null){
@@ -302,15 +308,13 @@ public class WXNoAuthController extends Controller{
 		ReturnData data = new ReturnData();
 		HttpServletRequest request = getRequest();
 		LoginDTO dto = LoginDTO.getInstance(request);
-		System.out.println("授权登陆重定向接口。。。。。。。。。。。。。。");
-		System.out.println("code:"+dto.getCode());
 		//获取openId
 		String retJson = HttpRequest.sendGet("https://api.weixin.qq.com/sns/oauth2/access_token", "appid=wxfb13c4770990aeed&secret=f48f307963115e674255e2238b31d871&code="+dto.getCode()+"&grant_type=authorization_code");
 		try {
 			JSONObject retJson1 = new JSONObject(retJson);
 			data.setCode(Constants.STATUS_CODE.SUCCESS);
 			data.setMessage("查询成功");
-			data.setData(retJson);
+			data.setData(retJson1.get("openid"));
 			System.out.println("openId:"+retJson1.getString("openid"));
 		} catch (JSONException e) {
 			data.setCode(Constants.STATUS_CODE.FAIL);

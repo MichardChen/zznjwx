@@ -40,6 +40,10 @@
     	
     		mui(".mui-bar-nav").on('tap','.mui-btn',function(){
     			var qq = $('.QQ-input').val();
+    			if(qq == '' || qq == null){
+    				mui.toast("请输入QQ号");
+    				return;
+    			}
     			if(qq == qqNo ){
     				return;
     			}else{

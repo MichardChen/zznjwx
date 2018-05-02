@@ -42,6 +42,10 @@
     	
     		mui(".mui-bar-nav").on('tap','.mui-btn',function(){
     			var name = $('.QQ-input').val();
+    			if(name == '' || name == null){
+    				mui.toast("请输入昵称");
+    				return;
+    			}
     			if(name == nickname){
     				return;
     			}else{

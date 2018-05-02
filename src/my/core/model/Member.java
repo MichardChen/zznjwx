@@ -274,6 +274,10 @@ public class Member extends Model<Member> {
 		return Db.update("update t_member set points=points+"+points+" where id="+userId);
 	}
 	
+	public int updateOpenId(int userId,String openId){
+		return Db.update("update t_member set open_id='"+openId+"' where id="+userId);
+	}
+	
 	public int updateMoneys(int userId,BigDecimal moneys){
 		return Db.update("update t_member set moneys="+moneys+",update_time='"+DateUtil.getNowTimestamp()+"' where id="+userId);
 	}

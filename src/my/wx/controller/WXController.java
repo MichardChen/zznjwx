@@ -1854,4 +1854,28 @@ public class WXController extends Controller{
 		data.setData(map);
 		renderJson(data);
 	}
+    
+    public void queryAddOrderList(){
+		LoginDTO dto = LoginDTO.getInstance(getRequest());
+		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		if(loginFlg != 3){
+			ReturnData data = new ReturnData();
+			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
+			if(loginFlg == 0){
+				data.setMessage("您还未登陆，请先登陆");
+			}
+			if(loginFlg == 1){
+				data.setMessage("您的账号登录过期");
+			}
+			if(loginFlg == 2){
+				data.setMessage("您的账号已在其他终端登录");
+			}
+			
+			getResponse().addHeader("Access-Control-Allow-Origin", "*");
+			renderJson(data);
+			return;
+		}
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
+		renderJson(service.queryBuyCartListsForPay(dto));
+	}
 }

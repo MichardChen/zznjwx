@@ -3,6 +3,8 @@
 	var getCartData = function(){
 		var cookieParam = getCookie();
 		var cartId = document.location.href.substring(document.location.href.indexOf("?")+1);
+		cartId = cartId.replace(/-/g,',');
+		console.log(cartId);
 		$.ajax({
             url:REQUEST_URL+"wxmrest/queryAddOrderList",
 			type:"get",

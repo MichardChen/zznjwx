@@ -280,7 +280,7 @@
 			if(cartId == ""){
 				cartId = $(cartSelect[i]).data("id");
 			}else{
-				cartId+="," + $(cartSelect[i]).data("id");
+				cartId+="-" + $(cartSelect[i]).data("id");
 			}
 		}
 		if(cartId !== ""){

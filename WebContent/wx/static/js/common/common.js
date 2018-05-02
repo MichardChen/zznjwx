@@ -1,11 +1,11 @@
 //常量定义
 
-var REQUEST_URL = 'http://www.yibuwangluo.cn/zznjwx/';
-var LOGIN_URL = "http://www.yibuwangluo.cn/zznjwx/wx/pages/login/login.html";
-var INDEX_URL = "http://www.yibuwangluo.cn/zznjwx/wx/index.html";
+var REQUEST_URL = 'https://www.yibuwangluo.cn/zznjwx/';
+var LOGIN_URL = "https://www.yibuwangluo.cn/zznjwx/wx/pages/login/login.html";
+var INDEX_URL = "https://www.yibuwangluo.cn/zznjwx/wx/index.html";
 //var REQUEST_URL = 'http://192.168.1.91:8088/zznjwx/';
-//var LOGIN_URL = "http://192.168.1.106:8020/wx/pages/login/login.html";
-//var INDEX_URL = "http://192.168.1.106:8020/wx/index.html";
+//var LOGIN_URL = "http://192.168.1.102:8020/wx/pages/login/login.html";
+//var INDEX_URL = "http://192.168.1.102:8020/wx/index.html";
 
 var REQUEST_OK = 5600;
 
@@ -96,6 +96,15 @@ var REQUEST_OK = 5600;
 		if (typeof(Storage) !== "undefined") {
 		    // Store
 		    localStorage.remind = arg;
+		} else {
+		    mui.alert('浏览器不支持localStorage')
+		}
+	}
+	
+	function setLocalOpenId(params){
+		if (typeof(Storage) !== "undefined") {
+		    // Store
+		    localStorage.openId = params;
 		} else {
 		    mui.alert('浏览器不支持localStorage')
 		}

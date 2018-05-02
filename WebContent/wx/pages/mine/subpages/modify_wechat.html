@@ -40,6 +40,10 @@
     	
     		mui(".mui-bar-nav").on('tap','.mui-btn',function(){
     			var wx = $('.QQ-input').val();
+    			if(wx == '' || wx == null){
+    				mui.toast("请输入微信号");
+    				return;
+    			}
     			if(wx == wxNo ){
     				return;
     			}else{

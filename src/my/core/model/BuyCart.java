@@ -36,6 +36,10 @@ public class BuyCart extends Model<BuyCart> {
 		return BuyCart.dao.find("select * from t_buycart where member_id="+memberId+" and status = '140002' order by create_time desc limit "+fromRow+","+pageSize);
 	}
 	
+	public List<BuyCart> queryBuyCartForPay(String buyCartIds){
+		return BuyCart.dao.find("select * from t_buycart where id in("+buyCartIds+") order by create_time desc");
+	}
+	
 	public Long queryBuycartCount(int memberId){
 		return Db.queryLong("select count(*) from t_buycart where member_id="+memberId+" and status='140002'");
 	}

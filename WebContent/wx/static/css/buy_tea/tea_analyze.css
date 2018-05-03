@@ -43,4 +43,6 @@
 }
 .mui-scroll-wrapper {
   top: 44px;
+  overflow-y: scroll;
+  -webkit-overflow-scroll: touch;
 }

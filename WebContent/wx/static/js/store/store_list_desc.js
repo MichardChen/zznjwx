@@ -2,14 +2,16 @@
 	//请求列表数据
 	var getListData = function(){
 		var cookieParam = checkCookie();
+		var storeId = document.location.href.substring(document.location.href.indexOf("?")+1);
 		$.ajax({
 			type:"get",
-			url:REQUEST_URL+"wxmrest/queryMemberStoreDetail",
+			url:REQUEST_URL+"wxmrest/queryTeaStoreDetail",
 			async:true,
 			data:{
 				"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
-				"userId":cookieParam.userId
+				"userId":cookieParam.userId,
+				"id":storeId
 			},
 			dataType:"json",
 			success:function(data){
@@ -27,6 +29,9 @@
 					createMap(store);
 				}else{
 					mui.toast(data.message);
+					setTimeout(function(){
+						noLoginHandle();
+					}, 2000);
 				}
 			}
 		});

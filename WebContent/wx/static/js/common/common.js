@@ -4,8 +4,8 @@ var REQUEST_URL = 'https://www.yibuwangluo.cn/zznjwx/';
 var LOGIN_URL = "https://www.yibuwangluo.cn/zznjwx/wx/pages/login/login.html";
 var INDEX_URL = "https://www.yibuwangluo.cn/zznjwx/wx/index.html";
 //var REQUEST_URL = 'http://192.168.1.91:8088/zznjwx/';
-//var LOGIN_URL = "http://192.168.1.102:8020/wx/pages/login/login.html";
-//var INDEX_URL = "http://192.168.1.102:8020/wx/index.html";
+//var LOGIN_URL = "http://192.168.1.91:8088/zznjwx/wx/pages/login/login.html";
+//var INDEX_URL = "http://192.168.1.91:8088/zznjwx/wx/index.html";
 
 var REQUEST_OK = 5600;
 

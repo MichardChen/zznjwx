@@ -124,8 +124,8 @@
 		var storeList = data.data.storeList;
 		var bindStoreFlg = data.data.bindStoreFlg;
 		storeList.forEach(function(n){
-			li = $('<li class="mui-table-view-cell" data-storeId='+n.storeId+'/>')
-			var contentBox = $("<div class='store-content'/>");
+			li = $('<li class="mui-table-view-cell" />')
+			var contentBox = $("<div class='store-content' data-storeId="+n.storeId+"/>");
 			var leftImg = "<div class='store-img'><img src="+n.img+" width = 75 height=75></div>";
 			var right = $("<div class='store-desc'/>");
 			var title = "<h3>"+n.businessTea+"</h3>";
@@ -140,6 +140,7 @@
 			}
 			listWapper.append(li);
 		})
+		
 	}
 	
 	//构建缺省页
@@ -179,7 +180,7 @@
 			})
 			city.html(html);
 			pageNum =1;
-			pullupRefresh();
+			pulldownRefresh();
 			mui("#store-list").pullRefresh().refresh(true);
 		})		
 	}
@@ -187,11 +188,11 @@
 	$("#city").on('change',function(){
 		$(".mui-table-view").html("");
 		pageNum =1;
-		pullupRefresh();
+		pulldownRefresh();
 		mui("#store-list").pullRefresh().refresh(true);
 	})
 
-	mui('.mui-table-view').on('click','.mui-btn',function(){
+	mui('.mui-table-view').on('tap','.mui-btn',function(){
 		var _this = this;
 		mui.confirm("绑定门店后，不能解绑，确认绑定？"," ",["取消","确定"],function(){
 				var storeId = $(_this).parents('.mui-table-view-cell').data('storeid');
@@ -219,4 +220,12 @@
 		})
 	
 	})
+	mui('.mui-table-view').on("tap",".store-content",function(){
+		var id = $(this).data('storeid');
+		mui.openWindow({
+			url:"../store/store_list_desc.html?"+id
+		})
+	})
+	
+
 })()

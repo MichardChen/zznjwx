@@ -2953,11 +2953,16 @@ public class WXService {
 		Map<String, Object> map = new HashMap<>();
 		map.put("storeList", resultList);
 		Member member = Member.dao.queryMemberById(dto.getUserId());
-		if(member.getInt("store_id") != 0){
-			map.put("bindStoreFlg", 1);
-		}else{
+		if(member == null){
 			map.put("bindStoreFlg", 0);
+		}else{
+			if(member.getInt("store_id") != 0){
+				map.put("bindStoreFlg", 1);
+			}else{
+				map.put("bindStoreFlg", 0);
+			}
 		}
+		
 		data.setData(map);
 		data.setCode(Constants.STATUS_CODE.SUCCESS);
 		data.setMessage("查询成功");

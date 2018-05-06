@@ -1,25 +1,24 @@
 +(function(){
 	var teaId = document.location.href.substring(document.location.href.indexOf("?")+1);
 	var getTeaDescData = function(){		
-		//var cookieParam = getCookie();
 		$.ajax({
 			url:REQUEST_URL+"wxmrest/queryNewTeaById",
 			type:"get",
 			dataType:"json",
 			async:true,
 			data:{
-			/*	"token":cookieParam.token,
-				"mobile":cookieParam.mobile,
-				"userId":cookieParam.userId,*/
 				"id":teaId
 			},
 			success:function(data){
 				if(data.code == REQUEST_OK){
 					var teaDescData = data.data.tea;
+					var status = teaDescData.status;
 					console.log(teaDescData);
 					createSlide(teaDescData);
 					createCard(teaDescData);
-					//createListDom(teaListData.models);
+					if(status == 090001 || status == 090003 || status == 090004){
+						$('.buy-btn').addClass('mui-disabled');
+					}
 				}else{
 					mui.toast(data.message)
 					setTimeout(function(){

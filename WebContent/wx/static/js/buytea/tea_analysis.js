@@ -1,16 +1,12 @@
 +(function(){
 	
 	var getbuyTeaData = function(obj){
-		//var cookieParam = getCookie();
 		$.ajax({
 			url:REQUEST_URL+"wxmrest/queryTeaAnalysis",
 			type:"get",
 			dataType:"json",
 			async:true,
 			data:{
-				/*"token":cookieParam.token,
-				"mobile":cookieParam.mobile,
-				"userId":cookieParam.userId,*/
 				'teaId':obj.teaId
 			},
 			success:function(data){
@@ -120,4 +116,8 @@
 		})
 	}
 	
+	//解决iframe宽度不适应的问题
+	var width = window.parent.document.body.clientWidth;
+	
+	$('body').width(width);
 })()

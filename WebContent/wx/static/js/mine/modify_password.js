@@ -44,10 +44,6 @@
 			return flag = false;
 		}
 		var passwordReg = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,20}$/;
-		/*if (!passwordReg.test(newPwd)) {  
-          mui.toast('请输入正确的密码格式') ;
-          return flag = false;
-	  	}*/
 		
 		if(flag){
 			modifyPassword(oldPwd,newPwd);

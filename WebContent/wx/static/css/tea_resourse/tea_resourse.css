@@ -104,3 +104,20 @@
   padding-left: 50px;
   line-height: 36px;
 }
+/*茶资产default页面*/
+.default-page{
+  text-align: center;
+  display: none;
+}
+.default-page .default-text {
+  text-align: center;
+  color: #ccc;
+}
+.default-page .mui-input-row button {
+  width: 80%;
+  text-align: center;
+  margin: 10%;
+  background: #ff5400;
+  color: #fff;
+  border: 0;
+}

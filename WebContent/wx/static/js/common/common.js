@@ -1,11 +1,11 @@
 //常量定义
 
-var REQUEST_URL = 'https://www.yibuwangluo.cn/zznjwx/';
-var LOGIN_URL = "https://www.yibuwangluo.cn/zznjwx/wx/pages/login/login.html";
-var INDEX_URL = "https://www.yibuwangluo.cn/zznjwx/wx/index.html";
+var REQUEST_URL = 'http://www.yibuwangluo.cn/zznjwx/';
+var LOGIN_URL = "http://www.yibuwangluo.cn/zznjwx/wx/pages/login/login.html";
+var INDEX_URL = "http://www.yibuwangluo.cn/zznjwx/wx/index.html";
 //var REQUEST_URL = 'http://192.168.1.91:8088/zznjwx/';
-//var LOGIN_URL = "http://192.168.1.91:8088/zznjwx/wx/pages/login/login.html";
-//var INDEX_URL = "http://192.168.1.91:8088/zznjwx/wx/index.html";
+//var LOGIN_URL = "http://192.168.0.102:8080/pages/login/login.html";
+//var INDEX_URL = "http://192.168.0.102:8080/index.html";
 
 var REQUEST_OK = 5600;
 
@@ -46,7 +46,7 @@ var REQUEST_OK = 5600;
 	        var c = ca[i].trim();
 	        if (c.indexOf(name)==0) { cookieParam = c.substring(name.length,c.length);}
 	    }
-	    return JSON.parse(cookieParam);
+	    return cookieParam == undefined ? "" : JSON.parse(cookieParam);
 	}
 	
 	function checkCookie(fn){

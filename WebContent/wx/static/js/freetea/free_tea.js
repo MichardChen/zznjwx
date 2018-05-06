@@ -82,7 +82,7 @@
 	var getListData = function(pageSize,pageNum){
 		var provinceId = $("#province").find("option:selected").val();
 		var cityId = $("#city").find("option:selected").val();
-		var cookieParam = getCookie();
+		var cookieParam = typeof getCookie() ==="object" ? getCookie() : "" ;
 		$.ajax({
 			type:"get",
 			url:REQUEST_URL+"wxmrest/queryTeaStoreList",
@@ -110,9 +110,6 @@
 					
 				}else{
 					mui.toast(data.message);
-					setTimeout(function(){
-						noLoginHandle();
-					}, 2000);
 				}
 			}
 		});

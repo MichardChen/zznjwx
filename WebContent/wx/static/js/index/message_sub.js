@@ -64,9 +64,12 @@
 			success:function(data){
 				if(data.code == REQUEST_OK){
 					if(pageNum==1&&data.data.messages.length == 0){
-						createNoData();
+						$(".default-page").show();
+						$(".mui-table-view").hide();
 						mui("#messages-list").pullRefresh().endPullupToRefresh(true);
 					}else{
+						$(".default-page").hide();
+						$(".mui-table-view").show();
 						var messageData = data.data;
 						createListDom(messageData);
 					}					
@@ -96,18 +99,6 @@
 			li.append(titleBox);
 			table.append(li);
 		}
-	}
-	
-	//构建缺省页
-	
-	var createNoData = function(){
-		var table  = $('.mui-table-view');
-		var li;
-		li = $('<li class="no-product"/>')
-		var noProductText = $("<p/>")
-		noProductText.text("当前暂无消息")
-		li.html(noProductText);
-		table.html(li);
 	}
 	
 	mui('.mui-table-view').on('tap','.mui-table-view-cell',function(){

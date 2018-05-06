@@ -46,8 +46,6 @@
 	
 	//请求数据
 	var getNewTeaData = function(pageSize,pageNum){
-		//获取cookie
-		//var cookieParam = getCookie();
 		//请求数据
 		$.ajax({
 			url:REQUEST_URL+"wxmrest/queryNewTeaSaleList",
@@ -55,9 +53,6 @@
 			dataType:"json",
 			async:true,
 			data:{
-			/*	"token":cookieParam.token,
-				"mobile":cookieParam.mobile,
-				"userId":cookieParam.userId,*/
 				"pageSize":pageSize,
 				"pageNum":pageNum
 			},

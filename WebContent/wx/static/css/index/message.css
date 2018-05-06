@@ -58,3 +58,20 @@
 #messages-list .mui-table-view:after {
   display: none;
 }
+/*消息default页面*/
+.default-page{
+  display: none;
+  text-align: center;
+}
+.default-page .default-text {
+  text-align: center;
+  color: #ccc;
+}
+.default-page .mui-input-row button {
+  width: 80%;
+  text-align: center;
+  margin: 10%;
+  background: #ff5400;
+  color: #fff;
+  border: 0;
+}

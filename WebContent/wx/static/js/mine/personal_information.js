@@ -150,9 +150,6 @@
 				id:'modify_nickname.html'
 			})
 		})
-		/*mui(".mui-content").on('tap','.modify-certification',function(){
-			mui.alert("调用摄像头接口")
-		})*/
 		mui(".mui-content").on('tap','.modify-address',function(){
 			mui.openWindow({
 				url:'./subpages/address_list.html',

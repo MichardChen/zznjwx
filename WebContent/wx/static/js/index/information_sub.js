@@ -58,8 +58,11 @@
 				if(data.code == REQUEST_OK){
 					console.log(data);
 					if(pageNum ==1 && data.data.news.length == 0){
-						createNoData();
+						$(".default-page").show();
+						$(".mui-table-view").hide();
 					}else{
+						$(".default-page").hide();
+						$(".mui-table-view").show();
 						var informationData = data.data;
 						createDom(informationData);
 					}					
@@ -86,19 +89,6 @@
 			table.append(li);
 		}
 	}
-	
-	//构建缺省页
-	
-	var createNoData = function(){
-		var table  = $('.mui-table-view');
-		var li;
-		li = $('<li class="no-product"/>')
-		var noProductText = $("<p/>")
-		noProductText.text("当前暂无资讯")
-		li.html(noProductText);
-		table.html(li);
-	}
-	
 	
 	mui('.mui-table-view').on('tap','.mui-table-view-cell',function(){
 		var url = $(this).find('a').attr('href');

@@ -272,3 +272,28 @@ a img {
   max-width: 100%;
   height: auto;
 }
+.amap-marker-label{
+  border: 0 !important;
+  display: none;
+  padding: 0;
+}
+.goMap button{
+  border:0;
+  background: #ff5400;
+  color: #fff;
+  height: 43px;
+  border-radius: 0
+}
+.goMap .store-address{
+  width: 150px;
+  padding:5px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.goMap .store-address strong{
+  font-weight: 700;
+  margin-bottom: 5px;
+  display: inline-block;
+}

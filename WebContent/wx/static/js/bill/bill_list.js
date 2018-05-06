@@ -119,8 +119,15 @@
 			success:function(data){
 				if(data.code == REQUEST_OK){
 					var billData = data.data.logs;
-					console.log(billData);
-					createListDom (billData);				
+					if(pageNum==1 && billData.length == 0){
+						$(".default-page").show();
+						$(".mui-table-view").hide();
+					}else{
+						$(".default-page").hide();
+						$(".mui-table-view").show();
+						createListDom (billData);
+					}
+									
 				}else{
 					mui.toast(data.message);
 					setTimeout(function(){

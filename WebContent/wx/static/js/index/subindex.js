@@ -142,94 +142,94 @@
         })
         
         mui('.nav-bar').on('tap','.tea-publish',function(){
-        	if(localStorage.remind == "1"){
+        	//if(localStorage.remind == "1"){
         		mui.openWindow({	        		
 	        		url:"../new_tea_publish/new_tea_publish.html",
 	        		id:'new_tea_publish.html'
 	        	})
-        		return;
-        	}
-        	$.ajax({
-        		url:REQUEST_URL+'wxnonAuthRest/queryDocument',
-        		type:"get",
-        		dataType:"json",
-        		data:{
-        			"typeCd":'060011'
-        		},
-        		success:function(data){
-        			console.log(data);
-        			var radioBox = '<div class="mui-checkbox mui-remind mui-left"><input type="checkbox" data-remind = 1>下次不再提醒</div>';
-        			var html ="<div><iframe src="+data.data.url+" scrolling=no width=100% height=300px></iframe></div>"+radioBox;	
-        			jqalert({
-				        content: html,
-				        yestext: '同意并继续',
-				        notext: '取消',
-				        yesfn: function(){
-				        	mui.openWindow({
-				        		url:"../new_tea_publish/new_tea_publish.html",
-				        		id:'new_tea_publish.html'
-				        	})
-				        }
-				    })
-				   mui('.mui-remind').on("change",'input[type=checkbox]',function(){
-			        	var flag = this.checked ? true : false;
-			        	if(flag){
-			        		setLocalStorage(1);
-			        	}
-			       })  
-        		}
-        	})
+        	// 	return;
+        	// }
+        	// $.ajax({
+        	// 	url:REQUEST_URL+'wxnonAuthRest/queryDocument',
+        	// 	type:"get",
+        	// 	dataType:"json",
+        	// 	data:{
+        	// 		"typeCd":'060011'
+        	// 	},
+        	// 	success:function(data){
+        	// 		console.log(data);
+        	// 		var radioBox = '<div class="mui-checkbox mui-remind mui-left"><input type="checkbox" data-remind = 1>下次不再提醒</div>';
+        	// 		var html ="<div><iframe src="+data.data.url+" scrolling=no width=100% height=300px></iframe></div>"+radioBox;	
+        	// 		jqalert({
+			// 	        content: html,
+			// 	        yestext: '同意并继续',
+			// 	        notext: '取消',
+			// 	        yesfn: function(){
+			// 	        	mui.openWindow({
+			// 	        		url:"../new_tea_publish/new_tea_publish.html",
+			// 	        		id:'new_tea_publish.html'
+			// 	        	})
+			// 	        }
+			// 	    })
+			// 	   mui('.mui-remind').on("change",'input[type=checkbox]',function(){
+			//         	var flag = this.checked ? true : false;
+			//         	if(flag){
+			//         		setLocalStorage(1);
+			//         	}
+			//        })  
+        	// 	}
+        	// })
         	
         })
          mui('.nav-bar').on('tap','.buy-tea',function(){ 
-         	if(localStorage.remind == "1"){
+         	//if(localStorage.remind == "1"){
         		mui.openWindow({
 	        		url:"../buytea/tea_list.html",
 	        		id:'tea_list.html'
 	        	})
-        		return;
-        	}
-        	$.ajax({
-        		url:REQUEST_URL+'wxnonAuthRest/queryDocument',
-        		type:"get",
-        		dataType:"json",
-        		data:{
-        			"typeCd":'060008'
-        		},
-        		success:function(data){
-        			var radioBox = '<div class="mui-checkbox mui-remind mui-left"><input type="checkbox" data-remind = 1>下次不再提醒</div>';
-        			var html ="<div><iframe src="+data.data.url+" scrolling=no width=100% height=300px></iframe></div>"+radioBox;	
-        			jqalert({
-				        content: html,
-				        yestext: '同意并继续',
-				        notext: '取消',
-				        yesfn: function(){
-				        	mui.openWindow({
-				        		url:"../buytea/tea_list.html",
-				        		id:'tea_list.html'
-				        	})
-				        }
-				    })
-        			mui('.mui-remind').on("change",'input[type=checkbox]',function(){
-			        	var flag = this.checked ? true : false;
-			        	if(flag){
-			        		setLocalStorage(1);
-			        	}
-			        })
-        		}
-        	})
+        	// 	return;
+        	// }
+        	// $.ajax({
+        	// 	url:REQUEST_URL+'wxnonAuthRest/queryDocument',
+        	// 	type:"get",
+        	// 	dataType:"json",
+        	// 	data:{
+        	// 		"typeCd":'060008'
+        	// 	},
+        	// 	success:function(data){
+        	// 		var radioBox = '<div class="mui-checkbox mui-remind mui-left"><input type="checkbox" data-remind = 1>下次不再提醒</div>';
+        	// 		var html ="<div><iframe src="+data.data.url+" scrolling=no width=100% height=300px></iframe></div>"+radioBox;	
+        	// 		jqalert({
+			// 	        content: html,
+			// 	        yestext: '同意并继续',
+			// 	        notext: '取消',
+			// 	        yesfn: function(){
+			// 	        	mui.openWindow({
+			// 	        		url:"../buytea/tea_list.html",
+			// 	        		id:'tea_list.html'
+			// 	        	})
+			// 	        }
+			// 	    })
+        	// 		mui('.mui-remind').on("change",'input[type=checkbox]',function(){
+			//         	var flag = this.checked ? true : false;
+			//         	if(flag){
+			//         		setLocalStorage(1);
+			//         	}
+			//         })
+        	// 	}
+        	// })
         	
         })
         mui('.nav-bar').on('tap','.sale-tea',function(){
         	appAlert()      	
         })
         mui('.nav-bar').on('tap','.free-tea',function(){
-        	var cookieParam = checkCookie(noLoginHandle);
-        	if(cookieParam){
+        	//var cookieParam = checkCookie(noLoginHandle);
+        	//if(cookieParam){
         		mui.openWindow({
         			url:'../freetea/free_tea.html'
         		})
-        	}
+        	//}
         	
         })
                

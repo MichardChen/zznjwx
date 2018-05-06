@@ -52,6 +52,9 @@
   background: none;
   color: #ff5400;
 }
+.tab-content{
+  padding-bottom: 50px;
+}
 .mui-table {
   background: #fff;
   padding: 15px;
@@ -80,6 +83,15 @@
   line-height: 50px;
   background: #ff5400;
 }
+.buy-bar .buy-btn.mui-disabled{
+  background: #999;
+}
 .buy-bar .buy-btn a {
   color: #fff;
+  height: 100%;
+  border: 0;
+  background: none;
+  position: relative;
+  top:0;
+  line-height: 40px
 }

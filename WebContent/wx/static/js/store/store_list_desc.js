@@ -1,16 +1,12 @@
 +(function(){
 	//请求列表数据
 	var getListData = function(){
-		var cookieParam = checkCookie();
 		var storeId = document.location.href.substring(document.location.href.indexOf("?")+1);
 		$.ajax({
 			type:"get",
 			url:REQUEST_URL+"wxmrest/queryTeaStoreDetail",
 			async:true,
 			data:{
-				"token":cookieParam.token,
-				"mobile":cookieParam.mobile,
-				"userId":cookieParam.userId,
 				"id":storeId
 			},
 			dataType:"json",
@@ -91,21 +87,28 @@
 	            size: new AMap.Size(40, 50),  //图标大小
 	            image: "http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png",
 	            imageOffset: new AMap.Pixel(0, -60)
-	        })        
+	        }),     
+			label: {
+				offset: new AMap.Pixel(-75, -40),//修改label相对于maker的位置
+				content: "<div class='goMap'><div class='store-address'><strong>"+$('.store-name').html()+"</strong><br>"+$(".address-desc").html()+"</div><button class='go-map'>去导航</button></div>"
+			}         
 	    });
 	    
-    marker.on('click',function(e){
-      mui.openWindow({
-      	url:'http://uri.amap.com/navigation?to='+longitude+','+latitude+',endpoint&via='+longitude+','+latitude+'&mode=car&src=nyx_super'
-      })
-    })
+		marker.on('click',function(e){
+			$('.amap-marker-label').show()
+			mui('.amap-marker-label').on("tap",'.go-map',function(){
+				mui.openWindow({
+					url:'http://uri.amap.com/navigation?to='+longitude+','+latitude+','+$(".address-desc").html()+'&via='+longitude+','+latitude+'&mode=car&src=nyx_super'
+				})
+			})	      
+		})
     
-    AMap.plugin(['AMap.ToolBar','AMap.Scale'],function(){
-        var toolBar = new AMap.ToolBar();
-        var scale = new AMap.Scale();
-        map.addControl(toolBar);
-        map.addControl(scale);
-    })
+		AMap.plugin(['AMap.ToolBar','AMap.Scale'],function(){
+			var toolBar = new AMap.ToolBar();
+			var scale = new AMap.Scale();
+			map.addControl(toolBar);
+			map.addControl(scale);
+		})
    
 	    
 	}

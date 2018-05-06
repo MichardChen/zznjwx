@@ -26,9 +26,6 @@
 				}else{
 					console.log(data);
 					mui.toast(data.message)
-					/*$("#register-form .require").each(function () {
-						this.value = "";
-					})*/
 				}
 			}
 		});
@@ -82,13 +79,6 @@
 		  			mui.toast("密码长度不能小于6位")
 		  			return flag = false;
 		  		}
-		  		/*else{
-		  			var passwordReg = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,20}$/;
-		  			if (!passwordReg.test(this.value)) {  
-		              mui.toast('请输入正确的密码格式') ;
-		              return flag = false;
-				  	}
-		  		}*/
 		  	}		    		  			 
 		});
 		return flag;

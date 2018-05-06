@@ -63,8 +63,11 @@
 				if(data.code == REQUEST_OK){
 					console.log(data.data);
 					if(pageNum ==1 && data.data.tea.length == 0){
-						createNoData();
+						$(".default-page").show();
+						$(".mui-table-view").hide();
 					}else{
+						$(".default-page").hide();
+						$(".mui-table-view").show();
 						createListDom(data.data.tea);
 					}
 					
@@ -95,18 +98,6 @@
 		})
 	}
 	
-	//构建缺省页
-	
-	var createNoData = function(){
-		var table  = $('.mui-table-view');
-		var li;
-		li = $('<li class="no-product"/>')
-		var noProductText = $("<p/>")
-		noProductText.text("当前暂无仓储")
-		li.html(noProductText);
-		table.html(li);
-	}
-	
 	mui(".header-nav").on("tap",".buy-tea",function(){
 		if(localStorage.remind == "1"){
     		mui.openWindow({
@@ -128,25 +119,10 @@
     			"typeCd":'060011'
     		},
     		success:function(data){
-    			console.log(data);
-    			var html = "<iframe src="+data.data.url+" scrolling=no width=100% height=300px></iframe>";
-	        	jqalert({
-			        content: html,
-			        yestext: '同意并继续',
-			        notext: '取消',
-			        yesfn: function(){
-			        	mui.openWindow({
-			        		url:"../buytea/tea_list.html",
-			        		id:'tea_list.html'
-			        	})
-			        }
-			    })
-	        	mui('.mui-remind').on("change",'input[type=checkbox]',function(){
-		        	var flag = this.checked ? true : false;
-		        	if(flag){
-		        		setLocalStorage(1);
-		        	}
-		        })
+				mui.openWindow({
+					url:"../buytea/tea_list.html",
+					id:'tea_list.html'
+				})
     		}
     	})
 	})

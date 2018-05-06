@@ -169,8 +169,11 @@
   color: #ff5400;
 }
 /*购物车default页面*/
+.default-page{
+  text-align: center;
+  display: none;
+}
 .default-page .default-text {
-  padding-top: 60%;
   text-align: center;
   color: #ccc;
 }

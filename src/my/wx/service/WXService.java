@@ -4411,6 +4411,7 @@ public class WXService {
 			vo.setNickName(member.getStr("nick_name"));
 			vo.setQqNo(member.getStr("qq"));
 			vo.setWxNo(member.getStr("wx"));
+			vo.setMoneys(StringUtil.toString(member.getBigDecimal("moneys")));
 			if(member.getInt("sex") != null){
 				vo.setSex(member.getInt("sex"));
 			}

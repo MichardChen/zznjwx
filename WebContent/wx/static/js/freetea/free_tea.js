@@ -121,7 +121,7 @@
 		var storeList = data.data.storeList;
 		var bindStoreFlg = data.data.bindStoreFlg;
 		storeList.forEach(function(n){
-			li = $('<li class="mui-table-view-cell" />')
+			li = $('<li class="mui-table-view-cell" data-storeId='+n.storeId+'/>')
 			var contentBox = $("<div class='store-content' data-storeId="+n.storeId+"/>");
 			var leftImg = "<div class='store-img'><img src="+n.img+" width = 75 height=75></div>";
 			var right = $("<div class='store-desc'/>");
@@ -132,7 +132,7 @@
 			contentBox.append(leftImg,right);
 			li.append(contentBox);
 			if(bindStoreFlg == 0){
-				var btn = "<div class='mui-button-row'><button class='mui-btn mui-btn-block'><span class='icon-store-manage'></span>绑定门店</button></div>";
+				var btn = "<div class='mui-button-row'><button class='mui-btn mui-btn-block'><span class='icon-store-manage'></span>关联门店</button></div>";
 				li.append(btn);
 			}
 			listWapper.append(li);
@@ -191,7 +191,7 @@
 
 	mui('.mui-table-view').on('tap','.mui-btn',function(){
 		var _this = this;
-		mui.confirm("绑定门店后，不能解绑，确认绑定？"," ",["取消","确定"],function(){
+		mui.confirm("关联门店后，不能解绑，确认绑定？"," ",["取消","确定"],function(){
 				var storeId = $(_this).parents('.mui-table-view-cell').data('storeid');
 				var cookieParam = getCookie();
 				$.ajax({

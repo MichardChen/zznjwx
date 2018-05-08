@@ -84,9 +84,9 @@
 	        map: map,
 			position: [longitude, latitude],
 	        icon: new AMap.Icon({            
-	            size: new AMap.Size(40, 50),  //图标大小
-	            image: "http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png",
-	            imageOffset: new AMap.Pixel(0, -60)
+	            size: new AMap.Size(40, 83),  //图标大小
+	            image: "http://app.tongjichaye.com:88/common/location.png",
+	            imageOffset: new AMap.Pixel(0, 0)
 	        }),     
 			label: {
 				offset: new AMap.Pixel(-75, -40),//修改label相对于maker的位置

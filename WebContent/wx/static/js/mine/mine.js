@@ -15,6 +15,7 @@
         portrait.attr('src',imgUrl);
         $('.Head-portrait').html(portrait);
         $('.name p').text(nickname);
+        $('.my-acount').attr("data-money",data.moneys);
         var storeHtml;
         if(storeFlg == 0){
             storeHtml = '<div class="buytea-record" data-id=120001>'
@@ -68,7 +69,11 @@
         getPersonalData();
 
         mui(".mine-list").on("tap",".my-acount",function(){
-            appAlert()
+            var money = $(this).attr("data-money");
+            mui.openWindow({
+        		url:"./subpages/my_count.html?"+money,
+        		id:"my_count.html"
+        	})
         })
 
         mui(".mine-list").on("tap",".my-card",function(){

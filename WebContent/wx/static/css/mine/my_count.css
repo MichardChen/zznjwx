@@ -1,0 +1,32 @@
+.money-img,.btns{
+    padding: 15px;
+    text-align: center
+}
+
+.money-img{
+    padding-top: 55px
+}
+.money-num{
+    text-align: center;
+    margin-bottom: 65px;
+}
+.money-num h3{
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 50px;
+}
+.btns{
+    padding: 0 10%;
+}
+.btns .mui-btn{
+    padding: 8px 0;
+    border: 0;
+}
+.btns .mui-button-row:first-child .mui-btn{
+    background: #ff5400;
+    color: #fff;
+}
+.btns .mui-button-row:last-child .mui-btn{
+    background: none;
+    border:1px solid #ccc;
+}

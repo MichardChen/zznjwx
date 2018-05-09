@@ -64,10 +64,10 @@
 					console.log(data.data);
 					if(pageNum ==1 && data.data.tea.length == 0){
 						$(".default-page").show();
-						$(".mui-table-view").hide();
+						$(".page-container").hide();
 					}else{
 						$(".default-page").hide();
-						$(".mui-table-view").show();
+						$(".page-container").show();
 						createListDom(data.data.tea);
 					}
 					

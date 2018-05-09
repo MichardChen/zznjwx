@@ -77,7 +77,8 @@
                 	if(pageNum == 1 && cartData.length == 0){
                 		 $('#cart-list').hide();
                 		 $(".cart-bar").hide();
-                		 $('.editor').hide();
+						 $('.editor').hide();
+						 $('.product-num').text("");
                 		 $('.default-page').show();
                 	}else{
                 		$('.product-num').text("("+data.data.buycartCount+")")

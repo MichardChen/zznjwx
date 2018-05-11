@@ -69,6 +69,7 @@
 	}
 	
 	var createMap = function(data){
+		alert(1);
 		var latitude = data.latitude;
 		var longitude = data.longitude;
 		

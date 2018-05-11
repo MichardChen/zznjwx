@@ -40,13 +40,16 @@ import my.core.vo.UserData;
 import my.core.vo.WXPrepayModel;
 import my.core.wxpay.WXPayUtil;
 import my.pvcloud.dto.LoginDTO;
+import my.pvcloud.model.MapWxData;
 import my.pvcloud.util.DateUtil;
 import my.pvcloud.util.HttpRequest;
 import my.pvcloud.util.ImageTools;
 import my.pvcloud.util.ImageZipUtil;
 import my.pvcloud.util.PropertiesUtil;
+import my.pvcloud.util.Sign;
 import my.pvcloud.util.StringUtil;
 import my.wx.service.WXService;
+import sun.misc.Signal;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -55,7 +58,9 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.session.mgt.WebSessionKey;
+import org.eclipse.jdt.internal.compiler.lookup.InvocationSite.EmptyWithAstNode;
 import org.huadalink.route.ControllerBind;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.github.wxpay.sdk.WXPayConstants;
@@ -1877,5 +1882,39 @@ public class WXController extends Controller{
 		}
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryBuyCartListsForPay(dto));
+	}
+    
+    public void getData(){
+		getResponse().addHeader("Access-Control-Allow-Origin", "*");
+		ReturnData data = new ReturnData();
+		//获取普通接口access_token
+		//{"access_token":"9_ayVikot_KLJlDk96aOXJ_Uc7mxqsER0FwwuzkHmB7WeuLkjpYVExL16W508IjbyQd496RDd1o2g9XOcUpT0G6EAoAtGgZoM7uuX5vtBTx56CTTpgk9zF8z9qqJh-6AdSdZVJtJcCs6A57TqlCYEcAAAFBH","expires_in":7200}
+		String retJson = HttpRequest.sendGet("https://api.weixin.qq.com/cgi-bin/token", "grant_type=client_credential&appid=wxfb13c4770990aeed&secret=f48f307963115e674255e2238b31d871");
+		try {
+			JSONObject retJson1 = new JSONObject(retJson);
+			String accessToken = retJson1.getString("access_token");
+			System.out.println("accessToken:"+retJson1.getString("access_token"));
+			String retJson2 = HttpRequest.sendGet("https://api.weixin.qq.com/cgi-bin/ticket/getticket", "access_token="+accessToken+"&type=jsapi");
+			JSONObject retJson3 = new JSONObject(retJson2);
+			String ticket = retJson3.getString("ticket");
+			
+			Map<String, String> map1 = Sign.sign(ticket, "http://www.yibuwangluo.cn/zznjwx/wx/pages/store/store_list_desc.html");
+			MapWxData map = new MapWxData();
+			map.setAppId("wxfb13c4770990aeed");
+			map.setNonceStr(map1.get("nonceStr"));
+			map.setTimestamp(map1.get("timestamp"));
+			map.setSignature(map1.get("signature"));
+			data.setData(map);
+			data.setCode(Constants.STATUS_CODE.SUCCESS);
+			renderJson(data);
+			//ticket 
+			//{"errcode":0,"errmsg":"ok","ticket":"HoagFKDcsGMVCIY2vOjf9qApGHHu2Z24NkT1dQLud9N6E1WQkiizCOaffeWLbsdHp7LEZ6WHQh9BbdQPdq5jmA","expires_in":7200}
+		} catch (JSONException e) {
+			data.setCode(Constants.STATUS_CODE.FAIL);
+			data.setMessage("导航失败，请重试");
+			data.setData(null);
+			renderJson(data);
+			e.printStackTrace();
+		}
 	}
 }

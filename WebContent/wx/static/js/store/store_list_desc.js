@@ -31,6 +31,48 @@
 				}
 			}
 		});
+		
+		$.ajax({
+			url : REQUEST_URL + "wxmrest/getData",
+			type : "get",
+			dataType : "json",
+			async : true,
+			data : {},
+			success : function(data) {
+				if (data.code == REQUEST_OK) {
+					var timestamp = data.data.timestamp;
+					var appId = data.data.appId;
+					var nonceStr = data.data.nonceStr;
+					var signature = data.data.signature;
+					//JSSDK配置参数 通过config接口注入权限验证配置
+					wx.config({
+						debug : true,
+						appId : appId,
+						timestamp : timestamp,
+						nonceStr : nonceStr,
+						signature : signature,
+						jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+								'onMenuShareAppMessage', 'onMenuShareQQ',
+								'onMenuShareWeibo', 'hideMenuItems',
+								'showMenuItems', 'hideAllNonBaseMenuItem',
+								'showAllNonBaseMenuItem', 'translateVoice',
+								'startRecord', 'stopRecord', 'onRecordEnd',
+								'playVoice', 'pauseVoice', 'stopVoice',
+								'uploadVoice', 'downloadVoice', 'chooseImage',
+								'previewImage', 'uploadImage', 'downloadImage',
+								'getNetworkType', 'openLocation',
+								'getLocation', 'hideOptionMenu',
+								'showOptionMenu', 'closeWindow', 'scanQRCode',
+								'chooseWXPay', 'openProductSpecificView',
+								'addCard', 'chooseCard', 'openCard' ]
+					});
+				}
+			},
+			error : function(msg) {
+				//console.log(msg);
+			}
+		})
+
 	}
 	
 	getListData();
@@ -97,9 +139,19 @@
 		marker.on('click',function(e){
 			$('.amap-marker-label').show()
 			mui('.amap-marker-label').on("tap",'.go-map',function(){
-				mui.openWindow({
+				alert(2);
+				alert(latitude);
+				wx.openLocation({
+					latitude : latitude,
+					longitude : longitude,
+					name : "国贸", //要写引号
+					address : "北京市朝阳区建国门外大街国贸桥", //要写引号
+					scale : 15,
+					infoUrl : "http://www.baidu.com" //要写引号
+				}); 
+			/*	mui.openWindow({
 					url:'http://uri.amap.com/navigation?to='+longitude+','+latitude+','+$(".address-desc").html()+'&via='+longitude+','+latitude+'&mode=car&src=nyx_super'
-				})
+				})*/
 			})	      
 		})
     
@@ -121,3 +173,6 @@
 	mui.previewImage();
 	
 })()
+
+wx.ready(function() {});
+wx.error(function(res) {alert(res.errMsg);});

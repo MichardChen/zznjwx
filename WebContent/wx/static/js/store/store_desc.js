@@ -34,6 +34,50 @@
 	
 	getListData();
 	
+	
+	//初始化配置
+	$.ajax({
+		url : REQUEST_URL + "wxmrest/getData1",
+		type : "get",
+		dataType : "json",
+		async : true,
+		data : {},
+		success : function(data) {
+			if (data.code == REQUEST_OK) {
+				var timestamp = data.data.timestamp;
+				var appId = data.data.appId;
+				var nonceStr = data.data.nonceStr;
+				var signature = data.data.signature;
+				//alert(timestamp+","+appId+","+nonceStr+","+signature);
+				//JSSDK配置参数 通过config接口注入权限验证配置
+				wx.config({
+					debug : false,
+					appId : appId,
+					timestamp : timestamp,
+					nonceStr : nonceStr,
+					signature : signature,
+					jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+							'onMenuShareAppMessage', 'onMenuShareQQ',
+							'onMenuShareWeibo', 'hideMenuItems',
+							'showMenuItems', 'hideAllNonBaseMenuItem',
+							'showAllNonBaseMenuItem', 'translateVoice',
+							'startRecord', 'stopRecord', 'onRecordEnd',
+							'playVoice', 'pauseVoice', 'stopVoice',
+							'uploadVoice', 'downloadVoice', 'chooseImage',
+							'previewImage', 'uploadImage', 'downloadImage',
+							'getNetworkType', 'openLocation',
+							'getLocation', 'hideOptionMenu',
+							'showOptionMenu', 'closeWindow', 'scanQRCode',
+							'chooseWXPay', 'openProductSpecificView',
+							'addCard', 'chooseCard', 'openCard' ]
+				});
+			}
+		},
+		error : function(msg) {
+			//console.log(msg);
+		}
+	})
+
 	var createsliderDom = function(data){
 		var slider = $('.mui-slider-group');
 		data.forEach(function(n){
@@ -69,7 +113,6 @@
 	}
 	
 	var createMap = function(data){
-		alert(1);
 		var latitude = data.latitude;
 		var longitude = data.longitude;
 		
@@ -97,12 +140,21 @@
 		marker.on('click',function(e){
 			$('.amap-marker-label').show()
 			mui('.amap-marker-label').on("tap",'.go-map',function(){
-				mui.openWindow({
+				
+				wx.openLocation({
+					latitude : latitude,
+					longitude : longitude,
+					name : $('.store-name').html(), //要写引号
+					address : $(".address-desc").html(), //要写引号
+					scale : 15,
+					infoUrl : "http://www.baidu.com" //要写引号
+				}); 
+				
+				/*mui.openWindow({
 					url:'http://uri.amap.com/navigation?to='+longitude+','+latitude+','+$(".address-desc").html()+'&via='+longitude+','+latitude+'&mode=car&src=nyx_super'
-				})
+				})*/
 			})	      
 		})
-		
 		
     
 		AMap.plugin(['AMap.ToolBar','AMap.Scale'],function(){
@@ -124,3 +176,6 @@
 	
 
 })()
+
+wx.ready(function() {});
+wx.error(function(res) {alert(res.errMsg);});

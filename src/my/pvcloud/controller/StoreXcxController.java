@@ -182,7 +182,7 @@ public class StoreXcxController extends Controller{
 			JSONObject retJson = new JSONObject(returnMsg);
 			String preAuthCode = retJson.getString("pre_auth_code");
 			//返回信息给前端，打开授权页面
-			String url = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid="+appId+"&pre_auth_code="+preAuthCode+"&redirect_uri=https://www.yibuwangluo.cn/zznj/storeXcxInfo/redirectCall?storeId="+storeId;
+			String url = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid="+appId+"&pre_auth_code="+preAuthCode+"&redirect_uri=https://app.tongjichaye.com/zznj/storeXcxInfo/redirectCall?storeId="+storeId;
 			System.out.println("url："+url);	
 			setAttr("data", url);
 			renderJson();

@@ -191,7 +191,8 @@
 
 	mui('.mui-table-view').on('tap','.mui-btn',function(){
 		var _this = this;
-		mui.confirm("关联门店后，不能解绑，确认绑定？"," ",["取消","确定"],function(){
+		mui.confirm("关联门店后，不能解绑，确认绑定？"," ",["取消","确定"],function(e){
+			if(e.index==1){
 				var storeId = $(_this).parents('.mui-table-view-cell').data('storeid');
 				var cookieParam = getCookie();
 				$.ajax({
@@ -214,13 +215,17 @@
 						}
 					}
 				})
+			}else{
+				
+			}
 		})
 	
 	})
 	mui('.mui-table-view').on("tap",".store-content",function(){
 		var id = $(this).data('storeid');
+		sessionStorage.storeId=id;
 		mui.openWindow({
-			url:"../store/store_list_desc.html?"+id
+			url:"../store/store_list_desc.html"
 		})
 	})
 	

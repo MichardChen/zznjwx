@@ -155,7 +155,7 @@
 		
 		mui(".mine-list").on("tap",".share",function(){
            mui.openWindow({
-           	  url:"http://www.yibuwangluo.cn/zznjwx/h5/download.jsp"
+           	  url:"http://app.tongjichaye.com/zznjwx/h5/download.jsp"
            })
         })
 		

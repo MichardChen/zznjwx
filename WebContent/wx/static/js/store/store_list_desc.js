@@ -1,78 +1,81 @@
 +(function(){
 	//请求列表数据
 	var getListData = function(){
-		var storeId = document.location.href.substring(document.location.href.indexOf("?")+1);
-		$.ajax({
-			type:"get",
-			url:REQUEST_URL+"wxmrest/queryTeaStoreDetail",
-			async:true,
-			data:{
-				"id":storeId
-			},
-			dataType:"json",
-			success:function(data){
-				if(data.code == REQUEST_OK){
-					console.log(data.data);
-					var store = data.data.store;
-					var evaluateList = data.data.evaluateList;
-					$(".phone").attr("data-mobile",store.mobile);
-					$('.store-name').html(store.name);
-					$(".address-desc").html(store.address);
-					createsliderDom(store.imgs);
-					$('.bussiness-time').html("营业时间：周一到周日 "+store.businessFromTime+"--"+store.businessToTime);
-					$('.store-desc').html(store.storeDesc);
-					createEvaluateList(evaluateList);
-					createMap(store);
-				}else{
-					mui.toast(data.message);
-					setTimeout(function(){
-						noLoginHandle();
-					}, 2000);
+		//var storeId = document.location.href.substring(document.location.href.indexOf("?")+1);
+		if(sessionStorage.storeId){
+			var storeId = sessionStorage.storeId;
+			sessionStorage.storeId = "";
+			$.ajax({
+				type:"get",
+				url:REQUEST_URL+"wxmrest/queryTeaStoreDetail",
+				async:true,
+				data:{
+					"id":storeId
+				},
+				dataType:"json",
+				success:function(data){
+					if(data.code == REQUEST_OK){
+						console.log(data.data);
+						var store = data.data.store;
+						var evaluateList = data.data.evaluateList;
+						$(".phone").attr("data-mobile",store.mobile);
+						$('.store-name').html(store.name);
+						$(".address-desc").html(store.address);
+						createsliderDom(store.imgs);
+						$('.bussiness-time').html("营业时间：周一到周日 "+store.businessFromTime+"--"+store.businessToTime);
+						$('.store-desc').html(store.storeDesc);
+						createEvaluateList(evaluateList);
+						createMap(store);
+					}else{
+						mui.toast(data.message);
+						setTimeout(function(){
+							noLoginHandle();
+						}, 2000);
+					}
 				}
-			}
-		});
-		
-		$.ajax({
-			url : REQUEST_URL + "wxmrest/getData",
-			type : "get",
-			dataType : "json",
-			async : true,
-			data : {},
-			success : function(data) {
-				if (data.code == REQUEST_OK) {
-					var timestamp = data.data.timestamp;
-					var appId = data.data.appId;
-					var nonceStr = data.data.nonceStr;
-					var signature = data.data.signature;
-					//JSSDK配置参数 通过config接口注入权限验证配置
-					wx.config({
-						debug : true,
-						appId : appId,
-						timestamp : timestamp,
-						nonceStr : nonceStr,
-						signature : signature,
-						jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
-								'onMenuShareAppMessage', 'onMenuShareQQ',
-								'onMenuShareWeibo', 'hideMenuItems',
-								'showMenuItems', 'hideAllNonBaseMenuItem',
-								'showAllNonBaseMenuItem', 'translateVoice',
-								'startRecord', 'stopRecord', 'onRecordEnd',
-								'playVoice', 'pauseVoice', 'stopVoice',
-								'uploadVoice', 'downloadVoice', 'chooseImage',
-								'previewImage', 'uploadImage', 'downloadImage',
-								'getNetworkType', 'openLocation',
-								'getLocation', 'hideOptionMenu',
-								'showOptionMenu', 'closeWindow', 'scanQRCode',
-								'chooseWXPay', 'openProductSpecificView',
-								'addCard', 'chooseCard', 'openCard' ]
-					});
+			});
+			
+			$.ajax({
+				url : REQUEST_URL + "wxmrest/getData",
+				type : "get",
+				dataType : "json",
+				async : true,
+				data : {},
+				success : function(data) {
+					if (data.code == REQUEST_OK) {
+						var timestamp = data.data.timestamp;
+						var appId = data.data.appId;
+						var nonceStr = data.data.nonceStr;
+						var signature = data.data.signature;
+						//JSSDK配置参数 通过config接口注入权限验证配置
+						wx.config({
+							debug : true,
+							appId : appId,
+							timestamp : timestamp,
+							nonceStr : nonceStr,
+							signature : signature,
+							jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+									'onMenuShareAppMessage', 'onMenuShareQQ',
+									'onMenuShareWeibo', 'hideMenuItems',
+									'showMenuItems', 'hideAllNonBaseMenuItem',
+									'showAllNonBaseMenuItem', 'translateVoice',
+									'startRecord', 'stopRecord', 'onRecordEnd',
+									'playVoice', 'pauseVoice', 'stopVoice',
+									'uploadVoice', 'downloadVoice', 'chooseImage',
+									'previewImage', 'uploadImage', 'downloadImage',
+									'getNetworkType', 'openLocation',
+									'getLocation', 'hideOptionMenu',
+									'showOptionMenu', 'closeWindow', 'scanQRCode',
+									'chooseWXPay', 'openProductSpecificView',
+									'addCard', 'chooseCard', 'openCard' ]
+						});
+					}
+				},
+				error : function(msg) {
+					//console.log(msg);
 				}
-			},
-			error : function(msg) {
-				//console.log(msg);
-			}
-		})
-
+			})
+		}
 	}
 	
 	getListData();
@@ -144,8 +147,8 @@
 				wx.openLocation({
 					latitude : latitude,
 					longitude : longitude,
-					name : "国贸", //要写引号
-					address : "北京市朝阳区建国门外大街国贸桥", //要写引号
+					name : $('.store-name').html(), //要写引号
+					address : $(".address-desc").html(), //要写引号
 					scale : 15,
 					infoUrl : "http://www.baidu.com" //要写引号
 				}); 

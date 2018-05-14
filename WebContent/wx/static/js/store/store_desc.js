@@ -127,7 +127,7 @@
 	        map: map,
 			position: [longitude, latitude],
 	        icon: new AMap.Icon({            
-	            size: new AMap.Size(40, 83),  //图标大小
+	            size: new AMap.Size(30, 63),  //图标大小
 	            image: "http://app.tongjichaye.com:88/common/location.png",
 	            imageOffset: new AMap.Pixel(0, 0)
 			}),
@@ -140,7 +140,6 @@
 		marker.on('click',function(e){
 			$('.amap-marker-label').show()
 			mui('.amap-marker-label').on("tap",'.go-map',function(){
-				
 				wx.openLocation({
 					latitude : latitude,
 					longitude : longitude,

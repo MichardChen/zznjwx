@@ -129,12 +129,12 @@
 	        map: map,
 			position: [longitude, latitude],
 	        icon: new AMap.Icon({            
-	            size: new AMap.Size(40, 83),  //图标大小
+	            size: new AMap.Size(30, 63),  //图标大小
 	            image: "http://app.tongjichaye.com:88/common/location.png",
 	            imageOffset: new AMap.Pixel(0, 0)
 	        }),     
 			label: {
-				offset: new AMap.Pixel(-75, -40),//修改label相对于maker的位置
+				offset: new AMap.Pixel(-75, -20),//修改label相对于maker的位置
 				content: "<div class='goMap'><div class='store-address'><strong>"+$('.store-name').html()+"</strong><br>"+$(".address-desc").html()+"</div><button class='go-map'>去导航</button></div>"
 			}         
 	    });

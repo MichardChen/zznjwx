@@ -1,5 +1,4 @@
 +(function(){
-	
 	//初始化mui
 	mui.init({
 		pullRefresh: {
@@ -40,10 +39,6 @@
 		pageNum++;		
 		}, 500);
 	}
-	mui.ready(function(){
-		mui("#store-list").pullRefresh().pullupLoading();
-		createSelector();
-	})		
 	
 	//获取地理位置信息
 	var position = new Object();
@@ -68,10 +63,17 @@
 	    AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
 	});
 	
+	mui.ready(function(){
+		
+	})		
+	
+	
 	function onComplete(result){
 		console.log(result);
-		position.localLongtitude = result.position.lon;
-		position.localLatitude = result.position.lat;
+		position.localLongtitude = result.position.getLng();
+		position.localLatitude = result.position.getLat();
+		mui("#store-list").pullRefresh().pullupLoading();
+		createSelector();
 	}
 	
 	function onError(result){

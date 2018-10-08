@@ -1,81 +1,36 @@
 +(function(){
 	//请求列表数据
 	var getListData = function(){
-		//var storeId = document.location.href.substring(document.location.href.indexOf("?")+1);
-		if(sessionStorage.storeId){
-			var storeId = sessionStorage.storeId;
-			sessionStorage.storeId = "";
-			$.ajax({
-				type:"get",
-				url:REQUEST_URL+"wxmrest/queryTeaStoreDetail",
-				async:true,
-				data:{
-					"id":storeId
-				},
-				dataType:"json",
-				success:function(data){
-					if(data.code == REQUEST_OK){
-						console.log(data.data);
-						var store = data.data.store;
-						var evaluateList = data.data.evaluateList;
-						$(".phone").attr("data-mobile",store.mobile);
-						$('.store-name').html(store.name);
-						$(".address-desc").html(store.address);
-						createsliderDom(store.imgs);
-						$('.bussiness-time').html("营业时间：周一到周日 "+store.businessFromTime+"--"+store.businessToTime);
-						$('.store-desc').html(store.storeDesc);
-						createEvaluateList(evaluateList);
-						createMap(store);
-					}else{
-						mui.toast(data.message);
-						setTimeout(function(){
-							noLoginHandle();
-						}, 2000);
-					}
+		var storeId = document.location.href.substring(document.location.href.indexOf("?")+1);
+		$.ajax({
+			type:"get",
+			url:REQUEST_URL+"wxmrest/queryTeaStoreDetail",
+			async:true,
+			data:{
+				"id":storeId
+			},
+			dataType:"json",
+			success:function(data){
+				if(data.code == REQUEST_OK){
+					console.log(data.data);
+					var store = data.data.store;
+					var evaluateList = data.data.evaluateList;
+					$(".phone").attr("data-mobile",store.mobile);
+					$('.store-name').html(store.name);
+					$(".address-desc").html(store.address);
+					createsliderDom(store.imgs);
+					$('.bussiness-time').html("营业时间：周一到周日 "+store.businessFromTime+"--"+store.businessToTime);
+					$('.store-desc').html(store.storeDesc);
+					createEvaluateList(evaluateList);
+					createMap(store);
+				}else{
+					mui.toast(data.message);
+					setTimeout(function(){
+						noLoginHandle();
+					}, 2000);
 				}
-			});
-			
-			$.ajax({
-				url : REQUEST_URL + "wxmrest/getData",
-				type : "get",
-				dataType : "json",
-				async : true,
-				data : {},
-				success : function(data) {
-					if (data.code == REQUEST_OK) {
-						var timestamp = data.data.timestamp;
-						var appId = data.data.appId;
-						var nonceStr = data.data.nonceStr;
-						var signature = data.data.signature;
-						//JSSDK配置参数 通过config接口注入权限验证配置
-						wx.config({
-							debug : true,
-							appId : appId,
-							timestamp : timestamp,
-							nonceStr : nonceStr,
-							signature : signature,
-							jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
-									'onMenuShareAppMessage', 'onMenuShareQQ',
-									'onMenuShareWeibo', 'hideMenuItems',
-									'showMenuItems', 'hideAllNonBaseMenuItem',
-									'showAllNonBaseMenuItem', 'translateVoice',
-									'startRecord', 'stopRecord', 'onRecordEnd',
-									'playVoice', 'pauseVoice', 'stopVoice',
-									'uploadVoice', 'downloadVoice', 'chooseImage',
-									'previewImage', 'uploadImage', 'downloadImage',
-									'getNetworkType', 'openLocation',
-									'getLocation', 'hideOptionMenu',
-									'showOptionMenu', 'closeWindow', 'scanQRCode',
-									'chooseWXPay', 'openProductSpecificView',
-									'addCard', 'chooseCard', 'openCard' ]
-						});
-					}
-				},
-				error : function(msg) {
-					//console.log(msg);
-				}
-			})
-		}
+			}
+		});
 	}
 	
 	getListData();
@@ -129,12 +84,12 @@
 	        map: map,
 			position: [longitude, latitude],
 	        icon: new AMap.Icon({            
-	            size: new AMap.Size(30, 63),  //图标大小
-	            image: "http://app.tongjichaye.com:88/common/location.png",
-	            imageOffset: new AMap.Pixel(0, 0)
+	            size: new AMap.Size(40, 50),  //图标大小
+	            image: "http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png",
+	            imageOffset: new AMap.Pixel(0, -60)
 	        }),     
 			label: {
-				offset: new AMap.Pixel(-75, -20),//修改label相对于maker的位置
+				offset: new AMap.Pixel(-75, -40),//修改label相对于maker的位置
 				content: "<div class='goMap'><div class='store-address'><strong>"+$('.store-name').html()+"</strong><br>"+$(".address-desc").html()+"</div><button class='go-map'>去导航</button></div>"
 			}         
 	    });
@@ -142,19 +97,9 @@
 		marker.on('click',function(e){
 			$('.amap-marker-label').show()
 			mui('.amap-marker-label').on("tap",'.go-map',function(){
-				alert(2);
-				alert(latitude);
-				wx.openLocation({
-					latitude : latitude,
-					longitude : longitude,
-					name : $('.store-name').html(), //要写引号
-					address : $(".address-desc").html(), //要写引号
-					scale : 15,
-					infoUrl : "http://www.baidu.com" //要写引号
-				}); 
-			/*	mui.openWindow({
+				mui.openWindow({
 					url:'http://uri.amap.com/navigation?to='+longitude+','+latitude+','+$(".address-desc").html()+'&via='+longitude+','+latitude+'&mode=car&src=nyx_super'
-				})*/
+				})
 			})	      
 		})
     
@@ -176,6 +121,3 @@
 	mui.previewImage();
 	
 })()
-
-wx.ready(function() {});
-wx.error(function(res) {alert(res.errMsg);});

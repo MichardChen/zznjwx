@@ -1,4 +1,5 @@
 +(function(){
+	
 	//初始化mui
 	mui.init({
 		pullRefresh: {
@@ -39,6 +40,10 @@
 		pageNum++;		
 		}, 500);
 	}
+	mui.ready(function(){
+		mui("#store-list").pullRefresh().pullupLoading();
+		createSelector();
+	})		
 	
 	//获取地理位置信息
 	var position = new Object();
@@ -63,17 +68,10 @@
 	    AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
 	});
 	
-	mui.ready(function(){
-		
-	})		
-	
-	
 	function onComplete(result){
 		console.log(result);
-		position.localLongtitude = result.position.getLng();
-		position.localLatitude = result.position.getLat();
-		mui("#store-list").pullRefresh().pullupLoading();
-		createSelector();
+		position.localLongtitude = result.position.lon;
+		position.localLatitude = result.position.lat;
 	}
 	
 	function onError(result){
@@ -123,7 +121,7 @@
 		var storeList = data.data.storeList;
 		var bindStoreFlg = data.data.bindStoreFlg;
 		storeList.forEach(function(n){
-			li = $('<li class="mui-table-view-cell" data-storeId='+n.storeId+'/>')
+			li = $('<li class="mui-table-view-cell" />')
 			var contentBox = $("<div class='store-content' data-storeId="+n.storeId+"/>");
 			var leftImg = "<div class='store-img'><img src="+n.img+" width = 75 height=75></div>";
 			var right = $("<div class='store-desc'/>");
@@ -134,7 +132,7 @@
 			contentBox.append(leftImg,right);
 			li.append(contentBox);
 			if(bindStoreFlg == 0){
-				var btn = "<div class='mui-button-row'><button class='mui-btn mui-btn-block'><span class='icon-store-manage'></span>关联门店</button></div>";
+				var btn = "<div class='mui-button-row'><button class='mui-btn mui-btn-block'><span class='icon-store-manage'></span>绑定门店</button></div>";
 				li.append(btn);
 			}
 			listWapper.append(li);
@@ -193,8 +191,7 @@
 
 	mui('.mui-table-view').on('tap','.mui-btn',function(){
 		var _this = this;
-		mui.confirm("关联门店后，不能解绑，确认绑定？"," ",["取消","确定"],function(e){
-			if(e.index==1){
+		mui.confirm("绑定门店后，不能解绑，确认绑定？"," ",["取消","确定"],function(){
 				var storeId = $(_this).parents('.mui-table-view-cell').data('storeid');
 				var cookieParam = getCookie();
 				$.ajax({
@@ -217,17 +214,13 @@
 						}
 					}
 				})
-			}else{
-				
-			}
 		})
 	
 	})
 	mui('.mui-table-view').on("tap",".store-content",function(){
 		var id = $(this).data('storeid');
-		sessionStorage.storeId=id;
 		mui.openWindow({
-			url:"../store/store_list_desc.html"
+			url:"../store/store_list_desc.html?"+id
 		})
 	})
 	

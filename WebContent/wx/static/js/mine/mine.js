@@ -15,7 +15,6 @@
         portrait.attr('src',imgUrl);
         $('.Head-portrait').html(portrait);
         $('.name p').text(nickname);
-        $('.my-acount').attr("data-money",data.moneys);
         var storeHtml;
         if(storeFlg == 0){
             storeHtml = '<div class="buytea-record" data-id=120001>'
@@ -69,11 +68,7 @@
         getPersonalData();
 
         mui(".mine-list").on("tap",".my-acount",function(){
-            var money = $(this).attr("data-money");
-            mui.openWindow({
-        		url:"./subpages/my_count.html?"+money,
-        		id:"my_count.html"
-        	})
+            appAlert()
         })
 
         mui(".mine-list").on("tap",".my-card",function(){
@@ -155,7 +150,7 @@
 		
 		mui(".mine-list").on("tap",".share",function(){
            mui.openWindow({
-           	  url:"http://app.tongjichaye.com/zznjwx/h5/download.jsp"
+           	  url:"http://www.yibuwangluo.cn/zznjwx/h5/download.jsp"
            })
         })
 		

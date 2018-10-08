@@ -278,6 +278,10 @@ public class Member extends Model<Member> {
 		return Db.update("update t_member set open_id='"+openId+"' where id="+userId);
 	}
 	
+	public int updateWXInfo(int userId,String openId,int sex,String nickName,String headImg){
+		return Db.update("update t_member set open_id='"+openId+"',nick_name='"+nickName+"',sex="+sex+",icon='"+headImg+"' where id="+userId);
+	}
+	
 	public int updateMoneys(int userId,BigDecimal moneys){
 		return Db.update("update t_member set moneys="+moneys+",update_time='"+DateUtil.getNowTimestamp()+"' where id="+userId);
 	}

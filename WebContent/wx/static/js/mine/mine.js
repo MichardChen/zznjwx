@@ -46,20 +46,23 @@
 				"token":cookieParam.token,
 				"mobile":cookieParam.mobile,
 				"userId":cookieParam.userId,
+				"openId":localStorage.openId,
 			},
             dataType:"json",
             async:true,
             success:function(data){
-                if(data.code == REQUEST_OK){
+            	if(data.code == REQUEST_OK){
                     console.log(data);
                     var personal_data = data.data.member;
                     filledPersonalData(personal_data);    
-                }else{
+                }else if(data.code == "560705"){
                     mui.toast(data.message);
                     setTimeout(function(){
 						noLoginHandle();
 					}, 2000);
-                }               
+                }else{
+                	 mui.toast(data.message);
+                }
             }
         })
     };

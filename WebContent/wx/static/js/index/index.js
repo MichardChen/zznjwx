@@ -17,7 +17,9 @@
     }
     mui.ready(function(){
     	var code = GetQueryString('code');
-    	if((code != '')&&(localStorage.openId == null || localStorage.openId == '')){
+    	//appid=wxfb13c4770990aeed&secret=f48f307963115e674255e2238b31d871&code=061SwrWw11VFe90oxZTw1UdqWw1SwrWF&grant_type=authorization_code
+    	//if((code != '')&&(localStorage.openId == null || localStorage.openId == '')){
+    	if(code != ''){
         	//获取code，传给后端，请求微信接口，获取用户基本信息，传给前端
         	$.ajax({
     			url:REQUEST_URL+"wxnonAuthRest/redirectAuth",

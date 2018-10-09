@@ -4401,42 +4401,87 @@ public class WXService {
 		return data;
 	}
 	
+	
 	public ReturnData queryPersonData(LoginDTO dto) throws Exception{
 		ReturnData data = new ReturnData();
-		Member member = Member.dao.queryById(dto.getUserId());
-		if(member != null){
-			MemberDataVO vo = new MemberDataVO();
-			vo.setIcon(member.getStr("icon"));
-			vo.setMobile(member.getStr("mobile"));
-			vo.setNickName(member.getStr("nick_name"));
-			vo.setQqNo(member.getStr("qq"));
-			vo.setWxNo(member.getStr("wx"));
-			vo.setMoneys(StringUtil.toString(member.getBigDecimal("moneys")));
-			if(member.getInt("sex") != null){
-				vo.setSex(member.getInt("sex"));
-			}
-			
-			Store store = Store.dao.queryMemberStore(dto.getUserId());
-			if(store != null){
-				if(StringUtil.equals(store.getStr("status"), "110003")){
-					vo.setStoreFlg(1);
+		if(dto.getUserId() != 0){
+			Member member = Member.dao.queryById(dto.getUserId());
+			if(member != null){
+				MemberDataVO vo = new MemberDataVO();
+				vo.setIcon(member.getStr("icon"));
+				vo.setMobile(member.getStr("mobile"));
+				vo.setNickName(member.getStr("nick_name"));
+				vo.setQqNo(member.getStr("qq"));
+				vo.setWxNo(member.getStr("wx"));
+				vo.setMoneys(StringUtil.toString(member.getBigDecimal("moneys")));
+				if(member.getInt("sex") != null){
+					vo.setSex(member.getInt("sex"));
+				}
+				
+				Store store = Store.dao.queryMemberStore(dto.getUserId());
+				if(store != null){
+					if(StringUtil.equals(store.getStr("status"), "110003")){
+						vo.setStoreFlg(1);
+					}else{
+						vo.setStoreFlg(0);
+					}
 				}else{
 					vo.setStoreFlg(0);
 				}
+				
+				Map<String, Object> map = new HashMap<>();
+				map.put("member", vo);
+				data.setData(map);
+				data.setCode(Constants.STATUS_CODE.SUCCESS);
+				data.setMessage("查询成功");
+				return data;
 			}else{
-				vo.setStoreFlg(0);
+				data.setCode(Constants.STATUS_CODE.FAIL);
+				data.setMessage("查询失败");
+				return data;
 			}
-			
-			Map<String, Object> map = new HashMap<>();
-			map.put("member", vo);
-			data.setData(map);
-			data.setCode(Constants.STATUS_CODE.SUCCESS);
-			data.setMessage("查询成功");
-			return data;
 		}else{
-			data.setCode(Constants.STATUS_CODE.FAIL);
-			data.setMessage("查询失败");
-			return data;
+			if(StringUtil.isNoneBlank(dto.getOpenId())){
+				Member member = Member.dao.queryByOpenId(dto.getOpenId());
+				if(member != null){
+					MemberDataVO vo = new MemberDataVO();
+					vo.setIcon(member.getStr("icon"));
+					vo.setMobile(member.getStr("mobile"));
+					vo.setNickName(member.getStr("nick_name"));
+					vo.setQqNo(member.getStr("qq"));
+					vo.setWxNo(member.getStr("wx"));
+					vo.setMoneys(StringUtil.toString(member.getBigDecimal("moneys")));
+					if(member.getInt("sex") != null){
+						vo.setSex(member.getInt("sex"));
+					}
+					
+					Store store = Store.dao.queryMemberStore(dto.getUserId());
+					if(store != null){
+						if(StringUtil.equals(store.getStr("status"), "110003")){
+							vo.setStoreFlg(1);
+						}else{
+							vo.setStoreFlg(0);
+						}
+					}else{
+						vo.setStoreFlg(0);
+					}
+					
+					Map<String, Object> map = new HashMap<>();
+					map.put("member", vo);
+					data.setData(map);
+					data.setCode(Constants.STATUS_CODE.SUCCESS);
+					data.setMessage("查询成功");
+					return data;
+				}else{
+					data.setCode(Constants.STATUS_CODE.FAIL);
+					data.setMessage("查询失败");
+					return data;
+				}
+			}else{
+				data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
+				data.setMessage("您还未登陆，请先登陆");
+				return data;
+			}
 		}
 	}
 	

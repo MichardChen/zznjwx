@@ -167,7 +167,7 @@ public class WXNoAuthController extends Controller{
 			code = "5600";
 			msg = "登录成功";
 			Member member = Member.dao.queryMember(mobile, password);
-			if(StringUtil.isNoneBlank(dto.getOpenId())&&(!StringUtil.equals(dto.getOpenId(), member.getStr("open_id")))){
+			if(StringUtil.isNoneBlank(dto.getOpenId())){
 				//获取性别、昵称、头像、openID
 				WxUserInfo userInfo = WxUserInfo.dao.queryByOpenId(dto.getOpenId());
 				if(userInfo != null){
@@ -242,7 +242,7 @@ public class WXNoAuthController extends Controller{
 				userData.setToken(accessToken);
 				userData.setMobile(dto.getMobile());
 				userData.setUserTypeCd("010001");
-				if(StringUtil.isNoneBlank(dto.getOpenId())&&(!StringUtil.equals(dto.getOpenId(), member.getStr("open_id")))){
+				if(StringUtil.isNoneBlank(dto.getOpenId())){
 					WxUserInfo userInfo = WxUserInfo.dao.queryByOpenId(dto.getOpenId());
 					if(userInfo != null){
 						if(StringUtil.equals("1",userInfo.getStr("sex"))){
@@ -383,21 +383,19 @@ public class WXNoAuthController extends Controller{
 		ReturnData data = new ReturnData();
 		HttpServletRequest request = getRequest();
 		LoginDTO dto = LoginDTO.getInstance(request);
+		
 		//获取openId
 		String retJson = HttpRequest.sendGet("https://api.weixin.qq.com/sns/oauth2/access_token", "appid=wxfb13c4770990aeed&secret=f48f307963115e674255e2238b31d871&code="+dto.getCode()+"&grant_type=authorization_code");
 		try {
 			JSONObject retJson1 = new JSONObject(retJson);
 			data.setCode(Constants.STATUS_CODE.SUCCESS);
-			data.setMessage("查询成功"+retJson);
-			data.setData(retJson1.get("openid")+","+retJson);
+			data.setMessage("查询成功");
+			data.setData(retJson1.get("openid"));
 			
 			if(retJson1.has("openid")){
 				String openId = (String)retJson1.get("openid");
 				//保存用户微信信息
 				//获取token
-				//String accessTokenUrl="https://api.weixin.qq.com/sns/oauth2/access_token";
-				//String accessTokenReturnMsg = HttpRequest.sendGet(accessTokenUrl, "appid=wxfb13c4770990aeed&secret=f48f307963115e674255e2238b31d871&code="+dto.getCode()+"&grant_type=authorization_code");
-				//JSONObject json = new JSONObject(accessTokenReturnMsg);
 				if(retJson1.has("access_token")){
 					String access_token = retJson1.getString("access_token");
 					//拉去用户信息
@@ -413,7 +411,7 @@ public class WXNoAuthController extends Controller{
 						String country = retJson2.getString("country");
 						String headimgurl = retJson2.getString("headimgurl");
 						String privilege = retJson2.getString("privilege");
-						String unionid = retJson2.getString("unionid");
+						//String unionid = retJson2.getString("unionid");
 						//保存微信用户数据
 						WxUserInfo userInfo = new WxUserInfo();
 						userInfo.set("openid", openid);
@@ -425,7 +423,6 @@ public class WXNoAuthController extends Controller{
 						userInfo.set("country", country);
 						userInfo.set("headimgurl", headimgurl);
 						userInfo.set("privilege", privilege);
-						userInfo.set("unionid", unionid);
 						userInfo.set("create_time", DateUtil.getNowTimestamp());
 						userInfo.set("update_time", DateUtil.getNowTimestamp());
 						boolean saveFlg = WxUserInfo.dao.saveInfo(userInfo);

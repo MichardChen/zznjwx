@@ -129,7 +129,7 @@ public class WXController extends Controller{
 	//获取个人数据
 	public void queryPersonData() throws Exception{
 		LoginDTO dto = LoginDTO.getInstance(getRequest());
-		int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
+		/*int loginFlg = onLogin(dto.getUserId(), dto.getUserTypeCd(), dto.getToken(), "020005");
 		if(loginFlg != 3){
 			ReturnData data = new ReturnData();
 			data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);
@@ -146,7 +146,7 @@ public class WXController extends Controller{
 			getResponse().addHeader("Access-Control-Allow-Origin", "*");
 			renderJson(data);
 			return;
-		}
+		}*/
 		getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		renderJson(service.queryPersonData(dto));
 	}

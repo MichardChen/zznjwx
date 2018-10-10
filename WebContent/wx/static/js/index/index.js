@@ -46,6 +46,8 @@
     	mui('.mui-bar-tab').on('tap', 'a', function(e) {	
     		if($(this).hasClass('default-index')){
     			toggleTap(this);
+    		}else if($(this).hasClass('my-index')){
+    			toggleTap(this);
     		}else{
     			toggleTap(this);
 				checkCookie(login); 

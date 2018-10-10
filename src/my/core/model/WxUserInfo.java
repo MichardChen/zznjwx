@@ -14,7 +14,7 @@ public class WxUserInfo extends Model<WxUserInfo> {
 	}
 	
 	public WxUserInfo queryByOpenId(String openId){
-		return WxUserInfo.dao.findFirst("select * from t_wxuserinfo where openid = ?",openId);
+		return WxUserInfo.dao.findFirst("select * from t_wxuserinfo where openid='"+openId+"'");
 	}
 	
 	public boolean updateInfo(WxUserInfo data){

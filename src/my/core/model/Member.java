@@ -352,7 +352,7 @@ public class Member extends Model<Member> {
 	}
 	
 	public Member queryByOpenId(String openId){
-		return Member.dao.findFirst("select * from t_member where open_id = ?",openId);
+		return Member.dao.findFirst("select * from t_member where open_id='"+openId+"'");
 	}
 	
 	public boolean updateInfo(Member data){

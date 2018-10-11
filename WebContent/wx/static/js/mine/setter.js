@@ -19,13 +19,22 @@ $(function(){
             async:true,
             success:function(data){
                 if(data.code == REQUEST_OK){
-                    mui.toast(data.message); 
+                    //mui.toast(data.message); 
                     delAllCookie();
                     setTimeout(function(){
-                    	 mui.openWindow({
+                    	/* mui.openWindow({
 							url:'../../../index.html',
 							id:'index.html'
-						})
+						})*/
+                    	mui.openWindow({
+                    		url:"../../../pages/login/login.html",
+                    		id:"login.html",
+                    		show:{
+                		      autoShow:true,//页面loaded事件发生后自动显示，默认为true
+                		      aniShow:"slide-in-down",//页面显示动画，默认为”slide-in-right“；
+                		      duration:100//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+                		    }
+                        })
                     },500)                 
                 }else{
                     mui.toast(data.message);

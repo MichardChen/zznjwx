@@ -56,6 +56,7 @@ import my.core.model.VertifyCode;
 import my.core.model.WareHouse;
 import my.core.model.WarehouseTeaMember;
 import my.core.model.WarehouseTeaMemberItem;
+import my.core.model.WxUserInfo;
 import my.core.tx.TxProxy;
 import my.core.vo.AddressDetailVO;
 import my.core.vo.AddressVO;
@@ -4474,9 +4475,25 @@ public class WXService {
 					data.setMessage("查询成功");
 					return data;
 				}else{
-					data.setCode(Constants.STATUS_CODE.FAIL);
-					data.setMessage("查询失败");
-					return data;
+					//判断查询WxUserInfo信息
+					WxUserInfo userInfo = WxUserInfo.dao.queryByOpenId(dto.getOpenId());
+					if(userInfo != null){
+						MemberDataVO vo = new MemberDataVO();
+						vo.setIcon(userInfo.getStr("headimgurl"));
+						vo.setNickName(userInfo.getStr("nickname"));
+						vo.setSex(StringUtil.toInteger(userInfo.getStr("sex")));
+						vo.setStoreFlg(0);
+						Map<String, Object> map = new HashMap<>();
+						map.put("member", vo);
+						data.setData(map);
+						data.setCode(Constants.STATUS_CODE.SUCCESS);
+						data.setMessage("查询成功");
+						return data;
+					}else{
+						data.setCode(Constants.STATUS_CODE.FAIL);
+						data.setMessage("查询失败");
+						return data;
+					}
 				}
 			}else{
 				data.setCode(Constants.STATUS_CODE.LOGIN_EXPIRE);

@@ -39,33 +39,65 @@
     var getPersonalData = function(){
         //获取cookie参数
         var cookieParam = checkCookie();
-        $.ajax({
-            url:REQUEST_URL+"wxmrest/queryPersonData",
-            type:"get",
-            data:{
-				"token":cookieParam.token,
-				"mobile":cookieParam.mobile,
-				"userId":cookieParam.userId,
-				"openId":"oukQg0pQgi0kyeuMIJ5N78o-O4CU",
-			},
-            dataType:"json",
-            async:true,
-            success:function(data){
-            	mui.toast(data.message);
-            	if(data.code == REQUEST_OK){
-            		mui.toast(data);
-                    var personal_data = data.data.member;
-                    filledPersonalData(personal_data);    
-                }else if(data.code == "560705"){
-                    mui.toast(data.message);
-                    setTimeout(function(){
-						noLoginHandle();
-					}, 2000);
-                }else{
-                	 mui.toast(data.message);
+        var openId =  "";
+        if( localStorage.openId){
+        	openId= localStorage.openId;
+        }
+        if(cookieParam){
+        	$.ajax({
+                url:REQUEST_URL+"wxmrest/queryPersonData",
+                type:"get",
+                data:{
+    				"token":cookieParam.token,
+    				"mobile":cookieParam.mobile,
+    				"userId":cookieParam.userId,
+    				"openId":openId,
+    			},
+                dataType:"json",
+                async:true,
+                success:function(data){
+                	if(data.code == REQUEST_OK){
+                		//mui.toast(data.message);
+                        var personal_data = data.data.member;
+                        filledPersonalData(personal_data);    
+                    }else if(data.code == "560705"){
+                        mui.toast(data.message);
+                        setTimeout(function(){
+    						noLoginHandle();
+    					}, 2000);
+                    }else{
+                    	 mui.toast(data.message);
+                    }
                 }
-            }
-        })
+            })
+        }else{
+        	$.ajax({
+                url:REQUEST_URL+"wxmrest/queryPersonData",
+                type:"get",
+                data:{
+    				"token":"",
+    				"mobile":"",
+    				"userId":"",
+    				"openId":openId,
+    			},
+                dataType:"json",
+                async:true,
+                success:function(data){
+                	if(data.code == REQUEST_OK){
+                		//mui.toast(data.message);
+                        var personal_data = data.data.member;
+                        filledPersonalData(personal_data);    
+                    }else if(data.code == "560705"){
+                        mui.toast(data.message);
+                        setTimeout(function(){
+    						noLoginHandle();
+    					}, 2000);
+                    }else{
+                    	 mui.toast(data.message);
+                    }
+                }
+            })
+        }
     };
        
     mui.ready(function(){

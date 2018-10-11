@@ -59,7 +59,9 @@ var REQUEST_OK = 5600;
 	       return getCookie();
 	    }
 	    else {
-			fn();
+	    	if(fn){
+	    		fn();
+	    	}
 	    }
 	}
 	

@@ -12,6 +12,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.subject.Subject;
+import org.huadalink.plugin.shiro.CaptchaUsernamePasswordToken;
+import org.huadalink.plugin.shiro.IncorrectCaptchaException;
 import org.json.JSONException;
 import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
@@ -88,6 +97,7 @@ import my.core.vo.TeaDetailModelVO;
 import my.core.vo.TeaPropertyListVO;
 import my.core.vo.TeaStoreListVO;
 import my.core.vo.TeaWarehouseDetailVO;
+import my.core.vo.UserData;
 import my.core.vo.WantSaleTeaListVO;
 import my.core.vo.WarehouseStockVO;
 import my.core.vo.WithDrawInitVO;
@@ -519,6 +529,58 @@ public class WXService {
 			 vos.add(vo);
 		}
 		
+		UserData userData = new UserData();
+		String msg = "登录成功";
+		data.setMessage(msg);
+		data.setCode(Constants.STATUS_CODE.SUCCESS);
+		//根据openID判断
+		String openId = dto.getOpenId();
+		if(StringUtil.isNoneBlank(openId)&&(dto.getUserId()==0)){
+			String code = "5700";
+			try{
+				code = "5600";
+				Member member = Member.dao.queryByOpenId(openId);
+				if(member != null){
+					dto.setUserId(member.getInt("id"));
+					dto.setMobile(member.getStr("mobile"));
+					String accessToken = TextUtil.generateUUID();
+					//String accessToken = "6aa1c3b464074590ad1f37af0fd2aa67";
+					userData.setUserId(member.getInt("id"));
+					userData.setToken(accessToken);
+					userData.setMobile(member.getStr("mobile"));
+					userData.setUserTypeCd("010001");
+					//判断access_token表是否存储
+					AcceessToken aToken = AcceessToken.dao.queryToken(member.getInt("id"), "010001", "020005");
+					if(aToken != null){
+						//更新
+						AcceessToken.dao.updateToken(member.getInt("id"), accessToken, "020005");
+					}else{
+						//新增
+						AcceessToken.dao.saveToken(member.getInt("id"), "010001", accessToken, "020005");
+					}
+				}
+				
+			} catch (IncorrectCaptchaException e) {
+				msg = "验证码错误!";
+			} catch (UnknownAccountException e) {
+				msg = "账号不存在!";
+			} catch (IncorrectCredentialsException e) {
+				msg = "用户名密码错误!";
+			} catch (LockedAccountException e) {
+				msg = "账号被锁定!";
+			} catch (ExcessiveAttemptsException e) {
+				msg = "尝试次数过多 请明天再试!";
+			} catch (AuthenticationException e) {
+				msg = "对不起 没有权限访问!";
+			} catch (Exception e) {
+				e.printStackTrace();
+				msg = "请重新登录!";
+				code = "5700";
+			}
+			data.setCode(code);
+			data.setMessage(msg);
+		}
+		
 		//判断是否绑定银行卡
 		MemberBankcard memberBankcard = MemberBankcard.dao.queryByMemberId(dto.getUserId());
 		if(memberBankcard != null){
@@ -599,7 +661,7 @@ public class WXService {
 			nv.setNewsId(n.getInt("id"));
 			newsVOs.add(nv);
 		}
-		map.put("carousel", vos);
+ 		map.put("carousel", vos);
 		map.put("news", newsVOs);
 		Member member = Member.dao.queryMember(dto.getMobile());
 		if((member != null)&&(StringUtil.isNotBlank(member.getStr("paypwd")))){
@@ -617,8 +679,7 @@ public class WXService {
 		}
 
 		map.put("member", member);
-		data.setCode(Constants.STATUS_CODE.SUCCESS);
-		data.setMessage("查询成功");
+		map.put("memberData", userData);
 		data.setData(map);
 		return data;
 	}

@@ -1,14 +1,26 @@
 +(function(){
     //请求首页的数据
     var getSubIndexData = function(){
+    	var openId = "";
+    	if( localStorage.openId){
+    		openId =  localStorage.openId;
+    	}
         $.ajax({
             url:REQUEST_URL+"wxnonAuthRest/index",
             type:"get",
             dataType:"json",
+            data:{
+				"openId":openId,
+			},
             async:true,
             success:function(data){
                 if(data.code == REQUEST_OK){
                     var indexData = data.data;
+                    //用户信息
+                    if(data.data.memberData){
+                    	var memberData = data.data.memberData;
+                    	setCookie(memberData,10);
+                    }
                     console.log(data);
                     createSlide(indexData);
                     createList(indexData);

@@ -5411,8 +5411,13 @@ public class WXService {
 			data.setMessage("对不起，您的账号在另一处登录");
 			return data;
 		}
-		
+		if(StringUtil.isNoneBlank(member.getStr("open_id"))){
+			//删除微信信息
+			WxUserInfo.dao.delByOpenId(member.getStr("open_id"));
+		}
 		AcceessToken.dao.updateToken(member.getInt("id"), "","020005");
+		//清空openId信息
+		Member.dao.updateOpenId(member.getInt("id"), "");
 		data.setCode(Constants.STATUS_CODE.SUCCESS);
 		data.setMessage("退出成功");
 		return data;

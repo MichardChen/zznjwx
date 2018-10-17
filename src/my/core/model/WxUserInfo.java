@@ -2,6 +2,7 @@ package my.core.model;
 
 import org.huadalink.plugin.tablebind.TableBind;
 
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
 @TableBind(table = "t_wxuserinfo", pk = "id")
@@ -27,6 +28,10 @@ public class WxUserInfo extends Model<WxUserInfo> {
 	
 	public boolean del(int id){
 		return WxUserInfo.dao.deleteById(id);
+	}
+	
+	public void delByOpenId(String openId){
+		Db.update("delete from t_wxuserinfo where openid='"+openId+"'");
 	}
 }
 

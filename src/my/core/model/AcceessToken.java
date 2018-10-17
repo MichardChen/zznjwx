@@ -18,7 +18,7 @@ public class AcceessToken extends Model<AcceessToken> {
 	}
 	
 	public void updateToken(int userId,String token,String platform){
-		 Db.update("update t_accesstoken set token='"+token+"',expire_time='"+DateUtil.getAccessTokenExpireTime()+"',update_time='"+DateUtil.getNowTimestamp()+"' where user_id="+userId+" and platform='"+platform+"'");
+		 Db.update("update t_accesstoken set token='"+token+"',expire_time='"+DateUtil.getAccessTokenExpireTime()+"',update_time='"+DateUtil.getNowTimestamp()+"' where user_id='"+userId+"' and platform='"+platform+"'");
 	}
 	
 	public AcceessToken queryById(int userId,String platform){

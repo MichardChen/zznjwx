@@ -21,6 +21,7 @@ $(function(){
                 if(data.code == REQUEST_OK){
                     //mui.toast(data.message); 
                     delAllCookie();
+                    localStorage.openId="";
                     setTimeout(function(){
                     	/* mui.openWindow({
 							url:'../../../index.html',

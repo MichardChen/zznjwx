@@ -559,7 +559,7 @@ public class WXService {
 						AcceessToken.dao.saveToken(member.getInt("id"), "010001", accessToken, "020005");
 					}
 				}
-				
+				map.put("memberData", userData);
 			} catch (IncorrectCaptchaException e) {
 				msg = "验证码错误!";
 			} catch (UnknownAccountException e) {
@@ -679,7 +679,6 @@ public class WXService {
 		}
 
 		map.put("member", member);
-		map.put("memberData", userData);
 		data.setData(map);
 		return data;
 	}

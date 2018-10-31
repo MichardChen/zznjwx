@@ -73,7 +73,19 @@
     	$('.tea-price-box').html(teaPrice);
     	var teaDesc = '<h3>正品</h3><p>'+data.comment+'</p>';
     	$('.mui-card-footer').html(teaDesc);
-    	$('#tea-desc').attr('src',data.descUrl);
+    	//$('#tea-desc').attr('src',data.descUrl);
+    	var imgs = data.descUrl;
+    	var imgsArrya = "";
+    	if(imgs){
+    		var arras = imgs.split(",");
+    		for(var arr in arras){
+    			var ig = arras[arr];
+    			if(ig){
+    				imgsArrya = imgsArrya + "<img src='"+ig+"' style=\"width: 100%;\"><br/>";
+    			}
+    		}
+    	}
+    	$("#tabItem1").html(imgsArrya);
     	var tablecontent = '<tr><td width=100>品牌</td><td>'+data.brand+'</td></tr>'
     					 + '<tr><td width=100>名称</td><td>'+data.name+'</td></tr>'
     					 + '<tr><td width=100>产地</td><td>'+data.productPlace+'</td></tr>'

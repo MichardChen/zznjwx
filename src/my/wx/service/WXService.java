@@ -9,8 +9,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -1241,7 +1243,20 @@ public class WXService {
 		if(phoneCodeMst != null){
 			vo.setCustomPhone(phoneCodeMst.getStr("data2"));
 		}
-		vo.setDescUrl(tea.getStr("desc_url"));
+		
+		String descHtml = tea.getStr("tea_desc");
+		if(StringUtil.isNoneBlank(descHtml)){
+			//获取img标签的url
+			Set<String> imgs = StringUtil.getImgStr(descHtml);
+			Iterator<String> iterator = imgs.iterator();
+			String img = "";
+			while(iterator.hasNext()){
+				img = iterator.next()+",";
+			}
+			vo.setDescUrl(img);
+		}else{
+			vo.setDescUrl("");
+		}
 		
 		if(wtmItem != null){
 			vo.setStock(StringUtil.toString(wtmItem.getInt("quality")));

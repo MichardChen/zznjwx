@@ -9,22 +9,16 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.subject.Subject;
-import org.huadalink.plugin.shiro.CaptchaUsernamePasswordToken;
 import org.huadalink.plugin.shiro.IncorrectCaptchaException;
 import org.json.JSONException;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -1247,11 +1241,10 @@ public class WXService {
 		String descHtml = tea.getStr("tea_desc");
 		if(StringUtil.isNoneBlank(descHtml)){
 			//获取img标签的url
-			Set<String> imgs = StringUtil.getImgStr(descHtml);
-			Iterator<String> iterator = imgs.iterator();
+			List<String> imgs = StringUtil.getImgStr(descHtml);
 			String img = "";
-			while(iterator.hasNext()){
-				img = iterator.next()+",";
+			for(String str : imgs){
+				img = img+","+str;
 			}
 			vo.setDescUrl(img);
 		}else{

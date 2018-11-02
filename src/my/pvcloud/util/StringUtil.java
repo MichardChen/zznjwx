@@ -5,9 +5,11 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -21,8 +23,8 @@ import my.core.model.Store;
 
 public class StringUtil extends StringUtils {
 	
-	public static Set<String> getImgStr(String htmlStr) {
-        Set<String> pics = new HashSet<>();
+	public static List<String> getImgStr(String htmlStr) {
+        List<String> pics = new ArrayList<String>();
         String img = "";
         Pattern p_image;
         Matcher m_image;
